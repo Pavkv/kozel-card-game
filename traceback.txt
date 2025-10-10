@@ -1,0 +1,26 @@
+﻿I'm sorry, but an uncaught exception occurred.
+
+While running game code:
+  File "game/CardGames/Kozel/scripts_kozel.rpy", line 34, in script
+    $ kozel_opponent_defend()
+  File "game/CardGames/Kozel/scripts_kozel.rpy", line 34, in <module>
+    $ kozel_opponent_defend()
+NameError: name 'kozel_opponent_defend' is not defined
+
+-- Full Traceback ------------------------------------------------------------
+
+Full traceback:
+  File "game/CardGames/Kozel/scripts_kozel.rpy", line 34, in script
+    $ kozel_opponent_defend()
+  File "/Users/pavelzobov/Downloads/renpy-7.4.11-sdk/renpy/ast.py", line 928, in execute
+    renpy.python.py_exec_bytecode(self.code.bytecode, self.hide, store=self.store)
+  File "/Users/pavelzobov/Downloads/renpy-7.4.11-sdk/renpy/python.py", line 2245, in py_exec_bytecode
+    exec(bytecode, globals, locals)
+  File "game/CardGames/Kozel/scripts_kozel.rpy", line 34, in <module>
+    $ kozel_opponent_defend()
+NameError: name 'kozel_opponent_defend' is not defined
+
+Darwin-24.6.0-x86_64-i386-64bit
+Ren'Py 7.4.11.2266
+ 
+Fri Oct 10 15:41:35 2025

@@ -1,0 +1,9 @@
+﻿I'm sorry, but errors were detected in your script. Please correct the
+errors listed below, and try again.
+
+
+File "game/CardGames/card_game_screens.rpy", line 151: is not terminated with a newline. (Check strings and parenthesis.)
+                            action [If(
+
+Ren'Py Version: Ren'Py 7.4.11.2266
+Fri Oct 10 15:25:15 2025
