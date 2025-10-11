@@ -88,10 +88,8 @@ class AIKozel(Player):
         self.remember_card(chosen)
         return chosen
 
-    def discard_if_needed(self, attack_cards):
+    def drop_cards(self, attack_cards):
         """If unable to defend, discard the same number of lowest-value cards."""
-        if len(attack_cards) > len(self.hand):
-            return []
         self.hand.sort(key=lambda c: Card.points_kozel_map[c.rank])
         discard_cards = self.hand[:len(attack_cards)]
         self.remember_cards(attack_cards + discard_cards)

@@ -117,7 +117,7 @@ transform deal_card(dest_x, dest_y, delay=0):
     pause delay
     linear 0.3 alpha 1.0 xpos dest_x ypos dest_y
 
-transform animate_table_card(x1, y1, x2, y2, delay=0.0, duration=0.4, discard=False):
+transform animate_table_card(x1, y1, x2, y2, delay=0.0, duration=0.4):
     alpha 1.0
     xpos x1
     ypos y1

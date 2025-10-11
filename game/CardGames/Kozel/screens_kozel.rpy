@@ -2,6 +2,10 @@ screen kozel():
 
     # Main kozel game screen
     timer .5 action SetVariable("next_turn", False)
+
+    if card_game.table.beaten():
+        timer .5 action SetVariable("card_game.state", "end_turn")
+
     if card_game.state not in ["player_attack", "player_defend"]:
          timer 5 action Jump(card_game_name + "_game_loop")
 
@@ -48,7 +52,7 @@ screen discard_pile_display_player():
     for card in card_game.player.discard:
         add Transform(base_cover_img_src, xysize=(CARD_WIDTH, CARD_HEIGHT), rotate=rotate + 15):
             xpos 50
-            ypos 1080
+            ypos PLAYER_DISCARD_Y
         $ rotate += 5 if rotate < 45 else -45
 
 screen discard_pile_display_opponent():
@@ -57,5 +61,5 @@ screen discard_pile_display_opponent():
     for card in card_game.opponent.discard:
         add Transform(base_cover_img_src, xysize=(CARD_WIDTH, CARD_HEIGHT), rotate=rotate + 15):
             xpos 50
-            ypos 0
+            ypos OPPONENT_DISCARD_Y
         $ rotate += 5 if rotate < 45 else -45

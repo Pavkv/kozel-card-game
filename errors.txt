@@ -2,8 +2,9 @@
 errors listed below, and try again.
 
 
-File "game/CardGames/card_game_screens.rpy", line 151: is not terminated with a newline. (Check strings and parenthesis.)
-                            action [If(
+File "game/CardGames/card_game_screens.rpy", line 146: u'if' is not a keyword argument or valid child for the textbutton statement.
+    textbutton "{color=#fff}Подтвердить\nатаку{/color}" if card_game.state == "player_drop" else "{color=#fff}Подтвердить\nсброс{/color}":
+                                                          ^
 
 Ren'Py Version: Ren'Py 7.4.11.2266
-Fri Oct 10 15:25:15 2025
+Fri Oct 10 21:23:42 2025

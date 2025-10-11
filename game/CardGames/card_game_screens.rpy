@@ -113,7 +113,7 @@ screen game_phase_and_controls():
 
         if isinstance(card_game, DurakGame) or isinstance(card_game, KozelGame):
             $ show_end_turn = card_game.table and card_game.state in ["player_turn", "player_defend"]
-            $ show_confirm_attack = card_game.state == "player_turn" and len(selected_attack_card_indexes) > 0
+            $ show_confirm_attack = card_game.state == "player_turn" and len(selected_attack_card_indexes) > 0 or card_game.state == "player_drop" and len(selected_attack_card_indexes) == len(card_game.table.keys())
             if show_end_turn and show_confirm_attack:
                 $ y1 = 30
                 $ y2 = 40
@@ -121,41 +121,40 @@ screen game_phase_and_controls():
                 $ y1 = y2 = 30
 
             if show_end_turn:
+                if card_game.state == "player_turn":
+                    $ btn_text = "Бито"
+                elif card_game.state == "player_defend" and isinstance(card_game, DurakGame):
+                    $ btn_text = "Взять"
+                elif card_game.state == "player_defend" and isinstance(card_game, KozelGame):
+                    $ btn_text = "Сбросить"
+
                 frame:
                     xsize 150
                     padding (0, 0)
                     ypos y1
                     has vbox
-                    textbutton ["{color=#fff}Бито{/color}" if card_game.state == "player_turn" else "{color=#fff}Взять{/color}" if card_game.state != "player_turn" and isinstance(card_game, DurakGame) else "{color=#fff}Сбросить{/color}"]:
+                    textbutton "{color=#fff}[btn_text]{/color}":
                         style "card_game_button"
                         text_size 25
-                        action [If(
-                            card_game.state == "player_turn",
-                            [
-                            SetVariable("card_game.state", "end_turn"),
-                            SetVariable("selected_attack_card_indexes", set()),
-                            SetVariable("hovered_card_index", -1)
-                            ],
-                            SetVariable("card_game.state", "opponent_turn"),
-                        ), SetVariable("confirm_take", True)]
+                        action Function(handle_end_turn)
 
             if show_confirm_attack:
+                if card_game.state == "player_turn":
+                    $ btn_text = "Подтвердить\nатаку"
+                elif card_game.state == "player_defend" and isinstance(card_game, DurakGame):
+                    $ btn_text = "Подтвердить\nзащиту"
+                elif card_game.state == "player_drop" and isinstance(card_game, KozelGame):
+                    $ btn_text = "Подтвердить\nсброс"
+
                 frame:
                     xsize 150
                     padding (0, 0)
                     ypos y2
                     has vbox
-                    textbutton "{color=#fff}Подтвердить\nатаку{/color}":
+                    textbutton "{color=#fff}[btn_text]{/color}":
                         style "card_game_button"
                         text_size 18
-                        action If(
-                            isinstance(card_game, DurakGame),
-                            [
-                            SetVariable("confirm_attack", True),
-                            Function(durak_confirm_selected_attack)
-                            ],
-                            Function(kozel_confirm_selected_attack)
-                        )
+                        action handle_confirm_attack()
 
         elif isinstance(card_game, WitchGame) and card_game.state == "wait_choice" and selected_exchange_card_index_opponent != -1:
             frame:
@@ -208,7 +207,7 @@ screen trump_and_deck_display():
 
     if card_game.deck.cards:
 
-        if isinstance(card_game, DurakGame):
+        if isinstance(card_game, DurakGame) or isinstance(card_game, KozelGame):
 
             $ trump = card_game.deck.trump_card
             if trump:
@@ -432,7 +431,7 @@ screen table_card_animation(function=None, delay=0.0):
         add Transform(
             anim.get("override_img", get_card_image(card)),
             xysize=(CARD_WIDTH, CARD_HEIGHT)
-        ) at animate_table_card(src_x, src_y, dest_x, dest_y, delay, duration, is_discard)
+        ) at animate_table_card(src_x, src_y, dest_x, dest_y, delay, duration)
 
         timer anim_time action Function(in_flight_cards.discard, card)
 

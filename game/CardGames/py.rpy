@@ -85,6 +85,29 @@ init python:
             return Function(lambda: els_swap_cards_player(index))
         return None
 
+    def handle_confirm_attack():
+        global confirm_attack, selected_attack_card_indexes
+        if isinstance(card_game, DurakGame):
+            confirm_attack = True
+            return Function(durak_confirm_selected_attack)
+        elif isinstance(card_game, KozelGame) and card_game.state == "player_turn":
+            confirm_attack = True
+            return Function(kozel_confirm_selected_attack)
+        elif isinstance(card_game, KozelGame) and card_game.state == "player_drop":
+            return Function(kozel_player_drop)
+
+    def handle_end_turn():
+        global selected_attack_card_indexes, hovered_card_index, confirm_take
+        if (isinstance(card_game, DurakGame) or isinstance(card_game, KozelGame)) and card_game.state == "player_turn":
+            card_game.state = "end_turn"
+            selected_attack_card_indexes = set()
+            hovered_card_index = -1
+        elif isinstance(card_game, DurakGame) and card_game.state == "player_defend":
+            card_game.state = "opponent_turn"
+            confirm_take = True
+        elif isinstance(card_game, KozelGame) and card_game.state == "player_defend":
+            card_game.state = "player_drop"
+
     # ----------------------------
     # Position Helpers
     # ----------------------------
@@ -331,7 +354,7 @@ init python:
 
         show_anim(function=after_anim)
 
-    def play_card_anim(cards, side, slot_index=0, is_defense=False, delay=0.5, anim_duration=0.5):
+    def play_card_anim(cards, side, slot_index=0, is_defense=False, delay=0.5, anim_duration=0.5, skip_check=False, on_finish=None):
         """
         Animate playing one or multiple cards from the player's or opponent's hand onto the table,
         then update the table structure and remove cards from the hand.
@@ -343,6 +366,7 @@ init python:
         - is_defense: if True, only one card should be used to defend at given slot
         - delay: delay before first animation starts
         - anim_duration: animation duration per card
+        - skip_check: if True, skip validation checks (for forced moves)
         """
         global hovered_card_index
 
@@ -355,7 +379,11 @@ init python:
         def apply_card_moves():
             attack_keys = list(card_game.table.table.keys())
             for i, card in enumerate(cards):
-                if is_defense:
+                if skip_check and is_defense:
+                    if i == 0 and slot_index < len(attack_keys):
+                        atk_card = attack_keys[slot_index]
+                        card_game.table.beat(atk_card, card)
+                elif is_defense:
                     if i == 0 and slot_index < len(attack_keys):
                         atk_card = attack_keys[slot_index]
                         if not card_game.table.table[atk_card][0]:
@@ -371,6 +399,9 @@ init python:
                     player.hand.remove(card)
 
             compute_hand_layout()
+
+            if on_finish:
+                on_finish()
 
         for i, card in enumerate(cards):
             if card is None:
@@ -399,7 +430,7 @@ init python:
                 "override_img": override_img,
             })
 
-        show_anim(apply_card_moves)
+        show_anim(function=apply_card_moves)
 
         hovered_card_index = -1
 
