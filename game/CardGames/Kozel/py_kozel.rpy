@@ -1,5 +1,4 @@
 init python:
-    confirm_drop = False
     DISCARD_X = 50
     PLAYER_DISCARD_Y = 800
     OPPONENT_DISCARD_Y = 0
@@ -7,7 +6,7 @@ init python:
      # Durak Animations
      # --------------------
     def kozel_animate_and_resolve_table(step_delay=0.05, anim_duration=0.1):
-        global hovered_card_index
+        global hovered_card_index, confirm_drop
         """
         Animate cards being cleared from the table and defer logic until after animation.
         """
@@ -18,9 +17,10 @@ init python:
         is_beaten = card_game.table.beaten()
 
         if confirm_drop:
-            receiver = card_game.current_turn  # The attacker takes the cards
+            receiver = card_game.current_turn
         else:
             receiver = card_game.player if card_game.current_turn == card_game.opponent else card_game.opponent  # The defender takes the cards
+            card_game.current_turn = card_game.opponent if card_game.current_turn == card_game.player else card_game.player
 
         for i, (atk_card, (beaten, def_card)) in enumerate(card_game.table.table.items()):
             src_x = 350 + i * 200
@@ -58,17 +58,11 @@ init python:
                 delay += step_delay
 
         def resolve_table_logic():
-            if not confirm_drop:
-                card_game.take_cards(receiver)
-                card_game.state = (
-                    "player_turn" if card_game.current_turn != card_game.player else "opponent_turn"
-                )
-                card_game.current_turn = card_game.opponent if card_game.current_turn == card_game.player else card_game.player
-            else:
-                card_game.take_cards(receiver)
-                card_game.state = (
-                    "player_turn" if receiver == card_game.player else "opponent_turn"
-                )
+            card_game.take_cards(receiver)
+            card_game.state = (
+                "player_turn" if card_game.current_turn == card_game.player else "opponent_turn"
+            )
+
             card_game.count_total_points_kozel_both()
             card_game.table.clear()
 
@@ -92,13 +86,14 @@ init python:
         show_anim(function=resolve_table_logic)
 
         hovered_card_index = -1
+        confirm_drop = False
 
     # --------------------
     # Player Functions
     # --------------------
     def kozel_handle_card_click(index):
         """Handles card click events for player actions."""
-        global confirm_attack, selected_attack_card_indexes, selected_attack_card
+        global confirm_attack, confirm_drop, selected_attack_card_indexes, selected_attack_card
 
         card = card_game.player.hand[index]
         print("Card clicked:", card)
@@ -191,51 +186,52 @@ init python:
         """Handles player dropping cards logic."""
         global selected_attack_card_indexes
 
-        if confirm_drop and selected_attack_card_indexes:
-            indexes = sorted(selected_attack_card_indexes)
-            cards = [card_game.player.hand[i] for i in indexes]
+        indexes = sorted(selected_attack_card_indexes)
+        cards = [card_game.player.hand[i] for i in indexes]
 
-            if len(cards) == len(card_game.table):
-                print("Player drops cards:", cards)
+        print(cards)
 
-                cards_to_drop = []
+        if len(cards) == len(card_game.table.keys()):
+            print("Player drops cards:", cards)
 
-                for i, (attack_card, (beaten, _)) in enumerate(card_game.table.table.items()):
-                    def_card = cards[i]
-                    cards_to_drop.append((i, attack_card, def_card))
+            cards_to_drop = []
 
-                def do_drop(index=0):
-                    if card_game.table.beaten():
-                        print("AI dropped all cards.")
-                        card_game.state = "end_turn"
-                        return
+            for i, (attack_card, (beaten, _)) in enumerate(card_game.table.table.items()):
+                def_card = cards[i]
+                cards_to_drop.append((i, attack_card, def_card))
 
-                    slot_index, atk_card, def_card = cards_to_drop[index]
+            def do_drop(index=0):
+                if card_game.table.beaten():
+                    print("AI dropped all cards.")
+                    card_game.state = "end_turn"
+                    return
 
-                    def apply_drop():
-                        # Now it's safe to update the game state
-                        card_game.table.beat(atk_card, def_card)
-                        card_game.player.hand.remove(def_card)
-                        compute_hand_layout()
+                slot_index, atk_card, def_card = cards_to_drop[index]
 
-                        # Move to next defense
-                        do_drop(index + 1)
+                def apply_drop():
+                    # Now it's safe to update the game state
+                    card_game.table.beat(atk_card, def_card)
+                    card_game.player.hand.remove(def_card)
+                    compute_hand_layout()
 
-                    # Animate it
-                    play_card_anim(
-                        cards=[def_card],
-                        side=0,
-                        slot_index=slot_index,
-                        is_defense=True,
-                        skip_check=True
-                    )
-                    show_anim(apply_drop)
+                    # Move to next defense
+                    do_drop(index + 1)
 
-                do_drop()
+                # Animate it
+                play_card_anim(
+                    cards=[def_card],
+                    side=0,
+                    slot_index=slot_index,
+                    is_defense=True,
+                    skip_check=True
+                )
+                show_anim(apply_drop)
 
-                # Clear selection and proceed to opponent turn
-                selected_attack_card_indexes.clear()
-                card_game.state = "end_turn"
+            do_drop()
+
+            # Clear selection and proceed to opponent turn
+            selected_attack_card_indexes.clear()
+            card_game.state = "end_turn"
 
     # --------------------
     # Opponent Functions
@@ -258,6 +254,7 @@ init python:
 
     def kozel_opponent_defend():
         """Handles the opponent's defense logic sequentially with animation."""
+        global confirm_drop
         defense_queue = []
 
         reserved_cards = set()

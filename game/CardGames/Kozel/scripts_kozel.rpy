@@ -4,7 +4,7 @@ label start:
     $ cards_bg = "images/bg/bg_14.jpg"
     $ in_game = False
     $ base_card_img_src = "images/cards/cards"
-    $ biased_draw = ["opponent", 0.5]
+    $ biased_draw = ["opponent", 0.0]
     $ day2_game_with_Alice = False
     $ last_winner = "player"
     $ start_card_game(KozelGame, "kozel")

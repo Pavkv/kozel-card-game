@@ -2,9 +2,13 @@
 errors listed below, and try again.
 
 
-File "game/CardGames/card_game_screens.rpy", line 146: u'if' is not a keyword argument or valid child for the textbutton statement.
-    textbutton "{color=#fff}Подтвердить\nатаку{/color}" if card_game.state == "player_drop" else "{color=#fff}Подтвердить\nсброс{/color}":
-                                                          ^
+File "game/CardGames/card_game_screens.rpy", line 260: u'if' is not a keyword argument or valid child for the frame statement.
+    xpos 885 if not isinstance(card_game, KozelGame) else 1750
+               ^
+
+File "game/CardGames/card_game_screens.rpy", line 327: u'if' is not a keyword argument or valid child for the frame statement.
+    xpos 885 if not isinstance(card_game, KozelGame) else 1750
+               ^
 
 Ren'Py Version: Ren'Py 7.4.11.2266
-Fri Oct 10 21:23:42 2025
+Mon Oct 13 11:28:41 2025
