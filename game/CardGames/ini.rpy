@@ -14,16 +14,26 @@ init python:
     made_turn = False
     last_winner = None
 
+    CARD_WIDTH, CARD_HEIGHT, CARD_SPACING = 157, 237, 118
+    suits = {'C': 'uvao', 'D': '2ch', 'H': 'ussr', 'S': 'utan'}
+    ranks = {'6': '6', '7': '7', '8': '8', '9': '9', '10': '10', 'J': '11', 'Q': '12', 'K': '13', 'A': '1'} # '2': '2', '3': '3', '4': '4', '5': '5',
+
     # Layout constants
-    DECK_X = 13
-    DECK_Y = 373
+    DECK_X = -50
+    DECK_Y = 422
+    DECK_NUM_X = 55
+    DECK_NUM_Y = 527
     DISCARD_X = 1600
-    DISCARD_Y = 350
-    HAND0_X = 700
-    HAND0_Y = 825
-    HAND1_X = 700
-    HAND1_Y = 20
+    DISCARD_Y = 422
+    TABLE_Y = 383
+    PLAYER_HAND_X = 700
+    PLAYER_HAND_Y = 825
+    PLAYER_HAND_NUM_Y = 703
+    OPPONENT_HAND_X = 700
+    OPPONENT_HAND_Y = 20
+    OPPONENT_HAND_NUM_Y = 377
     HAND_SPACING = 118
+    HAND_NUM_X = 885
 
     # Card selection and layout state
     hovered_card_index = -1
@@ -70,8 +80,10 @@ init python:
         "durak" : {
             "player_turn": "Вы атакуете",
             "player_defend": "Вы защищаетесь",
+            "player_take": "Вы берёте",
             "opponent_turn": "Противник атакует",
             "opponent_defend": "Противник защищается",
+            "opponent_take": "Противник берёт",
             "end_turn": "Окончание хода",
             "results": "Игра окончена"
         },
@@ -119,6 +131,8 @@ transform deal_card(dest_x, dest_y, delay=0):
 
 transform animate_table_card(x1, y1, x2, y2, delay=0.0, duration=0.4):
     alpha 1.0
+    anchor (0, 0)
+    xanchor 0
     xpos x1
     ypos y1
     pause delay

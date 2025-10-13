@@ -8,11 +8,6 @@ init python:
     from CardGames.Els.ElsGame import ElsGame
     from CardGames.Kozel.KozelGame import KozelGame
 
-    # Global variables
-    CARD_WIDTH, CARD_HEIGHT, CARD_SPACING = 157, 237, 118
-    suits = {'C': 'uvao', 'D': '2ch', 'H': 'ussr', 'S': 'utan'}
-    ranks = {'6': '6', '7': '7', '8': '8', '9': '9', '10': '10', 'J': '11', 'Q': '12', 'K': '13', 'A': '1'} # '2': '2', '3': '3', '4': '4', '5': '5',
-
     # ----------------------------
     # Game Setup Functions
     # ----------------------------
@@ -103,7 +98,7 @@ init python:
             selected_attack_card_indexes = set()
             hovered_card_index = -1
         elif isinstance(card_game, DurakGame) and card_game.state == "player_defend":
-            card_game.state = "opponent_turn"
+            card_game.state = "player_take"
             confirm_take = True
         elif isinstance(card_game, KozelGame) and card_game.state == "player_defend":
             card_game.state = "player_drop"
@@ -139,7 +134,7 @@ init python:
         """Position where the next card would visually land in the hand."""
         hand = card_game.player.hand if side_index == 0 else card_game.opponent.hand
         idx = len(hand)
-        return (HAND0_X + idx * HAND_SPACING, HAND0_Y) if side_index == 0 else (HAND1_X + idx * HAND_SPACING, HAND1_Y)
+        return (PLAYER_HAND_X + idx * HAND_SPACING, PLAYER_HAND_Y) if side_index == 0 else (OPPONENT_HAND_X + idx * HAND_SPACING, OPPONENT_HAND_Y)
 
     def show_anim(function=None, delay=0.0):
         renpy.show_screen("table_card_animation", function=function, delay=delay)
@@ -159,7 +154,6 @@ init python:
         renpy.config.allow_skipping = False
         renpy.preferences.afm_enable = False
         renpy.preferences.skip = False
-        renpy.preferences.skip_unseen = False
         renpy.config.rollback_enabled = False
         renpy.block_rollback()
 
@@ -167,9 +161,9 @@ init python:
         """
         Ress normal skipping, rollback, and menu behavior after the game ends.
         """
+        renpy.game.context().fast_skip = True
         renpy.config.allow_skipping = True
         renpy.config.rollback_enabled = True
-        renpy.preferences.afm_enable = True
 
     # ----------------------------
     # Game Start Function
@@ -269,13 +263,12 @@ init python:
 
             table_animations.append({
                 "card": card,
-                "src_x": DECK_X,
-                "src_y": DECK_Y,
+                "src_x": 13,
+                "src_y": DECK_Y + 20,
                 "dest_x": dest_x,
                 "dest_y": dest_y,
                 "delay": d,
                 "duration": anim_duration,
-                "target": target,
                 "override_img": override_img,
             })
 

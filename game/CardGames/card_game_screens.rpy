@@ -203,7 +203,7 @@ screen game_phase_and_controls():
 screen trump_and_deck_display():
 
     $ deck_text = str(len(card_game.deck.cards)) if len(card_game.deck.cards) > 0 else card_suits[card_game.deck.trump_suit]
-    $ deck_xpos = 55 if len(card_game.deck.cards) > 9 else 73
+    $ deck_num_xpos = DECK_NUM_X if len(card_game.deck.cards) > 9 else 73
 
     if card_game.deck.cards:
 
@@ -213,21 +213,21 @@ screen trump_and_deck_display():
             if trump:
                 add Transform(get_card_image(trump), xysize=(CARD_WIDTH, CARD_HEIGHT), rotate=90):
                     xpos CARD_WIDTH // 2 - 55
-                    ypos 350
+                    ypos DECK_Y
 
         add Transform(base_cover_img_src, xysize=(CARD_WIDTH, CARD_HEIGHT), rotate=0):
-            xpos -50
-            ypos 350
+            xpos DECK_X
+            ypos DECK_Y
 
         text str(len(card_game.deck.cards)):
-            xpos deck_xpos
-            ypos 455
+            xpos deck_num_xpos
+            ypos DECK_NUM_Y
             size 60
 
     elif isinstance(card_game, DurakGame) and not card_game.deck.cards:
             text card_suits[card_game.deck.trump_suit]:
-                xpos deck_xpos
-                ypos 455
+                xpos deck_num_xpos
+                ypos DECK_NUM_Y
                 size 75
 
 screen discard_pile_display():
@@ -235,16 +235,16 @@ screen discard_pile_display():
     $ rotate = 0
     for card in card_game.deck.discard:
         add Transform(base_cover_img_src, xysize=(CARD_WIDTH, CARD_HEIGHT), rotate=rotate + 15):
-            xpos 1600
-            ypos 350
+            xpos DISCARD_X
+            ypos DISCARD_Y
         $ rotate += 15 if rotate < 360 else -360
 
 screen opponent_card_hand_display():
 
     if isinstance(card_game, Game21) or isinstance(card_game, KozelGame) or (isinstance(card_game, ElsGame) and card_game.state == "result"):
 
-        $ xpos = 885
-        $ ypos = 340
+        $ xpos = HAND_NUM_X
+        $ ypos = OPPONENT_HAND_NUM_Y
 
         if isinstance(card_game, Game21):
             $ opponent_total = card_game.opponent.total21()
@@ -256,7 +256,6 @@ screen opponent_card_hand_display():
         elif isinstance(card_game, KozelGame):
             $ opponent_hand_text = "Очки: " + str(card_game.opponent_points)
             $ xpos = 20
-            $ ypos = 260
 
         else:
             $ opponent_hand_text = result_combination_opponent
@@ -321,16 +320,15 @@ screen player_card_hand_display():
 
     if isinstance(card_game, Game21) or isinstance(card_game, KozelGame) or (isinstance(card_game, ElsGame) and card_game.state == "result"):
 
-        $ xpos = 885
-        $ ypos = 705
+        $ xpos = HAND_NUM_X
+        $ ypos = PLAYER_HAND_NUM_Y
 
         if isinstance(card_game, Game21):
             $ player_hand_text = "Цена: " + str(card_game.player.total21())
 
         elif isinstance(card_game, KozelGame):
             $ player_hand_text = "Очки: " + str(card_game.player_points)
-            $ xpos = 50
-            $ ypos = 785
+            $ xpos = 20
 
         else:
             $ player_hand_text = result_combination_player
@@ -388,7 +386,7 @@ screen table():
     for i, (atk, (beaten, def_card)) in enumerate(card_game.table.table.items()):
         if atk not in in_flight_cards:
             $ atk_x = base_x + i * pair_spacing
-            $ atk_y = 375
+            $ atk_y = TABLE_Y
 
             if card_game.state == "player_defend" and not beaten:
                 $ is_selected = selected_attack_card == atk
@@ -430,34 +428,6 @@ screen deal_cards():
 
     timer delay + 1.0 action Jump(card_game_name + "_game_loop")
 
-screen draw_cards():
-
-    for card_data in draw_animations:
-
-        $ i = card_data["index"]
-        $ delay = card_data["delay"]
-
-        if card_data["owner"] == "player":
-            $ spacing = CARD_SPACING
-            $ total = len(card_game.player.hand)
-            $ total_width = CARD_WIDTH + (total - 1) * spacing
-            $ start_x = max((1920 - total_width) // 2, 20)
-            $ dest_x = start_x + i * spacing
-            $ dest_y = 825
-            $ card_img_src = get_card_image(card_game.player.hand[i])
-        else:
-            $ spacing = CARD_SPACING
-            $ total = len(card_game.opponent.hand)
-            $ total_width = CARD_WIDTH + (total - 1) * spacing
-            $ start_x = max((1920 - total_width) // 2, 20)
-            $ dest_x = start_x + i * spacing
-            $ dest_y = 20
-            $ card_img_src = base_cover_img_src
-
-        add Transform(card_img_src, xysize=(CARD_WIDTH, CARD_HEIGHT)) at deal_card(dest_x, dest_y, delay)
-
-    timer delay + 1.0 action Jump(card_game_name + "_game_loop")
-
 screen table_card_animation(function=None, delay=0.0):
 
     default max_duration = delay
@@ -470,7 +440,6 @@ screen table_card_animation(function=None, delay=0.0):
         $ dest_y = anim["dest_y"]
         $ delay = anim["delay"]
         $ duration = anim.get("duration", 0.4)
-        $ is_discard = anim["target"] == "discard"
         $ anim_time = delay + duration
 
         $ in_flight_cards.add(card)

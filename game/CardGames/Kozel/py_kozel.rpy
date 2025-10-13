@@ -1,5 +1,5 @@
 init python:
-    DISCARD_X = 50
+    DISCARD_PLAYERS_X = 50
     PLAYER_DISCARD_Y = 800
     OPPONENT_DISCARD_Y = 0
      # --------------------
@@ -30,29 +30,17 @@ init python:
             for card in cards:
                 offset_x = 30 * i
                 offset_y = 0
+                dest_y = PLAYER_DISCARD_Y if receiver == card_game.player else OPPONENT_DISCARD_Y
 
                 anim = {
                     "card": card,
                     "src_x": src_x,
                     "src_y": src_y if card == atk_card else src_y + 120,
+                    "dest_x": DISCARD_PLAYERS_X,
+                    "dest_y": dest_y,
                     "delay": delay,
                     "duration": anim_duration,
                 }
-                
-                dest_y_beaten = PLAYER_DISCARD_Y if receiver == card_game.player else OPPONENT_DISCARD_Y
-                dest_y_not_beaten = OPPONENT_DISCARD_Y if receiver == card_game.player else PLAYER_DISCARD_Y
-                if not confirm_drop:
-                    anim.update({
-                        "dest_x": DISCARD_X,
-                        "dest_y": dest_y_beaten,
-                        "target": "discard",
-                    })
-                else:
-                    anim.update({
-                        "dest_x": DISCARD_X,
-                        "dest_y": dest_y_not_beaten,
-                        "target": "discard",
-                    })
 
                 table_animations.append(anim)
                 delay += step_delay

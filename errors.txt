@@ -2,13 +2,9 @@
 errors listed below, and try again.
 
 
-File "game/CardGames/card_game_screens.rpy", line 260: u'if' is not a keyword argument or valid child for the frame statement.
-    xpos 885 if not isinstance(card_game, KozelGame) else 1750
-               ^
-
-File "game/CardGames/card_game_screens.rpy", line 327: u'if' is not a keyword argument or valid child for the frame statement.
-    xpos 885 if not isinstance(card_game, KozelGame) else 1750
-               ^
+File "game/CardGames/ini.rpy", line 122: ATL statement contains two expressions in a row; is one of them a misspelled property? If not, separate them with pass.
+    x x1
+        ^
 
 Ren'Py Version: Ren'Py 7.4.11.2266
-Mon Oct 13 11:28:41 2025
+Mon Oct 13 15:42:11 2025

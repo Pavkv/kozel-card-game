@@ -57,7 +57,10 @@ class Card:
 
     @classmethod
     def beats_kozel(cls, defender, attacker, trump):
+        """Kozel-specific beating rules."""
         if defender.suit == attacker.suit:
-            if defender.rank == '10' and attacker.rank != 'A':
-                return True
+            if attacker.rank == '10':
+                return defender.rank == 'A'
+            elif defender.rank == '10':
+                return attacker.rank != 'A'
         return cls.beats(defender, attacker, trump)

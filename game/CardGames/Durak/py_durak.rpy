@@ -134,9 +134,13 @@ init python:
                 )
 
                 selected_attack_card = None
-                card_game.state = "opponent_turn"
             else:
                 print("Invalid defense with:", card)
+                selected_attack_card = None
+
+            if card_game.table.beaten() and not card_game.can_attack(card_game.opponent):
+                print("All attacks beaten. Player wins this round.")
+                card_game.state = "end_turn"
                 selected_attack_card = None
 
     def durak_confirm_selected_attack():
@@ -150,6 +154,11 @@ init python:
             if card_game.can_attack(card_game.player):
                 print("Player attacked with: " + ', '.join(str(c) for c in cards))
 
+                def switch_to_defend():
+                    selected_attack_card_indexes.clear()
+                    confirm_attack = False
+                    card_game.state = "opponent_defend"
+
                 # Animate each card moving to table
                 start_index = len(card_game.table)
                 play_card_anim(
@@ -157,12 +166,8 @@ init python:
                     side=0,
                     slot_index=start_index,
                     is_defense=False,
+                    on_finish=switch_to_defend
                 )
-
-                # Clear selection and proceed to opponent turn
-                selected_attack_card_indexes.clear()
-                confirm_attack = False
-                card_game.state = "opponent_defend"
 
             else:
                 print("Invalid attack. Resetting selection.")
