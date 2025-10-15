@@ -104,7 +104,7 @@ init python:
         print("Card clicked:", card)
 
         # Player attack phase
-        if card_game.state == "player_turn":
+        if card_game.state in ["player_turn", "opponent_take"]:
             if index in selected_attack_card_indexes:
                 selected_attack_card_indexes.remove(index)
                 print("Unselected:", card)
@@ -194,7 +194,7 @@ init python:
                     is_defense=False,
                 )
 
-                card_game.state = "player_defend"
+                card_game.state = "player_defend" if not confirm_take else "end_turn"
 
             else:
                 print("AI attempted to attack but failed unexpectedly.")
@@ -207,7 +207,6 @@ init python:
 
             else:
                 print("AI cannot attack and table is beaten. Ending turn.")
-                confirm_take = False
                 card_game.state = "end_turn"
 
     def durak_opponent_defend():
@@ -235,9 +234,10 @@ init python:
                 # All done — now check if fully defended
                 if card_game.table.beaten():
                     print("AI defended all attacks.")
+                    card_game.state = "player_turn" if card_game.can_attack(card_game.player) else "end_turn"
                 else:
                     print("AI failed to defend completely.")
-                card_game.state = "player_turn"
+                    card_game.state = "opponent_take" if card_game.can_attack(card_game.player) else "player_turn"
                 return
 
             slot_index, atk_card, def_card = defense_queue[index]
@@ -266,30 +266,13 @@ init python:
             do_defense()
         else:
             print("AI could not defend. Will need to take.")
-            card_game.state = "player_turn"
+            card_game.state = "opponent_take"
 
     # --------------------
     # End Turn Logic
     # --------------------
     def durak_end_turn():
         global confirm_take  # Ensure this resets the global flag
-
-        # AI Throw-ins if it was the AI's turn and player still can be attacked
-        if card_game.current_turn == card_game.opponent and card_game.can_attack(card_game.opponent):
-            print("AI adding throw-ins.")
-            throw_ins = card_game.throw_ins()
-
-            table_animations[:] = []
-            for i, card in enumerate(throw_ins):
-                play_card_anim(
-                    card=card,
-                    side=1,
-                    slot_index=len(card_game.table) - len(cards) + i,
-                    is_defense=False,
-                    delay=i * 0.1
-                )
-
-            show_anim()
 
         print("Table before ending turn:", card_game.table)
         print("Player hand before ending turn:", card_game.player.hand)

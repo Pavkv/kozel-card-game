@@ -1,4 +1,12 @@
 label start_els:
+    $ player_name = renpy.input("Введите ваше имя", length=20)
+    $ opponent_name = "Противник"
+    $ cards_bg = "images/bg/bg_14.jpg"
+    $ in_game = False
+    $ base_card_img_src = "images/cards/cards"
+    $ biased_draw = ["opponent", 0.5]
+    $ day2_game_with_Alice = False
+    $ last_winner = "player"
     $ start_card_game(ElsGame, "els")
 
 label els_game_loop:
@@ -8,6 +16,15 @@ label els_game_loop:
         call screen deal_cards
     else:
         $ deal_cards = False
+
+    python:
+        import pickle
+        for key, val in renpy.store.__dict__.items():
+            try:
+                pickle.dumps(val)
+            except Exception as e:
+                if callable(val) or isinstance(val, (list, dict)) and any(callable(v) for v in (val.values() if isinstance(val, dict) else val)):
+                    print("🚨 Problem key:", key, e)
 
     if card_game.round == 5:
 #         $ renpy.block_rollback()

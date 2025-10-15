@@ -154,7 +154,7 @@ screen game_phase_and_controls():
                     textbutton "{color=#fff}[btn_text]{/color}":
                         style "card_game_button"
                         text_size 18
-                        action handle_confirm_attack()
+                        action Function(eval("store." + handle_confirm_attack()))
 
         elif isinstance(card_game, WitchGame) and card_game.state == "wait_choice" and selected_exchange_card_index_opponent != -1:
             frame:
@@ -363,19 +363,21 @@ screen player_card_hand_display():
             else:
                 $ is_selected = (i in selected_attack_card_indexes or i == selected_exchange_card_index_player)
                 $ y_shift = -80 if is_hovered or is_selected else 0
+                $ func_name, idx = handle_card_action(card_game, i)
                 imagebutton:
                     idle Transform(get_card_image(card), xysize=(CARD_WIDTH, CARD_HEIGHT))
                     hover Transform(get_card_image(card), xysize=(CARD_WIDTH, CARD_HEIGHT))
                     xpos card_x
                     ypos card_y
                     at hover_offset(y=y_shift, x=x_shift)
-                    action handle_card_action(card_game, i)
+                    if func_name:
+                        action Function(eval("store." + func_name), idx)
                     hovered If(hovered_card_index != i, SetVariable("hovered_card_index", i))
                     unhovered If(hovered_card_index == i, SetVariable("hovered_card_index", -1))
 
 screen table():
     timer .5 action SetVariable("next_turn", False)
-    if card_game.state not in ["player_attack", "player_defend"]:
+    if card_game.state not in ["player_attack", "player_defend", "opponent_take"]:
          timer 5 action Jump(card_game_name + "_game_loop")
 
     $ num_table_cards = len(card_game.table.table)
@@ -428,7 +430,7 @@ screen deal_cards():
 
     timer delay + 1.0 action Jump(card_game_name + "_game_loop")
 
-screen table_card_animation(function=None, delay=0.0):
+screen table_card_animation(on_finish=None, args=(), kwargs={}, delay=0.0):
 
     default max_duration = delay
 
@@ -457,5 +459,5 @@ screen table_card_animation(function=None, delay=0.0):
         SetVariable("in_flight_cards", set()),
         Function(renpy.restart_interaction),
         Hide("table_card_animation"),
-        Function(function) if function else None
+        Function(resolve_on_finish, on_finish, args, kwargs) if on_finish else None
     ]

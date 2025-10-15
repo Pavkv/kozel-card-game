@@ -1,4 +1,14 @@
-label start_g21:
+label start:
+    $ player_name = renpy.input("Введите ваше имя", length=20)
+    $ opponent_name = "Противник"
+    $ cards_bg = "images/bg/bg_14.jpg"
+    $ in_game = False
+    $ base_card_img_src = "images/cards/cards"
+    $ biased_draw = ["opponent", 0.5]
+    $ day2_game_with_Alice = False
+    $ last_winner = "opponent"
+    $ g21_card_num = 1
+    $ g21_aces_low = True
     $ start_card_game(Game21, "g21", game_kwargs={"initial_deal": g21_card_num, "aces_low": g21_aces_low})
 
 label g21_game_loop:
@@ -8,6 +18,7 @@ label g21_game_loop:
         call screen deal_cards
     else:
         $ deal_cards = False
+
 
     if card_game.state == "result":
 #       $ renpy.block_rollback()

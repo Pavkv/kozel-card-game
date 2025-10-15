@@ -1,4 +1,4 @@
-label start:
+label start_durak:
     $ player_name = renpy.input("Введите ваше имя", length=20)
     $ opponent_name = "Противник"
     $ cards_bg = "images/bg/bg_14.jpg"
@@ -25,7 +25,7 @@ label durak_game_loop:
         $ print("Game Over: ", card_game.result)
         $ card_game.state = "result"
 
-    if card_game.state == "opponent_turn":
+    if card_game.state in ["opponent_turn", "player_take"]:
 #         $ renpy.block_rollback()
         $ durak_opponent_turn()
 

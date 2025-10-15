@@ -22,7 +22,6 @@ class AIWitch(Player):
                  rng=None, epsilon=0.20, reward=1.0, witch_penalty=1.5,
                  decay=0.995, min_trials_boost=0.25, verbose=False):
         super(AIWitch, self).__init__(name, aces_low)
-        self.rng = rng or random
         self.epsilon = float(epsilon)
         self.reward = float(reward)
         self.witch_penalty = float(witch_penalty)
@@ -117,8 +116,8 @@ class AIWitch(Player):
         self._ensure_stats_capacity(n)
 
         # epsilon-greedy
-        if self.rng.random() < self.epsilon:
-            return self.rng.randrange(n)
+        if random.random() < self.epsilon:
+            return random.randrange(n)
 
         # pick argmax(score + prior/(1+trials))
         best_idx, best_val = None, None
@@ -128,7 +127,7 @@ class AIWitch(Player):
             if best_val is None or val > best_val:
                 best_val = val
                 best_idx = i
-        return best_idx if best_idx is not None else self.rng.randrange(n)
+        return best_idx if best_idx is not None else random.randrange(n)
 
     def _remember_context(self, donor_player, index):
         # Ranks BEFORE the take (to judge pair potential fairly)

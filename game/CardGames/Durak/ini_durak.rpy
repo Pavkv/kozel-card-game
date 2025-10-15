@@ -1,11 +1,11 @@
-init:
+init python:
     # Card selection and layout state
-    default confirm_attack = False
-    default confirm_take = False
-    default selected_card = None
-    default selected_attack_card = None
-    default attack_target = None
+    confirm_attack = False
+    confirm_take = False
+    selected_card = None
+    selected_attack_card = None
+    attack_target = None
 
     # Achievements
-    default last_attack_two_sixes = True
-    default sixes_loss_candidate = False
+    last_attack_two_sixes = True
+    sixes_loss_candidate = False

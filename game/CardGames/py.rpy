@@ -73,23 +73,22 @@ init python:
 
     def handle_card_action(card_game, index):
         if isinstance(card_game, DurakGame):
-            return Function(durak_handle_card_click, index)
+            return "durak_handle_card_click", index
         elif isinstance(card_game, KozelGame):
-            return Function(kozel_handle_card_click, index)
+            return "kozel_handle_card_click", index
         elif isinstance(card_game, ElsGame) and card_game.state == "player_defend":
-            return Function(lambda: els_swap_cards_player(index))
-        return None
+            return "els_swap_cards_player", index
+        return None, None
 
     def handle_confirm_attack():
-        global confirm_attack, selected_attack_card_indexes
         if isinstance(card_game, DurakGame):
             confirm_attack = True
-            return Function(durak_confirm_selected_attack)
+            return "durak_confirm_selected_attack"
         elif isinstance(card_game, KozelGame) and card_game.state == "player_turn":
             confirm_attack = True
-            return Function(kozel_confirm_selected_attack)
+            return "kozel_confirm_selected_attack"
         elif isinstance(card_game, KozelGame) and card_game.state == "player_drop":
-            return Function(kozel_player_drop)
+            return "kozel_player_drop"
 
     def handle_end_turn():
         global selected_attack_card_indexes, hovered_card_index, confirm_take
@@ -136,11 +135,27 @@ init python:
         idx = len(hand)
         return (PLAYER_HAND_X + idx * HAND_SPACING, PLAYER_HAND_Y) if side_index == 0 else (OPPONENT_HAND_X + idx * HAND_SPACING, OPPONENT_HAND_Y)
 
-    def show_anim(function=None, delay=0.0):
-        renpy.show_screen("table_card_animation", function=function, delay=delay)
+    def show_anim(on_finish=None, args=(), kwargs=None, delay=0.0):
+        """
+        Shows the animation screen with a callback by name and optional arguments.
+
+        on_finish: string function name
+        args: tuple of positional arguments
+        kwargs: dict of keyword arguments
+        """
+        if kwargs is None:
+            kwargs = {}
+
+        renpy.show_screen(
+            "table_card_animation",
+            on_finish=on_finish,
+            args=args,
+            kwargs=kwargs,
+            delay=delay
+        )
 
     def delay_anim(delay=3, on_finish=None):
-        show_anim(function=on_finish, delay=delay)
+        show_anim(on_finish=on_finish, delay=delay)
 
     # ----------------------------
     # In-Game Control Management
@@ -229,6 +244,35 @@ init python:
     # ----------------------------
     # In Game Animations
     # ----------------------------
+    def resolve_on_finish(name, args=(), kwargs=None):
+        """
+        Resolve and call a function by string name, with optional args and kwargs.
+        """
+        if kwargs is None:
+            kwargs = {}
+
+        if not isinstance(name, str):
+            renpy.log(f"[WARN] resolve_on_finish got non-string: {name!r}")
+            return
+
+        try:
+            func = globals().get(name)
+            if callable(func):
+                func(*args, **kwargs)
+            else:
+                renpy.log(f"[WARN] No callable found for '{name}'")
+        except Exception as e:
+            renpy.log(f"[ERROR] resolve_on_finish({name}): {e}")
+
+    def apply_draw(draw_cards, player, sort_hand=False, on_finish=None):
+        for card in drawn_cards:
+            player.hand.append(card)
+        if sort_hand:
+            player.sort_hand(card_game.deck.trump_suit)
+        compute_hand_layout()
+        if isinstance(on_finish, str):
+            resolve_on_finish(on_finish)
+
     def draw_anim(side, target_count=6, sort_hand=False, step_delay=0.1, on_finish=None):
         """
         Animate drawing cards for the given side (0 = player, 1 = opponent)
@@ -274,16 +318,7 @@ init python:
 
             d += step_delay
 
-        def apply_draw():
-            for card in drawn_cards:
-                player.hand.append(card)
-            if sort_hand:
-                player.sort_hand(card_game.deck.trump_suit)
-            compute_hand_layout()
-            if on_finish:
-                on_finish()
-
-        show_anim(function=apply_draw)
+        show_anim(function="apply_draw")
 
     def take_card_anim(
         from_side,

@@ -2,9 +2,9 @@
 errors listed below, and try again.
 
 
-File "game/CardGames/ini.rpy", line 122: ATL statement contains two expressions in a row; is one of them a misspelled property? If not, separate them with pass.
-    x x1
-        ^
+File "game/CardGames/Els/scripts_els.rpy", line 20: expected statement.
+    print("yes")
+                ^
 
 Ren'Py Version: Ren'Py 7.4.11.2266
-Mon Oct 13 15:42:11 2025
+Tue Oct 14 10:40:40 2025

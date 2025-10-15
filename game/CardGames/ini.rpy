@@ -80,10 +80,10 @@ init python:
         "durak" : {
             "player_turn": "Вы атакуете",
             "player_defend": "Вы защищаетесь",
-            "player_take": "Вы берёте",
+            "player_take": "Вы забираете",
             "opponent_turn": "Противник атакует",
             "opponent_defend": "Противник защищается",
-            "opponent_take": "Противник берёт",
+            "opponent_take": "Противник забирает",
             "end_turn": "Окончание хода",
             "results": "Игра окончена"
         },
