@@ -1,12 +1,55 @@
 init python:
-     # --------------------
-     # Durak Animations
-     # --------------------
+    # --------------------
+    # Durak Animations
+    # --------------------
+    def durak_player_draw():
+        draw_anim(side=0, sort_hand=True)
+
+    def durak_opponent_draw():
+        draw_anim(side=1, sort_hand=True)
+
+    def durak_resolve_table_logic(is_beaten, receiver):
+        if is_beaten:
+            for atk_card, (beaten, def_card) in card_game.table.table.items():
+                card_game.deck.discard.append(atk_card)
+                if def_card:
+                    card_game.deck.discard.append(def_card)
+            card_game.current_turn = (
+                card_game.opponent if card_game.current_turn == card_game.player else card_game.player
+            )
+            card_game.state = (
+                "player_turn" if card_game.current_turn == card_game.player else "opponent_turn"
+            )
+        else:
+            for atk_card, (beaten, def_card) in card_game.table.table.items():
+                receiver.hand.append(atk_card)
+                if def_card:
+                    receiver.hand.append(def_card)
+            card_game.state = (
+                "player_turn" if receiver == card_game.opponent else "opponent_turn"
+            )
+
+        card_game.table.clear()
+
+        print("Discard pile:", card_game.deck.discard)
+        print("Player hand after turn:", card_game.player.hand)
+        print("Opponent hand after turn:", card_game.opponent.hand)
+
+        if card_game.current_turn == card_game.opponent:
+            draw_anim(side=0, sort_hand=True, on_finish="durak_opponent_draw")
+        else:
+            draw_anim(side=1, sort_hand=True, on_finish="durak_player_draw")
+
+        card_game.player.sort_hand(card_game.deck.trump_suit)
+        card_game.opponent.sort_hand(card_game.deck.trump_suit)
+
+        compute_hand_layout()
+
     def durak_animate_and_resolve_table(step_delay=0.05, anim_duration=0.1):
-        global hovered_card_index
         """
         Animate cards being cleared from the table and defer logic until after animation.
         """
+        global hovered_card_index
 
         table_animations[:] = []
         delay = 0.0
@@ -52,44 +95,10 @@ init python:
                 table_animations.append(anim)
                 delay += step_delay
 
-        def resolve_table_logic():
-            if is_beaten:
-                for atk_card, (beaten, def_card) in card_game.table.table.items():
-                    card_game.deck.discard.append(atk_card)
-                    if def_card:
-                        card_game.deck.discard.append(def_card)
-                card_game.current_turn = (
-                    card_game.opponent if card_game.current_turn == card_game.player else card_game.player
-                )
-                card_game.state = (
-                    "player_turn" if card_game.current_turn == card_game.player else "opponent_turn"
-                )
-            else:
-                for atk_card, (beaten, def_card) in card_game.table.table.items():
-                    receiver.hand.append(atk_card)
-                    if def_card:
-                        receiver.hand.append(def_card)
-                card_game.state = (
-                    "player_turn" if receiver == card_game.opponent else "opponent_turn"
-                )
-
-            card_game.table.clear()
-
-            print("Discard pile:", card_game.deck.discard)
-            print("Player hand after turn:", card_game.player.hand)
-            print("Opponent hand after turn:", card_game.opponent.hand)
-
-            if card_game.current_turn == card_game.opponent:
-                draw_anim(side=0, sort_hand=True, on_finish=lambda: draw_anim(side=1, sort_hand=True))
-            else:
-                draw_anim(side=1, sort_hand=True, on_finish=lambda: draw_anim(side=0, sort_hand=True))
-
-            card_game.player.sort_hand(card_game.deck.trump_suit)
-            card_game.opponent.sort_hand(card_game.deck.trump_suit)
-
-            compute_hand_layout()
-
-        show_anim(function=resolve_table_logic)
+        show_anim(
+            on_finish="durak_resolve_table_logic",
+            args=(is_beaten, receiver),
+        )
 
         hovered_card_index = -1
 
@@ -143,6 +152,12 @@ init python:
                 card_game.state = "end_turn"
                 selected_attack_card = None
 
+    def durak_player_switch_to_defend():
+        global confirm_attack, selected_attack_card_indexes
+        selected_attack_card_indexes.clear()
+        confirm_attack = False
+        card_game.state = "opponent_defend"
+
     def durak_confirm_selected_attack():
         """Confirms all selected attack cards and animates them from hand to table."""
         global confirm_attack, selected_attack_card_indexes
@@ -154,11 +169,6 @@ init python:
             if card_game.can_attack(card_game.player):
                 print("Player attacked with: " + ', '.join(str(c) for c in cards))
 
-                def switch_to_defend():
-                    selected_attack_card_indexes.clear()
-                    confirm_attack = False
-                    card_game.state = "opponent_defend"
-
                 # Animate each card moving to table
                 start_index = len(card_game.table)
                 play_card_anim(
@@ -166,7 +176,7 @@ init python:
                     side=0,
                     slot_index=start_index,
                     is_defense=False,
-                    on_finish=switch_to_defend
+                    on_finish="durak_player_switch_to_defend"
                 )
 
             else:
@@ -211,8 +221,9 @@ init python:
 
     def durak_opponent_defend():
         """Handles the opponent's defense logic sequentially with animation."""
-        defense_queue = []
+        global durak_defense_queue, durak_defense_index
 
+        durak_defense_queue = []
         reserved_cards = set()
 
         for i, (attack_card, (beaten, _)) in enumerate(card_game.table.table.items()):
@@ -223,50 +234,64 @@ init python:
                     exclude=reserved_cards
                 )
                 if def_card:
-                    defense_queue.append((i, attack_card, def_card))
-                    reserved_cards.add(def_card)  # Reserve this card
+                    durak_defense_queue.append((i, attack_card, def_card))
+                    reserved_cards.add(def_card)
                 else:
                     print("AI cannot defend against:", attack_card)
                     break
 
-        def do_defense(index=0):
-            if index >= len(defense_queue):
-                # All done — now check if fully defended
-                if card_game.table.beaten():
-                    print("AI defended all attacks.")
-                    card_game.state = "player_turn" if card_game.can_attack(card_game.player) else "end_turn"
-                else:
-                    print("AI failed to defend completely.")
-                    card_game.state = "opponent_take" if card_game.can_attack(card_game.player) else "player_turn"
-                return
+        durak_defense_index = 0
 
-            slot_index, atk_card, def_card = defense_queue[index]
-
-            def apply_defense():
-                # Now it's safe to update the game state
-                card_game.table.beat(atk_card, def_card)
-                if def_card in card_game.opponent.hand:
-                    card_game.opponent.hand.remove(def_card)
-                compute_hand_layout()
-
-                # Move to next defense
-                do_defense(index + 1)
-
-            # Animate it
-            play_card_anim(
-                cards=[def_card],
-                side=1,
-                slot_index=slot_index,
-                is_defense=True,
-                delay=0.0
-            )
-            show_anim(apply_defense)  # ensure `beat()` happens *after* animation
-
-        if defense_queue:
-            do_defense()
+        if durak_defense_queue:
+            durak_opponent_do_defense()
         else:
             print("AI could not defend. Will need to take.")
             card_game.state = "opponent_take"
+
+    def durak_opponent_do_defense():
+        """Executes one defense step at a time using animation + show_anim."""
+        global durak_defense_queue, durak_defense_index
+
+        if durak_defense_index >= len(durak_defense_queue):
+            # Done with all defenses
+            if card_game.table.beaten():
+                print("AI defended all attacks.")
+                card_game.state = "player_turn" if card_game.can_attack(card_game.player) else "end_turn"
+            else:
+                print("AI failed to defend completely.")
+                card_game.state = "opponent_take" if card_game.can_attack(card_game.player) else "end_turn"
+            return
+
+        slot_index, atk_card, def_card = durak_defense_queue[durak_defense_index]
+
+        play_card_anim(
+            cards=[def_card],
+            side=1,
+            slot_index=slot_index,
+            is_defense=True,
+            delay=0.0
+        )
+
+        # Wait for animation, then continue logic
+        show_anim(
+            on_finish="durak_opponent_apply_defense"
+        )
+
+    def durak_opponent_apply_defense():
+        """Applies the current defense step and continues to the next."""
+        global durak_defense_queue, durak_defense_index
+
+        slot_index, atk_card, def_card = durak_defense_queue[durak_defense_index]
+
+        print("AI defends", atk_card, "with", def_card)
+        card_game.table.beat(atk_card, def_card)
+        if def_card in card_game.opponent.hand:
+            card_game.opponent.hand.remove(def_card)
+        compute_hand_layout()
+
+        # Next step
+        durak_defense_index += 1
+        durak_opponent_do_defense()
 
     # --------------------
     # End Turn Logic
@@ -302,3 +327,15 @@ init python:
         print("Opponent hand after drawing:", card_game.opponent.hand)
 
         confirm_take = False
+
+    def resolve_on_finish(key):
+        if key == "durak_player_draw":
+            durak_player_draw()
+        elif key == "durak_opponent_draw":
+            durak_opponent_draw()
+        elif key == "durak_resolve_table_logic":
+            durak_resolve_table_logic()
+        elif key == "durak_player_switch_to_defend":
+            durak_player_switch_to_defend()
+        elif key == "durak_opponent_apply_defense":
+            durak_opponent_apply_defense()

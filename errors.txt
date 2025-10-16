@@ -2,10 +2,7 @@
 errors listed below, and try again.
 
 
-File "game/CardGames/py.rpy", line 255: invalid syntax
-            renpy.log(f"[WARN] resolve_on_finish got non-string: {name!r}")
-                                                                          ^
-    
+File "game/CardGames/Durak/py_durak.rpy", line 222: non-default argument follows default argument
 
 Ren'Py Version: Ren'Py 7.4.11.2266
-Wed Oct 15 18:14:57 2025
+Thu Oct 16 09:17:29 2025

@@ -1,279 +1,244 @@
-Wed Oct 15 19:17:11 2025
-Windows-10-10.0.26100
+Thu Oct 16 10:01:38 2025
+Darwin-24.6.0-x86_64-i386-64bit
 Ren'Py 7.4.11.2266
  
 
 Bootstrap to the start of init.init took 0.05s
 Early init took 0.00s
-Loader init took 0.02s
+Loader init took 0.00s
 Loading error handling took 0.01s
-Loading script took 0.12s
-Loading save slot metadata. took 0.01s
+Loading script took 0.05s
+Loading save slot metadata. took 0.00s
 Loading persistent took 0.00s
 Importing _renpysteam: ImportError('No module named _renpysteam',)
-Running init code took 0.06s
+Running init code took 0.03s
 Loading analysis data took 0.01s
 Analyze and compile ATL took 0.00s
 Index archives took 0.00s
-Backing up script files to 'C:\\Users\\Admin\\AppData\\Roaming/RenPy/backups\\kozel-card-game':
-Dump and make backups. took 0.04s
+Dump and make backups. took 0.03s
+Cleaning cache took 0.00s
+Making clean stores took 0.00s
+Initial gc. took 0.01s
+DPI scale factor: 1.000000
+Creating interface object took 0.00s
+Cleaning stores took 0.00s
+Init translation took 0.01s
+Build styles took 0.00s
+Load screen analysis took 0.01s
+Analyze screens took 0.00s
+Save screen analysis took 0.00s
+Prepare screens took 0.03s
+Save pyanalysis. took 0.00s
+Save bytecode. took 0.00s
+Running _start took 0.00s
+Performance test:
+Interface start took 0.25s
+
+Initializing gl2 renderer:
+primary display bounds: (0, 0, 1470, 956)
+swap interval: 1 frames
+Windowed mode.
+Vendor: 'Apple'
+Renderer: 'Apple M3'
+Version: '2.1 Metal - 89.4'
+Display Info: None
+Screen sizes: virtual=(1920, 1080) physical=(1072, 603) drawable=(2144, 1206)
+Maximum texture size: 4096x4096
+[6S, 9D, KD, KC, 6H, 10H]
+[7D, 9S, JC, QD, AS, 9H]
+[6S, 9D, KD, KC, 6H, 10H]
+[7D, 9S, JC, QD, AS, 9H]
+Card clicked: 6S
+Selected: 6S
+Player attacked with: 6S
+yes
+[9D, KD, KC, 6H, 10H]
+[7D, 9S, JC, QD, AS, 9H]
+AI defends 6S with 9S
+AI defended all attacks.
+Card clicked: 9D
+[9D, KD, KC, 6H, 10H]
+[7D, JC, QD, AS, 9H]
+Table before ending turn: Table: 6S
+Player hand before ending turn: [9D, KD, KC, 6H, 10H]
+Opponent hand before ending turn: [7D, JC, QD, AS, 9H]
+Player hand after drawing: [9D, KD, KC, 6H, 10H]
+Opponent hand after drawing: [7D, JC, QD, AS, 9H]
+Discard pile: [6S, 9S]
+Player hand after turn: [9D, KD, KC, 6H, 10H]
+Opponent hand after turn: [7D, JC, QD, AS, 9H]
+[9D, KD, KC, 6H, 7H, 10H]
+[7D, 10D, JC, QD, AS, 9H]
+AI attacked successfully with: [7D]
+yes
+Card clicked: KD
+Player defended against 7D with KD
+yes
+[9D, KC, 6H, 7H, 10H]
+[10D, JC, QD, AS, 9H]
+AI cannot attack and table is beaten. Ending turn.
+[9D, KC, 6H, 7H, 10H]
+[10D, JC, QD, AS, 9H]
+Table before ending turn: Table: 7D
+Player hand before ending turn: [9D, KC, 6H, 7H, 10H]
+Opponent hand before ending turn: [10D, JC, QD, AS, 9H]
+Player hand after drawing: [9D, KC, 6H, 7H, 10H]
+Opponent hand after drawing: [10D, JC, QD, AS, 9H]
+Discard pile: [6S, 9S, 7D, KD]
+Player hand after turn: [9D, KC, 6H, 7H, 10H]
+Opponent hand after turn: [10D, JC, QD, AS, 9H]
+[9D, KC, 6H, 7H, 10H, QH]
+[9C, 10D, JC, QD, AS, 9H]
+Resetting cache.
+Bootstrap to the start of init.init took 40.86s
+Early init took 0.00s
+Loader init took 0.00s
+Loading error handling took 0.01s
+Loading script took 0.07s
+Loading save slot metadata. took 0.00s
+Loading persistent took 0.00s
+Importing _renpysteam: ImportError('No module named _renpysteam',)
+Running init code took 0.01s
+Loading analysis data took 0.01s
+Analyze and compile ATL took 0.00s
+Index archives took 0.00s
+Backing up script files to '/Users/pavelzobov/Library/RenPy/backups/Kozel':
+Dump and make backups. took 0.03s
 Cleaning cache took 0.00s
 Making clean stores took 0.00s
 Initial gc. took 0.02s
 DPI scale factor: 1.000000
-nvdrs: Loaded, about to disable thread optimizations.
-nvdrs: Disabled thread optimizations.
-Creating interface object took 0.22s
+Creating interface object took 0.00s
 Cleaning stores took 0.00s
 Init translation took 0.02s
 Build styles took 0.00s
 Load screen analysis took 0.00s
 Analyze screens took 0.01s
-Save screen analysis took 0.02s
-Prepare screens took 0.04s
-Save pyanalysis. took 0.00s
-Save bytecode. took 0.02s
-Running _start took 0.00s
-Performance test:
-Interface start took 0.09s
-
-Initializing gl2 renderer:
-primary display bounds: (0, 0, 3440, 1440)
-swap interval: 1 frames
-Windowed mode.
-Vendor: 'NVIDIA Corporation'
-Renderer: 'NVIDIA GeForce RTX 3080/PCIe/SSE2'
-Version: '4.6.0 NVIDIA 576.88'
-Display Info: None
-Screen sizes: virtual=(1920, 1080) physical=(1072, 603) drawable=(1072, 603)
-Maximum texture size: 4096x4096
-[6C, 9C, 8S, 10S, AH, JH]
-[AD, KH, JS, 6D, 9S, QD]
-[6C, 9C, 8S, 10S, AH, JH]
-[AD, KH, JS, 6D, 9S, QD]
-exchange
-[10S, JH, 9C, 8S, AH]
-[AD, KH, JS, 9S, QD]
-end_turn
-AI draws cards.
-AI attempts to exchange a card.
-[JH, 9C, 8S, AH]
-[QD, KH, AD, 6S, 9S, JS]
-end_turn
-AI ends turn.
-Resetting cache.
-Bootstrap to the start of init.init took 30.30s
-Early init took 0.00s
-Loader init took 0.02s
-Loading error handling took 0.01s
-Loading script took 0.10s
-Loading save slot metadata. took 0.01s
-Loading persistent took 0.00s
-Importing _renpysteam: ImportError('No module named _renpysteam',)
-Running init code took 0.02s
-Loading analysis data took 0.02s
-Analyze and compile ATL took 0.00s
-Index archives took 0.00s
-Backing up script files to 'C:\\Users\\Admin\\AppData\\Roaming/RenPy/backups\\kozel-card-game':
-Dump and make backups. took 0.04s
-Cleaning cache took 0.00s
-Making clean stores took 0.00s
-Initial gc. took 0.03s
-DPI scale factor: 1.000000
-nvdrs: Loaded, about to disable thread optimizations.
-nvdrs: Disabled thread optimizations.
-Creating interface object took 0.23s
-Cleaning stores took 0.00s
-Init translation took 0.02s
-Build styles took 0.00s
-Load screen analysis took 0.00s
-Analyze screens took 0.01s
-Save screen analysis took 0.02s
+Save screen analysis took 0.01s
 Prepare screens took 0.03s
 Save pyanalysis. took 0.00s
 Save bytecode. took 0.01s
 Running _start took 0.00s
 Performance test:
-Interface start took 0.03s
+Interface start took 0.09s
 
 Initializing gl2 renderer:
-primary display bounds: (0, 0, 3440, 1440)
+primary display bounds: (0, 0, 1470, 956)
 swap interval: 1 frames
 Windowed mode.
-Vendor: 'NVIDIA Corporation'
-Renderer: 'NVIDIA GeForce RTX 3080/PCIe/SSE2'
-Version: '4.6.0 NVIDIA 576.88'
+Vendor: 'Apple'
+Renderer: 'Apple M3'
+Version: '2.1 Metal - 89.4'
 Display Info: None
-Screen sizes: virtual=(1920, 1080) physical=(1072, 603) drawable=(1072, 603)
+Screen sizes: virtual=(1920, 1080) physical=(1072, 603) drawable=(2144, 1206)
 Maximum texture size: 4096x4096
-AI ends turn.
-[KD, AH, 9C, 8S]
-[6S, KH, 9S, JS, AD, QD]
-end_turn
-AI can exchange a card.
-AI attempts to exchange a card.
-[KD, AH, 8S]
-[6S, KH, 9S, JS, AD, QD]
-end_turn
-AI ends turn.
-Resetting cache.
-Bootstrap to the start of init.init took 43.09s
-Early init took 0.00s
-Loader init took 0.03s
-Loading error handling took 0.01s
-Loading script took 0.11s
-Loading save slot metadata. took 0.01s
-Loading persistent took 0.00s
-Importing _renpysteam: ImportError('No module named _renpysteam',)
-Running init code took 0.02s
-Loading analysis data took 0.03s
-Analyze and compile ATL took 0.00s
-Index archives took 0.00s
-Backing up script files to 'C:\\Users\\Admin\\AppData\\Roaming/RenPy/backups\\kozel-card-game':
-Dump and make backups. took 0.04s
-Cleaning cache took 0.00s
-Making clean stores took 0.00s
-Initial gc. took 0.06s
-DPI scale factor: 1.000000
-nvdrs: Loaded, about to disable thread optimizations.
-nvdrs: Disabled thread optimizations.
-Creating interface object took 0.26s
-Cleaning stores took 0.00s
-Init translation took 0.03s
-Build styles took 0.00s
-Load screen analysis took 0.00s
-Analyze screens took 0.01s
-Save screen analysis took 0.02s
-Prepare screens took 0.04s
-Save pyanalysis. took 0.00s
-Save bytecode. took 0.01s
-Running _start took 0.00s
-Performance test:
-Interface start took 0.04s
+[9D, KC, 6H, 7H, 10H, QH]
+[9C, 10D, JC, QD, AS, 9H]
+[9D, KC, 6H, 7H, 10H, QH]
+[9C, 10D, JC, QD, AS, 9H]
+[9D, KC, 6H, 7H, 10H, QH]
+[9C, 10D, JC, QD, AS, 9H]
+[9D, KC, 6H, 7H, 10H, QH]
+[9C, 10D, JC, QD, AS, 9H]
+[9D, KC, 6H, 7H, 10H, QH]
+[9C, 10D, JC, QD, AS, 9H]
+[9D, KC, 6H, 7H, 10H, QH]
+[9C, 10D, JC, QD, AS, 9H]
+[9D, KC, 6H, 7H, 10H, QH]
+[9C, 10D, JC, QD, AS, 9H]
+[9D, KC, 6H, 7H, 10H, QH]
+[9C, 10D, JC, QD, AS, 9H]
+[9D, KC, 6H, 7H, 10H, QH]
+[9C, 10D, JC, QD, AS, 9H]
+[9D, KC, 6H, 7H, 10H, QH]
+[9C, 10D, JC, QD, AS, 9H]
+[9D, KC, 6H, 7H, 10H, QH]
+[9C, 10D, JC, QD, AS, 9H]
+[9D, KC, 6H, 7H, 10H, QH]
+[9C, 10D, JC, QD, AS, 9H]
+[9D, KC, 6H, 7H, 10H, QH]
+[9C, 10D, JC, QD, AS, 9H]
+[9D, KC, 6H, 7H, 10H, QH]
+[9C, 10D, JC, QD, AS, 9H]
+[9D, KC, 6H, 7H, 10H, QH]
+[9C, 10D, JC, QD, AS, 9H]
+[9D, KC, 6H, 7H, 10H, QH]
+[9C, 10D, JC, QD, AS, 9H]
+[9D, KC, 6H, 7H, 10H, QH]
+[9C, 10D, JC, QD, AS, 9H]
+[9D, KC, 6H, 7H, 10H, QH]
+[9C, 10D, JC, QD, AS, 9H]
+[9D, KC, 6H, 7H, 10H, QH]
+[9C, 10D, JC, QD, AS, 9H]
+[9D, KC, 6H, 7H, 10H, QH]
+[9C, 10D, JC, QD, AS, 9H]
+[9D, KC, 6H, 7H, 10H, QH]
+[9C, 10D, JC, QD, AS, 9H]
+[9D, KC, 6H, 7H, 10H, QH]
+[9C, 10D, JC, QD, AS, 9H]
+[9D, KC, 6H, 7H, 10H, QH]
+[9C, 10D, JC, QD, AS, 9H]
+[9D, KC, 6H, 7H, 10H, QH]
+[9C, 10D, JC, QD, AS, 9H]
+[9D, KC, 6H, 7H, 10H, QH]
+[9C, 10D, JC, QD, AS, 9H]
+[9D, KC, 6H, 7H, 10H, QH]
+[9C, 10D, JC, QD, AS, 9H]
+[9D, KC, 6H, 7H, 10H, QH]
+[9C, 10D, JC, QD, AS, 9H]
+[9D, KC, 6H, 7H, 10H, QH]
+[9C, 10D, JC, QD, AS, 9H]
+[9D, KC, 6H, 7H, 10H, QH]
+[9C, 10D, JC, QD, AS, 9H]
+[9D, KC, 6H, 7H, 10H, QH]
+[9C, 10D, JC, QD, AS, 9H]
+[9D, KC, 6H, 7H, 10H, QH]
+[9C, 10D, JC, QD, AS, 9H]
+[9D, KC, 6H, 7H, 10H, QH]
+[9C, 10D, JC, QD, AS, 9H]
 
-Initializing gl2 renderer:
-primary display bounds: (0, 0, 3440, 1440)
-swap interval: 1 frames
-Windowed mode.
-Vendor: 'NVIDIA Corporation'
-Renderer: 'NVIDIA GeForce RTX 3080/PCIe/SSE2'
-Version: '4.6.0 NVIDIA 576.88'
-Display Info: None
-Screen sizes: virtual=(1920, 1080) physical=(1072, 603) drawable=(1072, 603)
-Maximum texture size: 4096x4096
-AI ends turn.
-[8S, KD, 7H, AH]
-[KH, AD, JS, 6S, QD, 9C]
-end_turn
-AI can exchange a card.
-AI attempts to exchange a card.
-[8S, KD, AH]
-[KH, AD, JS, 6S, QD, 9C]
-end_turn
-AI ends turn.
-[8S, QH, AH, KD]
-[KH, AD, JS, 6S, QD, 9C, 7H]
-end_turn
-AI can exchange a card.
-AI attempts to exchange a card.
-[8S, QH, KD]
-[KH, AD, JS, 6S, QD, 9C, 7H]
-end_turn
-AI ends turn.
-[QH, 10H]
-[KH, 9C, 6S, QD, 7H, JS]
-end_turn
-AI can exchange a card.
-AI attempts to exchange a card.
-[10H]
-[KH, 9C, 6S, QD, 7H, JS]
-end_turn
-AI ends turn.
-[AS, 6H, 10H, 8H]
-[KH, JS, 6S, 7H, 9C]
-end_turn
-AI draws cards.
-[AS, 6H, 10H, 8H]
-[7H, 9C, JC, KH, 6S, JS]
-end_turn
-AI ends turn.
-[6H, AS]
-[7H, 6S, 9C, KH]
-end_turn
-AI draws cards.
-[6H, AS]
-[7H, 9C, KH, AC, 6S, 7S]
-end_turn
-AI ends turn.
-[6H, 10C, KS, AS, KH]
-[6S, 9C, AC]
-end_turn
-AI can exchange a card.
-AI attempts to exchange a card.
-[6H, KS, AS, KH]
-[6S, 9C, AC]
-end_turn
-AI ends turn.
-[6H, KS, KH]
-[6S, 9C, 10C]
-end_turn
-AI can exchange a card.
-AI attempts to exchange a card.
-[KS, KH]
-[6S, 9C, 10C]
-end_turn
-AI ends turn.
-[KS, KH, 9C]
-[10C]
-end_turn
-AI can exchange a card.
-AI attempts to exchange a card.
-[KH, 9C]
-[10C]
-end_turn
-AI ends turn.
-[KH, 9C, KS]
-[10C]
-end_turn
-AI can exchange a card.
-AI attempts to exchange a card.
-[9C, KS]
-[10C]
-end_turn
-AI ends turn.
-[9C, KS, KH]
-[10C]
-end_turn
-AI can exchange a card.
-AI attempts to exchange a card.
-[9C, KH]
-[10C]
-end_turn
-AI ends turn.
-[9C, KH, KS]
-[10C]
-end_turn
-AI can exchange a card.
-AI attempts to exchange a card.
-[9C, KH]
-[10C]
-end_turn
-AI ends turn.
-[9C, KH, KS]
-[10C]
-end_turn
-AI can exchange a card.
-AI attempts to exchange a card.
-[9C, KS]
-[10C]
-end_turn
-AI ends turn.
-[9C, KS, KH]
-[10C]
-end_turn
-AI can exchange a card.
-AI attempts to exchange a card.
-[KS, KH]
-[10C]
-end_turn
-AI ends turn.
+Full traceback:
+  File "game/CardGames/Durak/scripts_durak.rpy", line 46, in script
+    call screen durak
+  File "/Users/pavelzobov/Downloads/renpy-7.4.11-sdk/renpy/ast.py", line 2015, in execute
+    self.call("execute")
+  File "/Users/pavelzobov/Downloads/renpy-7.4.11-sdk/renpy/ast.py", line 2003, in call
+    return renpy.statements.call(method, parsed, *args, **kwargs)
+  File "/Users/pavelzobov/Downloads/renpy-7.4.11-sdk/renpy/statements.py", line 278, in call
+    return method(parsed, *args, **kwargs)
+  File "renpy/common/000statements.rpy", line 569, in execute_call_screen
+    store._return = renpy.call_screen(name, *args, **kwargs)
+  File "/Users/pavelzobov/Downloads/renpy-7.4.11-sdk/renpy/exports.py", line 3136, in call_screen
+    rv = renpy.ui.interact(mouse="screen", type="screen", roll_forward=roll_forward)
+  File "/Users/pavelzobov/Downloads/renpy-7.4.11-sdk/renpy/ui.py", line 298, in interact
+    rv = renpy.game.interface.interact(roll_forward=roll_forward, **kwargs)
+  File "/Users/pavelzobov/Downloads/renpy-7.4.11-sdk/renpy/display/core.py", line 3325, in interact
+    repeat, rv = self.interact_core(preloads=preloads, trans_pause=trans_pause, pause=pause, pause_start=pause_start, **kwargs)
+  File "/Users/pavelzobov/Downloads/renpy-7.4.11-sdk/renpy/display/core.py", line 4035, in interact_core
+    self.quit_event()
+  File "/Users/pavelzobov/Downloads/renpy-7.4.11-sdk/renpy/display/core.py", line 2977, in quit_event
+    renpy.display.behavior.run(renpy.config.quit_action)
+  File "/Users/pavelzobov/Downloads/renpy-7.4.11-sdk/renpy/display/behavior.py", line 330, in run
+    return action(*args, **kwargs)
+  File "renpy/common/00action_menu.rpy", line 220, in __call__
+    layout.yesno_screen(layout.QUIT, Quit(False))
+  File "renpy/common/00layout.rpy", line 527, in yesno_screen
+    if renpy.invoke_in_new_context(layout.invoke_yesno_prompt, None, message):
+  File "/Users/pavelzobov/Downloads/renpy-7.4.11-sdk/renpy/game.py", line 284, in invoke_in_new_context
+    return callable(*args, **kwargs)
+  File "renpy/common/00layout.rpy", line 472, in invoke_yesno_prompt
+    rv = layout.yesno_prompt(*args)
+AttributeError: 'Layout' object has no attribute 'yesno_prompt'
+
+While running game code:
+  File "game/CardGames/Durak/scripts_durak.rpy", line 46, in script
+    call screen durak
+  File "renpy/common/000statements.rpy", line 569, in execute_call_screen
+    store._return = renpy.call_screen(name, *args, **kwargs)
+  File "renpy/common/00action_menu.rpy", line 220, in __call__
+    layout.yesno_screen(layout.QUIT, Quit(False))
+  File "renpy/common/00layout.rpy", line 527, in yesno_screen
+    if renpy.invoke_in_new_context(layout.invoke_yesno_prompt, None, message):
+  File "renpy/common/00layout.rpy", line 472, in invoke_yesno_prompt
+    rv = layout.yesno_prompt(*args)
+AttributeError: 'Layout' object has no attribute 'yesno_prompt'

@@ -1,4 +1,4 @@
-label start:
+label start_witch:
     $ player_name = renpy.input("Введите ваше имя", length=20)
     $ opponent_name = "Противник"
     $ cards_bg = "images/bg/bg_14.jpg"

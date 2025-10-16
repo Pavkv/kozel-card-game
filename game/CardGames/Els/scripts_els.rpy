@@ -17,15 +17,6 @@ label els_game_loop:
     else:
         $ deal_cards = False
 
-    python:
-        import pickle
-        for key, val in renpy.store.__dict__.items():
-            try:
-                pickle.dumps(val)
-            except Exception as e:
-                if callable(val) or isinstance(val, (list, dict)) and any(callable(v) for v in (val.values() if isinstance(val, dict) else val)):
-                    print("🚨 Problem key:", key, e)
-
     if card_game.round == 5:
 #         $ renpy.block_rollback()
         $ game_result_els()

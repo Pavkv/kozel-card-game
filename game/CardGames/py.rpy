@@ -198,7 +198,6 @@ init python:
             delay=delay
         )
 
-
     # ----------------------------
     # In-Game Control Management
     # ----------------------------
@@ -411,7 +410,8 @@ init python:
             kwargs={"on_finish": on_finish}
         )
 
-    def apply_card_moves(cards, side, slot_index=0, is_defense=False, skip_check=False, on_finish=None):
+    def apply_card_moves(player, cards, slot_index=0, is_defense=False, skip_check=False, on_finish=None):
+        print("yes")
         attack_keys = list(card_game.table.table.keys())
         for i, card in enumerate(cards):
             if skip_check and is_defense:
@@ -438,7 +438,7 @@ init python:
         if isinstance(on_finish, str):
             resolve_on_finish(on_finish)
 
-    def play_card_anim(cards, side, slot_index=0, is_defense=False, delay=0.5, anim_duration=0.5, skip_check=False, on_finish=None):
+    def play_card_anim(cards, side, slot_index=0, is_defense=False, skip_check=False, on_finish=None, delay=0.5, anim_duration=0.5):
         """
         Animate playing one or multiple cards from the player's or opponent's hand onto the table,
         then update the table structure and remove cards from the hand.
@@ -489,7 +489,7 @@ init python:
 
         show_anim(
             on_finish="apply_card_moves",
-            args=(cards, side, slot_index, is_defense, skip_check),
+            args=(player, cards, slot_index, is_defense, skip_check),
             kwargs={"on_finish": on_finish}
         )
 
