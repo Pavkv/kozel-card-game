@@ -165,7 +165,7 @@ screen game_phase_and_controls():
                 textbutton "{color=#fff}Подтвердить{/color}":
                     style "card_game_button"
                     text_size 18
-                    action [SetVariable("selected_exchange_card_index_opponent", -1), Function(take_card_anim, from_side=1, to_side=0, index=selected_exchange_card_index_opponent, on_finish=witch_after_exchange)]
+                    action [SetVariable("selected_exchange_card_index_opponent", -1), Function(take_card_anim, from_side=1, to_side=0, index=selected_exchange_card_index_opponent, on_finish="witch_after_exchange")]
 
         elif isinstance(card_game, ElsGame):
             if card_game.round < 5:

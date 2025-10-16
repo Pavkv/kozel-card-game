@@ -1,78 +1,279 @@
-Wed Oct 15 09:54:22 2025
-Darwin-24.6.0-x86_64-i386-64bit
+Wed Oct 15 19:17:11 2025
+Windows-10-10.0.26100
 Ren'Py 7.4.11.2266
  
 
 Bootstrap to the start of init.init took 0.05s
 Early init took 0.00s
-Loader init took 0.01s
+Loader init took 0.02s
 Loading error handling took 0.01s
-Loading script took 0.08s
+Loading script took 0.12s
 Loading save slot metadata. took 0.01s
 Loading persistent took 0.00s
 Importing _renpysteam: ImportError('No module named _renpysteam',)
-Running init code took 0.03s
+Running init code took 0.06s
 Loading analysis data took 0.01s
 Analyze and compile ATL took 0.00s
 Index archives took 0.00s
-Backing up script files to '/Users/pavelzobov/Library/RenPy/backups/Kozel':
-Dump and make backups. took 0.03s
+Backing up script files to 'C:\\Users\\Admin\\AppData\\Roaming/RenPy/backups\\kozel-card-game':
+Dump and make backups. took 0.04s
 Cleaning cache took 0.00s
 Making clean stores took 0.00s
-Initial gc. took 0.01s
+Initial gc. took 0.02s
 DPI scale factor: 1.000000
-Creating interface object took 0.00s
+nvdrs: Loaded, about to disable thread optimizations.
+nvdrs: Disabled thread optimizations.
+Creating interface object took 0.22s
 Cleaning stores took 0.00s
-Init translation took 0.01s
+Init translation took 0.02s
 Build styles took 0.00s
 Load screen analysis took 0.00s
 Analyze screens took 0.01s
-Save screen analysis took 0.01s
+Save screen analysis took 0.02s
+Prepare screens took 0.04s
+Save pyanalysis. took 0.00s
+Save bytecode. took 0.02s
+Running _start took 0.00s
+Performance test:
+Interface start took 0.09s
+
+Initializing gl2 renderer:
+primary display bounds: (0, 0, 3440, 1440)
+swap interval: 1 frames
+Windowed mode.
+Vendor: 'NVIDIA Corporation'
+Renderer: 'NVIDIA GeForce RTX 3080/PCIe/SSE2'
+Version: '4.6.0 NVIDIA 576.88'
+Display Info: None
+Screen sizes: virtual=(1920, 1080) physical=(1072, 603) drawable=(1072, 603)
+Maximum texture size: 4096x4096
+[6C, 9C, 8S, 10S, AH, JH]
+[AD, KH, JS, 6D, 9S, QD]
+[6C, 9C, 8S, 10S, AH, JH]
+[AD, KH, JS, 6D, 9S, QD]
+exchange
+[10S, JH, 9C, 8S, AH]
+[AD, KH, JS, 9S, QD]
+end_turn
+AI draws cards.
+AI attempts to exchange a card.
+[JH, 9C, 8S, AH]
+[QD, KH, AD, 6S, 9S, JS]
+end_turn
+AI ends turn.
+Resetting cache.
+Bootstrap to the start of init.init took 30.30s
+Early init took 0.00s
+Loader init took 0.02s
+Loading error handling took 0.01s
+Loading script took 0.10s
+Loading save slot metadata. took 0.01s
+Loading persistent took 0.00s
+Importing _renpysteam: ImportError('No module named _renpysteam',)
+Running init code took 0.02s
+Loading analysis data took 0.02s
+Analyze and compile ATL took 0.00s
+Index archives took 0.00s
+Backing up script files to 'C:\\Users\\Admin\\AppData\\Roaming/RenPy/backups\\kozel-card-game':
+Dump and make backups. took 0.04s
+Cleaning cache took 0.00s
+Making clean stores took 0.00s
+Initial gc. took 0.03s
+DPI scale factor: 1.000000
+nvdrs: Loaded, about to disable thread optimizations.
+nvdrs: Disabled thread optimizations.
+Creating interface object took 0.23s
+Cleaning stores took 0.00s
+Init translation took 0.02s
+Build styles took 0.00s
+Load screen analysis took 0.00s
+Analyze screens took 0.01s
+Save screen analysis took 0.02s
 Prepare screens took 0.03s
 Save pyanalysis. took 0.00s
 Save bytecode. took 0.01s
 Running _start took 0.00s
 Performance test:
-Interface start took 0.42s
+Interface start took 0.03s
 
 Initializing gl2 renderer:
-primary display bounds: (0, 0, 1470, 956)
+primary display bounds: (0, 0, 3440, 1440)
 swap interval: 1 frames
 Windowed mode.
-Vendor: 'Apple'
-Renderer: 'Apple M3'
-Version: '2.1 Metal - 89.4'
+Vendor: 'NVIDIA Corporation'
+Renderer: 'NVIDIA GeForce RTX 3080/PCIe/SSE2'
+Version: '4.6.0 NVIDIA 576.88'
 Display Info: None
-Screen sizes: virtual=(1920, 1080) physical=(1073, 604) drawable=(2146, 1208)
+Screen sizes: virtual=(1920, 1080) physical=(1072, 603) drawable=(1072, 603)
 Maximum texture size: 4096x4096
-Opponent move:  h
-Opponent move:  p
-Opponent passes turn to player.
+AI ends turn.
+[KD, AH, 9C, 8S]
+[6S, KH, 9S, JS, AD, QD]
+end_turn
+AI can exchange a card.
+AI attempts to exchange a card.
+[KD, AH, 8S]
+[6S, KH, 9S, JS, AD, QD]
+end_turn
+AI ends turn.
+Resetting cache.
+Bootstrap to the start of init.init took 43.09s
+Early init took 0.00s
+Loader init took 0.03s
+Loading error handling took 0.01s
+Loading script took 0.11s
+Loading save slot metadata. took 0.01s
+Loading persistent took 0.00s
+Importing _renpysteam: ImportError('No module named _renpysteam',)
+Running init code took 0.02s
+Loading analysis data took 0.03s
+Analyze and compile ATL took 0.00s
+Index archives took 0.00s
+Backing up script files to 'C:\\Users\\Admin\\AppData\\Roaming/RenPy/backups\\kozel-card-game':
+Dump and make backups. took 0.04s
+Cleaning cache took 0.00s
+Making clean stores took 0.00s
+Initial gc. took 0.06s
+DPI scale factor: 1.000000
+nvdrs: Loaded, about to disable thread optimizations.
+nvdrs: Disabled thread optimizations.
+Creating interface object took 0.26s
+Cleaning stores took 0.00s
+Init translation took 0.03s
+Build styles took 0.00s
+Load screen analysis took 0.00s
+Analyze screens took 0.01s
+Save screen analysis took 0.02s
+Prepare screens took 0.04s
+Save pyanalysis. took 0.00s
+Save bytecode. took 0.01s
+Running _start took 0.00s
+Performance test:
+Interface start took 0.04s
 
-Full traceback:
-  File "renpy/common/00keymap.rpy", line 469, in script
-    python hide:
-  File "/Users/pavelzobov/Downloads/renpy-7.4.11-sdk/renpy/ast.py", line 928, in execute
-    renpy.python.py_exec_bytecode(self.code.bytecode, self.hide, store=self.store)
-  File "/Users/pavelzobov/Downloads/renpy-7.4.11-sdk/renpy/python.py", line 2245, in py_exec_bytecode
-    exec(bytecode, globals, locals)
-  File "renpy/common/00keymap.rpy", line 469, in <module>
-    python hide:
-  File "renpy/common/00keymap.rpy", line 488, in _execute_python_hide
-    renpy.save("_reload-1", "reload save game")
-  File "/Users/pavelzobov/Downloads/renpy-7.4.11-sdk/renpy/loadsave.py", line 415, in save
-    reraise(t, e, tb)
-  File "/Users/pavelzobov/Downloads/renpy-7.4.11-sdk/renpy/loadsave.py", line 401, in save
-    dump((roots, renpy.game.log), logf)
-  File "/Users/pavelzobov/Downloads/renpy-7.4.11-sdk/renpy/loadsave.py", line 49, in dump
-    cPickle.dump(o, f, cPickle.HIGHEST_PROTOCOL)
-PicklingError: Can't pickle <type 'function'>: attribute lookup __builtin__.function failed
-
-While running game code:
-  File "renpy/common/00keymap.rpy", line 469, in script
-    python hide:
-  File "renpy/common/00keymap.rpy", line 469, in <module>
-    python hide:
-  File "renpy/common/00keymap.rpy", line 488, in _execute_python_hide
-    renpy.save("_reload-1", "reload save game")
-PicklingError: Can't pickle <type 'function'>: attribute lookup __builtin__.function failed
+Initializing gl2 renderer:
+primary display bounds: (0, 0, 3440, 1440)
+swap interval: 1 frames
+Windowed mode.
+Vendor: 'NVIDIA Corporation'
+Renderer: 'NVIDIA GeForce RTX 3080/PCIe/SSE2'
+Version: '4.6.0 NVIDIA 576.88'
+Display Info: None
+Screen sizes: virtual=(1920, 1080) physical=(1072, 603) drawable=(1072, 603)
+Maximum texture size: 4096x4096
+AI ends turn.
+[8S, KD, 7H, AH]
+[KH, AD, JS, 6S, QD, 9C]
+end_turn
+AI can exchange a card.
+AI attempts to exchange a card.
+[8S, KD, AH]
+[KH, AD, JS, 6S, QD, 9C]
+end_turn
+AI ends turn.
+[8S, QH, AH, KD]
+[KH, AD, JS, 6S, QD, 9C, 7H]
+end_turn
+AI can exchange a card.
+AI attempts to exchange a card.
+[8S, QH, KD]
+[KH, AD, JS, 6S, QD, 9C, 7H]
+end_turn
+AI ends turn.
+[QH, 10H]
+[KH, 9C, 6S, QD, 7H, JS]
+end_turn
+AI can exchange a card.
+AI attempts to exchange a card.
+[10H]
+[KH, 9C, 6S, QD, 7H, JS]
+end_turn
+AI ends turn.
+[AS, 6H, 10H, 8H]
+[KH, JS, 6S, 7H, 9C]
+end_turn
+AI draws cards.
+[AS, 6H, 10H, 8H]
+[7H, 9C, JC, KH, 6S, JS]
+end_turn
+AI ends turn.
+[6H, AS]
+[7H, 6S, 9C, KH]
+end_turn
+AI draws cards.
+[6H, AS]
+[7H, 9C, KH, AC, 6S, 7S]
+end_turn
+AI ends turn.
+[6H, 10C, KS, AS, KH]
+[6S, 9C, AC]
+end_turn
+AI can exchange a card.
+AI attempts to exchange a card.
+[6H, KS, AS, KH]
+[6S, 9C, AC]
+end_turn
+AI ends turn.
+[6H, KS, KH]
+[6S, 9C, 10C]
+end_turn
+AI can exchange a card.
+AI attempts to exchange a card.
+[KS, KH]
+[6S, 9C, 10C]
+end_turn
+AI ends turn.
+[KS, KH, 9C]
+[10C]
+end_turn
+AI can exchange a card.
+AI attempts to exchange a card.
+[KH, 9C]
+[10C]
+end_turn
+AI ends turn.
+[KH, 9C, KS]
+[10C]
+end_turn
+AI can exchange a card.
+AI attempts to exchange a card.
+[9C, KS]
+[10C]
+end_turn
+AI ends turn.
+[9C, KS, KH]
+[10C]
+end_turn
+AI can exchange a card.
+AI attempts to exchange a card.
+[9C, KH]
+[10C]
+end_turn
+AI ends turn.
+[9C, KH, KS]
+[10C]
+end_turn
+AI can exchange a card.
+AI attempts to exchange a card.
+[9C, KH]
+[10C]
+end_turn
+AI ends turn.
+[9C, KH, KS]
+[10C]
+end_turn
+AI can exchange a card.
+AI attempts to exchange a card.
+[9C, KS]
+[10C]
+end_turn
+AI ends turn.
+[9C, KS, KH]
+[10C]
+end_turn
+AI can exchange a card.
+AI attempts to exchange a card.
+[KS, KH]
+[10C]
+end_turn
+AI ends turn.

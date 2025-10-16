@@ -135,6 +135,29 @@ init python:
         idx = len(hand)
         return (PLAYER_HAND_X + idx * HAND_SPACING, PLAYER_HAND_Y) if side_index == 0 else (OPPONENT_HAND_X + idx * HAND_SPACING, OPPONENT_HAND_Y)
 
+    # ----------------------------
+    # Animation Management
+    # ----------------------------
+    def resolve_on_finish(name, args=(), kwargs=None):
+        """
+        Resolve and call a function by string name, with optional args and kwargs.
+        """
+        if kwargs is None:
+            kwargs = {}
+
+        if not isinstance(name, str):
+            renpy.log("[WARN] resolve_on_finish got non-string: {}".format(name))
+            return
+
+        try:
+            func = globals().get(name)
+            if callable(func):
+                func(*args, **kwargs)
+            else:
+                renpy.log("[WARN] No callable found for '{}'".format(name))
+        except Exception as e:
+            renpy.log("[ERROR] resolve_on_finish({}): {}".format(name, e))
+
     def show_anim(on_finish=None, args=(), kwargs=None, delay=0.0):
         """
         Shows the animation screen with a callback by name and optional arguments.
@@ -154,8 +177,27 @@ init python:
             delay=delay
         )
 
-    def delay_anim(delay=3, on_finish=None):
-        show_anim(on_finish=on_finish, delay=delay)
+    def delay_anim(delay=3, on_finish=None, args=(), kwargs=None):
+        """
+        Delays for `delay` seconds before executing `on_finish` (by name).
+        Compatible with show_anim system.
+
+        Parameters:
+        - delay: time to wait in seconds
+        - on_finish: string name of the function to call
+        - args: tuple of arguments for the function
+        - kwargs: dictionary of keyword arguments
+        """
+        if kwargs is None:
+            kwargs = {}
+
+        show_anim(
+            on_finish=on_finish,
+            args=args,
+            kwargs=kwargs,
+            delay=delay
+        )
+
 
     # ----------------------------
     # In-Game Control Management
@@ -244,27 +286,7 @@ init python:
     # ----------------------------
     # In Game Animations
     # ----------------------------
-    def resolve_on_finish(name, args=(), kwargs=None):
-        """
-        Resolve and call a function by string name, with optional args and kwargs.
-        """
-        if kwargs is None:
-            kwargs = {}
-
-        if not isinstance(name, str):
-            renpy.log(f"[WARN] resolve_on_finish got non-string: {name!r}")
-            return
-
-        try:
-            func = globals().get(name)
-            if callable(func):
-                func(*args, **kwargs)
-            else:
-                renpy.log(f"[WARN] No callable found for '{name}'")
-        except Exception as e:
-            renpy.log(f"[ERROR] resolve_on_finish({name}): {e}")
-
-    def apply_draw(draw_cards, player, sort_hand=False, on_finish=None):
+    def apply_draw(drawn_cards, player, sort_hand=False, on_finish=None):
         for card in drawn_cards:
             player.hand.append(card)
         if sort_hand:
@@ -318,7 +340,22 @@ init python:
 
             d += step_delay
 
-        show_anim(function="apply_draw")
+        show_anim(
+            on_finish="apply_draw",
+            args=(drawn_cards, player),
+            kwargs={"sort_hand": True, "on_finish": on_finish}
+        )
+
+    def after_take(taker, donor, src_card, on_finish=None):
+        taker.hand.append(src_card)
+
+        if hasattr(taker, 'on_after_take'):
+            taker.on_after_take(donor, src_card)
+
+        compute_hand_layout()
+
+        if isinstance(on_finish, str):
+            resolve_on_finish(on_finish)
 
     def take_card_anim(
         from_side,
@@ -368,19 +405,38 @@ init python:
             "override_img": override_img,
         }]
 
-        def after_anim():
-            # Officially give the card to taker
-            taker.hand.append(src_card)
+        show_anim(
+            on_finish="after_take",
+            args=(taker, donor, src_card),
+            kwargs={"on_finish": on_finish}
+        )
 
-            if hasattr(taker, 'on_after_take'):
-                taker.on_after_take(donor, src_card)
+    def apply_card_moves(cards, side, slot_index=0, is_defense=False, skip_check=False, on_finish=None):
+        attack_keys = list(card_game.table.table.keys())
+        for i, card in enumerate(cards):
+            if skip_check and is_defense:
+                if i == 0 and slot_index < len(attack_keys):
+                    atk_card = attack_keys[slot_index]
+                    card_game.table.beat(atk_card, card)
+            elif is_defense:
+                if i == 0 and slot_index < len(attack_keys):
+                    atk_card = attack_keys[slot_index]
+                    if not card_game.table.table[atk_card][0]:
+                        card_game.table.beat(atk_card, card)
+                else:
+                    print("Cannot defend with multiple cards or invalid slot.")
+            else:
+                if not card_game.table.append(card):
+                    print("Invalid attack: card doesn't match table ranks.")
+                    continue
 
-            compute_hand_layout()
+            if card in player.hand:
+                player.hand.remove(card)
 
-            if on_finish:
-                on_finish()
+        compute_hand_layout()
 
-        show_anim(function=after_anim)
+        if isinstance(on_finish, str):
+            resolve_on_finish(on_finish)
 
     def play_card_anim(cards, side, slot_index=0, is_defense=False, delay=0.5, anim_duration=0.5, skip_check=False, on_finish=None):
         """
@@ -403,33 +459,6 @@ init python:
         player = card_game.player if side == 0 else card_game.opponent
         base_x = 350 + slot_index * 200
         base_y = 375
-
-        def apply_card_moves():
-            attack_keys = list(card_game.table.table.keys())
-            for i, card in enumerate(cards):
-                if skip_check and is_defense:
-                    if i == 0 and slot_index < len(attack_keys):
-                        atk_card = attack_keys[slot_index]
-                        card_game.table.beat(atk_card, card)
-                elif is_defense:
-                    if i == 0 and slot_index < len(attack_keys):
-                        atk_card = attack_keys[slot_index]
-                        if not card_game.table.table[atk_card][0]:
-                            card_game.table.beat(atk_card, card)
-                    else:
-                        print("Cannot defend with multiple cards or invalid slot.")
-                else:
-                    if not card_game.table.append(card):
-                        print("Invalid attack: card doesn't match table ranks.")
-                        continue
-
-                if card in player.hand:
-                    player.hand.remove(card)
-
-            compute_hand_layout()
-
-            if on_finish:
-                on_finish()
 
         for i, card in enumerate(cards):
             if card is None:
@@ -458,9 +487,61 @@ init python:
                 "override_img": override_img,
             })
 
-        show_anim(function=apply_card_moves)
+        show_anim(
+            on_finish="apply_card_moves",
+            args=(cards, side, slot_index, is_defense, skip_check),
+            kwargs={"on_finish": on_finish}
+        )
 
         hovered_card_index = -1
+
+    def after_discard_pairs(player, on_finish=None):
+        player.discard_pairs_excluding_witch(card_game.deck)
+        player.shaffle_hand()
+        compute_hand_layout()
+        if isinstance(on_finish, str):
+            resolve_on_finish(on_finish)
+
+    def discard_pairs_anim(side, base_delay=0.0, step=0.05, on_finish=None):
+        """Animate discarding pairs of cards for the given side (0=player, 1=opponent)"""
+        player = card_game.player if side == 0 else card_game.opponent
+        before = list(player.hand)
+
+        # Actually discard now (only to compute the diff)
+        player.discard_pairs_excluding_witch(card_game.deck)
+
+        after = list(player.hand)
+        removed = diff_removed(before, after)
+
+        # Restore the hand so animation still works visually
+        player.hand = list(before)
+
+        table_animations[:] = []
+
+        for i, (idx, card) in enumerate(removed):
+            sx, sy = hand_card_pos(side, card, override_index=idx)
+
+            override_img = get_card_image(card) if side == 0 else base_cover_img_src
+
+            anim = {
+                "card": card,
+                "src_x": sx,
+                "src_y": sy,
+                "dest_x": DISCARD_X,
+                "dest_y": DISCARD_Y,
+                "delay": base_delay + i * step,
+                "duration": 0.4,
+                "target": "discard",
+                "override_img": override_img,
+            }
+
+            table_animations.append(anim)
+
+        show_anim(
+            on_finish="after_discard_pairs",
+            args=(player,),
+            kwargs={"on_finish": on_finish}
+        )
 
     # ----------------------------
     # Reset Game Function

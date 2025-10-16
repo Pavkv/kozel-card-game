@@ -2,9 +2,10 @@
 errors listed below, and try again.
 
 
-File "game/CardGames/Els/scripts_els.rpy", line 20: expected statement.
-    print("yes")
-                ^
+File "game/CardGames/py.rpy", line 255: invalid syntax
+            renpy.log(f"[WARN] resolve_on_finish got non-string: {name!r}")
+                                                                          ^
+    
 
 Ren'Py Version: Ren'Py 7.4.11.2266
-Tue Oct 14 10:40:40 2025
+Wed Oct 15 18:14:57 2025

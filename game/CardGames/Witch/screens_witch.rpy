@@ -21,7 +21,7 @@ screen witch():
                     textbutton "{color=#fff}Взять{/color}":
                         style "card_game_button"
                         text_size 25
-                        action Function(draw_anim, side=0, target_count=6, on_finish=witch_after_draw)
+                        action Function(draw_anim, side=0, target_count=6, on_finish="witch_after_draw")
 
             elif card_game.user_turn == "discard_pairs":
                 frame:
@@ -31,7 +31,7 @@ screen witch():
                     textbutton "{color=#fff}Скинуть\nпары{/color}":
                         style "card_game_button"
                         text_size 18
-                        action Function(discard_pairs_anim, side=0, on_finish=witch_after_discard)
+                        action Function(discard_pairs_anim, side=0, on_finish="witch_after_discard")
 
             elif card_game.user_turn == "exchange" and not made_turn:
                 frame:
