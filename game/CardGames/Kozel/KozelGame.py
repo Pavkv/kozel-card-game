@@ -1,9 +1,9 @@
 # coding=utf-8
 
-from game.CardGames.Classes.CardGame import CardGame
-from game.CardGames.Classes.AIKozel import AIKozel
-from game.CardGames.Classes.Table import Table
-from game.CardGames.Classes.Card import Card
+from CardGames.Classes.CardGame import CardGame
+from CardGames.Classes.AIKozel import AIKozel
+from CardGames.Classes.Table import Table
+from CardGames.Classes.Card import Card
 
 class KozelGame(CardGame):
     def __init__(self, player_name, opponent_name, biased_draw):
@@ -77,3 +77,33 @@ class KozelGame(CardGame):
             self.result = self.player.name
         else:
             self.result = self.opponent.name
+
+    # Achievement checks
+    def same_suit(self):
+        """Check if all cards in player's hand are of the same suit."""
+        if len(self.player.hand) < 6:
+            return False
+        first_suit = self.player.hand[0].suit
+        for card in self.player.hand:
+            if card.suit != first_suit:
+                return False
+        return True
+
+    def all_trumps(self):
+        """Check if all cards in player's hand are trumps."""
+        if len(self.player.hand) < 6:
+            return False
+        for card in self.player.hand:
+            if card.suit != self.deck.trump_suit:
+                return False
+        return True
+
+    def three_aces(self):
+        """Check if player has three aces."""
+        aces = [card for card in self.player.hand if card.rank == 'A']
+        return len(aces) >= 3
+
+    def three_sixes(self):
+        """Check if player has three sixes."""
+        sixes = [card for card in self.player.hand if card.rank == '6']
+        return len(sixes) >= 3

@@ -11,5 +11,6 @@ init python:
     opponent_defense_index = 0
 
     # Achievements
+    lost_to_two_sixes = False
     last_attack_two_sixes = True
     sixes_loss_candidate = False

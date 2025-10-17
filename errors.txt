@@ -2,7 +2,10 @@
 errors listed below, and try again.
 
 
-File "game/CardGames/Durak/py_durak.rpy", line 222: non-default argument follows default argument
+File "game/CardGames/py.rpy", line 421: invalid syntax
+            print(f"[Before correction] selected_attack_card_indexes: {selected_attack_card_indexes}")
+                                                                                                     ^
+    
 
 Ren'Py Version: Ren'Py 7.4.11.2266
-Thu Oct 16 09:17:29 2025
+Fri Oct 17 08:50:55 2025

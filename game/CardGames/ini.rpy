@@ -155,7 +155,6 @@ label card_game_result_handler:
 
     if in_game:
         $ result = card_game.result
-        $ enable_ingame_controls()
         $ reset_card_game()
         jump expression card_game_results[result]
     else:
@@ -169,6 +168,8 @@ label card_game_result_handler:
 
 # Show Achievements
 label show_achievement(key, message_tag):
+    if persistent.achievements.get(key, True):
+        return
     play sound sfx_achievement
     show expression message_tag at achievement_trans
     with dspr

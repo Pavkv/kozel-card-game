@@ -1,9 +1,9 @@
 # coding=utf-8
 
-from game.CardGames.Classes.CardGame import CardGame
-from game.CardGames.Classes.Table import Table
-from game.CardGames.Classes.Card import Card
-from game.CardGames.Classes.AIDurak import AIDurak
+from CardGames.Classes.CardGame import CardGame
+from CardGames.Classes.Table import Table
+from CardGames.Classes.Card import Card
+from CardGames.Classes.AIDurak import AIDurak
 
 class DurakGame(CardGame):
     def __init__(self, player_name, opponent_name, biased_draw):

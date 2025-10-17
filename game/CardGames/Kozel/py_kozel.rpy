@@ -78,11 +78,7 @@ init python:
                     "duration": anim_duration,
                 }
 
-                # Drop or take animation
                 dest_y = PLAYER_DISCARD_Y if receiver == card_game.player else OPPONENT_DISCARD_Y
-                if confirm_drop:
-                    dest_y = OPPONENT_DISCARD_Y if receiver == card_game.player else PLAYER_DISCARD_Y
-
                 anim.update({
                     "dest_x": DISCARD_PLAYERS_X,
                     "dest_y": dest_y,
@@ -217,6 +213,8 @@ init python:
             def_card = cards[i]
             kozel_drop_queue.append((i, attack_card, def_card))
 
+        selected_attack_card_indexes.clear()
+
         # Start first drop
         kozel_player_do_drop()
 
@@ -227,7 +225,6 @@ init python:
         if kozel_drop_index >= len(kozel_drop_queue):
             print("Player finished dropping cards.")
             card_game.state = "end_turn"
-            selected_attack_card_indexes.clear()
             compute_hand_layout()
             return
 
@@ -247,7 +244,7 @@ init python:
 
     def kozel_player_apply_drop():
         """Applies the dropped card and continues to the next."""
-        global kozel_drop_queue, kozel_drop_index
+        global selected_attack_card_indexes, kozel_drop_queue, kozel_drop_index
 
         slot_index, atk_card, def_card = kozel_drop_queue[kozel_drop_index]
 

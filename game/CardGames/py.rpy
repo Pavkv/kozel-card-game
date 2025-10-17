@@ -552,6 +552,9 @@ init python:
         renpy.hide("durak")
         renpy.hide("game21")
         renpy.hide("witch")
+
+        enable_ingame_controls()
+
         s = store
         
         # base
@@ -592,3 +595,8 @@ init python:
 
         # witch-specific
         s.made_turn = False
+
+        # kozel specific
+        s.confirm_drop = False
+        s.kozel_drop_queue = []
+        s.kozel_drop_index = 0

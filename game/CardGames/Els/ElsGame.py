@@ -1,8 +1,8 @@
 # coding=utf-8
 
-from game.CardGames.Classes.CardGame import CardGame
-from game.CardGames.Classes.Card import Card
-from game.CardGames.Classes.AIEls import AIEls
+from CardGames.Classes.CardGame import CardGame
+from CardGames.Classes.Card import Card
+from CardGames.Classes.AIEls import AIEls
 
 class ElsGame(CardGame):
     def __init__(self, player_name, opponent_name, biased_draw):

@@ -1,8 +1,6 @@
 # coding=utf-8
-import random
-
-from game.CardGames.Classes.CardGame import CardGame
-from game.CardGames.Classes.AI21 import AI21
+from CardGames.Classes.CardGame import CardGame
+from CardGames.Classes.AI21 import AI21
 
 
 class Game21(CardGame):
