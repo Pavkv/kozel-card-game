@@ -81,7 +81,7 @@ class AIDurak(Player):
                     attack_cards.append(c)
         else:
             for c in hand_sorted:
-                if len(attack_cards) >= defender_hand_size:
+                if len(attack_cards) >= (defender_hand_size + table.num_unbeaten()):
                     break
                 if c.rank in table_ranks:
                     if has_trump_left and c.suit != trump_suit:

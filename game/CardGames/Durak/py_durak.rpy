@@ -328,6 +328,9 @@ init python:
 
         confirm_take = False
 
+    # --------------------
+    # Animation Callbacks
+    # --------------------
     def resolve_on_finish(key):
         if key == "durak_player_draw":
             durak_player_draw()

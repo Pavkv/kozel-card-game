@@ -1,11 +1,11 @@
-Thu Oct 16 10:01:38 2025
+Thu Oct 16 21:02:03 2025
 Darwin-24.6.0-x86_64-i386-64bit
 Ren'Py 7.4.11.2266
  
 
 Bootstrap to the start of init.init took 0.05s
 Early init took 0.00s
-Loader init took 0.00s
+Loader init took 0.01s
 Loading error handling took 0.01s
 Loading script took 0.05s
 Loading save slot metadata. took 0.00s
@@ -32,7 +32,7 @@ Save pyanalysis. took 0.00s
 Save bytecode. took 0.00s
 Running _start took 0.00s
 Performance test:
-Interface start took 0.25s
+Interface start took 0.18s
 
 Initializing gl2 renderer:
 primary display bounds: (0, 0, 1470, 956)
@@ -44,83 +44,201 @@ Version: '2.1 Metal - 89.4'
 Display Info: None
 Screen sizes: virtual=(1920, 1080) physical=(1072, 603) drawable=(2144, 1206)
 Maximum texture size: 4096x4096
-[6S, 9D, KD, KC, 6H, 10H]
-[7D, 9S, JC, QD, AS, 9H]
-[6S, 9D, KD, KC, 6H, 10H]
-[7D, 9S, JC, QD, AS, 9H]
+[6S, 9H, JH, AS, 7C, JC]
+[7D, 7S, 9S, JS, 8C, 9C]
+[6S, 9H, JH, AS, 7C, JC]
+[7D, 7S, 9S, JS, 8C, 9C]
+[6S, 9H, JH, AS, 7C, JC]
+[7D, 7S, 9S, JS, 8C, 9C]
+[6S, 9H, JH, AS, 7C, JC]
+[7D, 7S, 9S, JS, 8C, 9C]
+[6S, 9H, JH, AS, 7C, JC]
+[7D, 7S, 9S, JS, 8C, 9C]
+[6S, 9H, JH, AS, 7C, JC]
+[7D, 7S, 9S, JS, 8C, 9C]
 Card clicked: 6S
 Selected: 6S
+[6S, 9H, JH, AS, 7C, JC]
+[7D, 7S, 9S, JS, 8C, 9C]
 Player attacked with: 6S
 yes
-[9D, KD, KC, 6H, 10H]
-[7D, 9S, JC, QD, AS, 9H]
-AI defends 6S with 9S
+[9H, JH, AS, 7C, JC]
+[7D, 7S, 9S, JS, 8C, 9C]
+AI defends 6S with 7S
 AI defended all attacks.
+Card clicked: 7C
+Selected: 7C
+Player attacked with: 7C
+yes
+[9H, JH, AS, JC]
+[7D, 9S, JS, 8C, 9C]
+AI defends 7C with 8C
+AI defended all attacks.
+[9H, JH, AS, JC]
+[7D, 9S, JS, 9C]
+Table before ending turn: Table: 6S, 7C
+Player hand before ending turn: [9H, JH, AS, JC]
+Opponent hand before ending turn: [7D, 9S, JS, 9C]
+Player hand after drawing: [9H, JH, AS, JC]
+Opponent hand after drawing: [7D, 9S, JS, 9C]
+Discard pile: [6S, 7S, 7C, 8C]
+Player hand after turn: [9H, JH, AS, JC]
+Opponent hand after turn: [7D, 9S, JS, 9C]
+[9H, 9D, JH, QS, AS, JC]
+[6D, 7D, 9S, 10H, JS, 9C]
+AI attacked successfully with: [6D]
+yes
 Card clicked: 9D
-[9D, KD, KC, 6H, 10H]
-[7D, JC, QD, AS, 9H]
-Table before ending turn: Table: 6S
-Player hand before ending turn: [9D, KD, KC, 6H, 10H]
-Opponent hand before ending turn: [7D, JC, QD, AS, 9H]
-Player hand after drawing: [9D, KD, KC, 6H, 10H]
-Opponent hand after drawing: [7D, JC, QD, AS, 9H]
-Discard pile: [6S, 9S]
-Player hand after turn: [9D, KD, KC, 6H, 10H]
-Opponent hand after turn: [7D, JC, QD, AS, 9H]
-[9D, KD, KC, 6H, 7H, 10H]
-[7D, 10D, JC, QD, AS, 9H]
-AI attacked successfully with: [7D]
+Player defended against 6D with 9D
 yes
-Card clicked: KD
-Player defended against 7D with KD
+[9H, JH, QS, AS, JC]
+[7D, 9S, 10H, JS, 9C]
+AI attacked successfully with: [9S, 9C]
 yes
-[9D, KC, 6H, 7H, 10H]
-[10D, JC, QD, AS, 9H]
+[9H, JH, QS, AS, JC]
+[7D, 10H, JS]
+AI skipped attack; player must still defend or take.
+Card clicked: QS
+Player defended against 9S with QS
+yes
+Card clicked: JC
+Player defended against 9C with JC
+yes
+[9H, JH, AS]
+[7D, 10H, JS]
+AI attacked successfully with: [JS]
+yes
+[9H, JH, AS]
+[7D, 10H]
+AI skipped attack; player must still defend or take.
+Card clicked: AS
+Player defended against JS with AS
+yes
+[9H, JH]
+[7D, 10H]
 AI cannot attack and table is beaten. Ending turn.
-[9D, KC, 6H, 7H, 10H]
-[10D, JC, QD, AS, 9H]
-Table before ending turn: Table: 7D
-Player hand before ending turn: [9D, KC, 6H, 7H, 10H]
-Opponent hand before ending turn: [10D, JC, QD, AS, 9H]
-Player hand after drawing: [9D, KC, 6H, 7H, 10H]
-Opponent hand after drawing: [10D, JC, QD, AS, 9H]
-Discard pile: [6S, 9S, 7D, KD]
-Player hand after turn: [9D, KC, 6H, 7H, 10H]
-Opponent hand after turn: [10D, JC, QD, AS, 9H]
-[9D, KC, 6H, 7H, 10H, QH]
-[9C, 10D, JC, QD, AS, 9H]
+[9H, JH]
+[7D, 10H]
+Table before ending turn: Table: 6D, 9S, 9C, JS
+Player hand before ending turn: [9H, JH]
+Opponent hand before ending turn: [7D, 10H]
+Player hand after drawing: [9H, JH]
+Opponent hand after drawing: [7D, 10H]
+Discard pile: [6S, 7S, 7C, 8C, 6D, 9D, 9S, QS, 9C, JC, JS, AS]
+Player hand after turn: [9H, JH]
+Opponent hand after turn: [7D, 10H]
+[8H, 8D, 9H, JH, KH, AD]
+[7D, 10H, 10S, QH, AH, KC]
+[8H, 8D, 9H, JH, KH, AD]
+[7D, 10H, 10S, QH, AH, KC]
+[8H, 8D, 9H, JH, KH, AD]
+[7D, 10H, 10S, QH, AH, KC]
+[8H, 8D, 9H, JH, KH, AD]
+[7D, 10H, 10S, QH, AH, KC]
+Card clicked: 8H
+Selected: 8H
+Card clicked: 8D
+Selected: 8D
+Player attacked with: 8H, 8D
+[8H, 8D, 9H, JH, KH, AD]
+[7D, 10H, 10S, QH, AH, KC]
+yes
+[9H, JH, KH, AD]
+[7D, 10H, 10S, QH, AH, KC]
+AI defends 8H with 10H
+AI defends 8D with KC
+AI defended all attacks.
+Card clicked: KH
+Selected: KH
+[9H, JH, KH, AD]
+[7D, 10S, QH, AH]
+Player attacked with: KH
+yes
+[9H, JH, AD]
+[7D, 10S, QH, AH]
+AI defends KH with AH
+AI defended all attacks.
+Card clicked: AD
+Selected: AD
+Player attacked with: AD
+yes
+[9H, JH]
+[7D, 10S, QH]
+AI cannot defend against: AD
+AI could not defend. Will need to take.
+[9H, JH]
+[7D, 10S, QH]
+Table before ending turn: Table: 8H, 8D, KH, AD
+Player hand before ending turn: [9H, JH]
+Opponent hand before ending turn: [7D, 10S, QH]
+Player hand after drawing: [9H, JH]
+Opponent hand after drawing: [7D, 10S, QH]
+Discard pile: [6S, 7S, 7C, 8C, 6D, 9D, 9S, QS, 9C, JC, JS, AS]
+Player hand after turn: [9H, JH]
+Opponent hand after turn: [7D, 10S, QH, 8H, 10H, 8D, KC, KH, AH, AD]
+[6H, 8S, 9H, 10D, JH, KS]
+[7D, 8H, 8D, 10S, 10H, QH, KH, AH, AD, KC]
+[6H, 8S, 9H, 10D, JH, KS]
+[7D, 8H, 8D, 10S, 10H, QH, KH, AH, AD, KC]
+[6H, 8S, 9H, 10D, JH, KS]
+[7D, 8H, 8D, 10S, 10H, QH, KH, AH, AD, KC]
+[6H, 8S, 9H, 10D, JH, KS]
+[7D, 8H, 8D, 10S, 10H, QH, KH, AH, AD, KC]
+[6H, 8S, 9H, 10D, JH, KS]
+[7D, 8H, 8D, 10S, 10H, QH, KH, AH, AD, KC]
+[6H, 8S, 9H, 10D, JH, KS]
+[7D, 8H, 8D, 10S, 10H, QH, KH, AH, AD, KC]
+[6H, 8S, 9H, 10D, JH, KS]
+[7D, 8H, 8D, 10S, 10H, QH, KH, AH, AD, KC]
+[6H, 8S, 9H, 10D, JH, KS]
+[7D, 8H, 8D, 10S, 10H, QH, KH, AH, AD, KC]
+[6H, 8S, 9H, 10D, JH, KS]
+[7D, 8H, 8D, 10S, 10H, QH, KH, AH, AD, KC]
+[6H, 8S, 9H, 10D, JH, KS]
+[7D, 8H, 8D, 10S, 10H, QH, KH, AH, AD, KC]
+[6H, 8S, 9H, 10D, JH, KS]
+[7D, 8H, 8D, 10S, 10H, QH, KH, AH, AD, KC]
+[6H, 8S, 9H, 10D, JH, KS]
+[7D, 8H, 8D, 10S, 10H, QH, KH, AH, AD, KC]
+[6H, 8S, 9H, 10D, JH, KS]
+[7D, 8H, 8D, 10S, 10H, QH, KH, AH, AD, KC]
+[6H, 8S, 9H, 10D, JH, KS]
+[7D, 8H, 8D, 10S, 10H, QH, KH, AH, AD, KC]
+[6H, 8S, 9H, 10D, JH, KS]
+[7D, 8H, 8D, 10S, 10H, QH, KH, AH, AD, KC]
+[6H, 8S, 9H, 10D, JH, KS]
+[7D, 8H, 8D, 10S, 10H, QH, KH, AH, AD, KC]
 Resetting cache.
-Bootstrap to the start of init.init took 40.86s
+Bootstrap to the start of init.init took 231.28s
 Early init took 0.00s
-Loader init took 0.00s
+Loader init took 0.01s
 Loading error handling took 0.01s
-Loading script took 0.07s
-Loading save slot metadata. took 0.00s
+Loading script took 0.06s
+Loading save slot metadata. took 0.01s
 Loading persistent took 0.00s
 Importing _renpysteam: ImportError('No module named _renpysteam',)
 Running init code took 0.01s
 Loading analysis data took 0.01s
 Analyze and compile ATL took 0.00s
 Index archives took 0.00s
-Backing up script files to '/Users/pavelzobov/Library/RenPy/backups/Kozel':
-Dump and make backups. took 0.03s
+Dump and make backups. took 0.04s
 Cleaning cache took 0.00s
 Making clean stores took 0.00s
-Initial gc. took 0.02s
+Initial gc. took 0.01s
 DPI scale factor: 1.000000
 Creating interface object took 0.00s
 Cleaning stores took 0.00s
-Init translation took 0.02s
+Init translation took 0.01s
 Build styles took 0.00s
-Load screen analysis took 0.00s
-Analyze screens took 0.01s
-Save screen analysis took 0.01s
+Load screen analysis took 0.01s
+Analyze screens took 0.00s
+Save screen analysis took 0.00s
 Prepare screens took 0.03s
 Save pyanalysis. took 0.00s
-Save bytecode. took 0.01s
+Save bytecode. took 0.00s
 Running _start took 0.00s
 Performance test:
-Interface start took 0.09s
+Interface start took 0.04s
 
 Initializing gl2 renderer:
 primary display bounds: (0, 0, 1470, 956)
@@ -132,70 +250,176 @@ Version: '2.1 Metal - 89.4'
 Display Info: None
 Screen sizes: virtual=(1920, 1080) physical=(1072, 603) drawable=(2144, 1206)
 Maximum texture size: 4096x4096
-[9D, KC, 6H, 7H, 10H, QH]
-[9C, 10D, JC, QD, AS, 9H]
-[9D, KC, 6H, 7H, 10H, QH]
-[9C, 10D, JC, QD, AS, 9H]
-[9D, KC, 6H, 7H, 10H, QH]
-[9C, 10D, JC, QD, AS, 9H]
-[9D, KC, 6H, 7H, 10H, QH]
-[9C, 10D, JC, QD, AS, 9H]
-[9D, KC, 6H, 7H, 10H, QH]
-[9C, 10D, JC, QD, AS, 9H]
-[9D, KC, 6H, 7H, 10H, QH]
-[9C, 10D, JC, QD, AS, 9H]
-[9D, KC, 6H, 7H, 10H, QH]
-[9C, 10D, JC, QD, AS, 9H]
-[9D, KC, 6H, 7H, 10H, QH]
-[9C, 10D, JC, QD, AS, 9H]
-[9D, KC, 6H, 7H, 10H, QH]
-[9C, 10D, JC, QD, AS, 9H]
-[9D, KC, 6H, 7H, 10H, QH]
-[9C, 10D, JC, QD, AS, 9H]
-[9D, KC, 6H, 7H, 10H, QH]
-[9C, 10D, JC, QD, AS, 9H]
-[9D, KC, 6H, 7H, 10H, QH]
-[9C, 10D, JC, QD, AS, 9H]
-[9D, KC, 6H, 7H, 10H, QH]
-[9C, 10D, JC, QD, AS, 9H]
-[9D, KC, 6H, 7H, 10H, QH]
-[9C, 10D, JC, QD, AS, 9H]
-[9D, KC, 6H, 7H, 10H, QH]
-[9C, 10D, JC, QD, AS, 9H]
-[9D, KC, 6H, 7H, 10H, QH]
-[9C, 10D, JC, QD, AS, 9H]
-[9D, KC, 6H, 7H, 10H, QH]
-[9C, 10D, JC, QD, AS, 9H]
-[9D, KC, 6H, 7H, 10H, QH]
-[9C, 10D, JC, QD, AS, 9H]
-[9D, KC, 6H, 7H, 10H, QH]
-[9C, 10D, JC, QD, AS, 9H]
-[9D, KC, 6H, 7H, 10H, QH]
-[9C, 10D, JC, QD, AS, 9H]
-[9D, KC, 6H, 7H, 10H, QH]
-[9C, 10D, JC, QD, AS, 9H]
-[9D, KC, 6H, 7H, 10H, QH]
-[9C, 10D, JC, QD, AS, 9H]
-[9D, KC, 6H, 7H, 10H, QH]
-[9C, 10D, JC, QD, AS, 9H]
-[9D, KC, 6H, 7H, 10H, QH]
-[9C, 10D, JC, QD, AS, 9H]
-[9D, KC, 6H, 7H, 10H, QH]
-[9C, 10D, JC, QD, AS, 9H]
-[9D, KC, 6H, 7H, 10H, QH]
-[9C, 10D, JC, QD, AS, 9H]
-[9D, KC, 6H, 7H, 10H, QH]
-[9C, 10D, JC, QD, AS, 9H]
-[9D, KC, 6H, 7H, 10H, QH]
-[9C, 10D, JC, QD, AS, 9H]
-[9D, KC, 6H, 7H, 10H, QH]
-[9C, 10D, JC, QD, AS, 9H]
-[9D, KC, 6H, 7H, 10H, QH]
-[9C, 10D, JC, QD, AS, 9H]
-[9D, KC, 6H, 7H, 10H, QH]
-[9C, 10D, JC, QD, AS, 9H]
-[9D, KC, 6H, 7H, 10H, QH]
-[9C, 10D, JC, QD, AS, 9H]
+Card clicked: 6H
+Selected: 6H
+Player attacked with: 6H
+[6H, 8S, 9H, 10D, JH, KS]
+[7D, 8H, 8D, 10S, 10H, QH, KH, AH, AD, KC]
+yes
+[8S, 9H, 10D, JH, KS]
+[7D, 8H, 8D, 10S, 10H, QH, KH, AH, AD, KC]
+AI defends 6H with 8H
+AI defended all attacks.
+Card clicked: 8S
+Selected: 8S
+Player attacked with: 8S
+yes
+[9H, 10D, JH, KS]
+[7D, 8D, 10S, 10H, QH, KH, AH, AD, KC]
+AI defends 8S with 10S
+AI defended all attacks.
+Card clicked: 10D
+Selected: 10D
+Player attacked with: 10D
+yes
+[9H, JH, KS]
+[7D, 8D, 10H, QH, KH, AH, AD, KC]
+AI defends 10D with AD
+AI defended all attacks.
+[9H, JH, KS]
+[7D, 8D, 10H, QH, KH, AH, KC]
+Table before ending turn: Table: 6H, 8S, 10D
+Player hand before ending turn: [9H, JH, KS]
+Opponent hand before ending turn: [7D, 8D, 10H, QH, KH, AH, KC]
+Player hand after drawing: [9H, JH, KS]
+Opponent hand after drawing: [7D, 8D, 10H, QH, KH, AH, KC]
+Discard pile: [6S, 7S, 7C, 8C, 6D, 9D, 9S, QS, 9C, JC, JS, AS, 6H, 8H, 8S, 10S, 10D, AD]
+Player hand after turn: [9H, JH, KS]
+Opponent hand after turn: [7D, 8D, 10H, QH, KH, AH, KC]
+[7H, 9H, JH, KS, KD, 10C]
+[7D, 8D, 10H, QH, KH, AH, KC]
+AI attacked successfully with: [7D]
+yes
+Card clicked: KD
+Player defended against 7D with KD
+yes
+[7H, 9H, JH, KS, 10C]
+[8D, 10H, QH, KH, AH, KC]
+AI attacked successfully with: [KH, KC]
+yes
+[7H, 9H, JH, KS, 10C]
+[8D, 10H, QH, AH]
+AI skipped attack; player must still defend or take.
+[7H, 9H, JH, KS, 10C]
+[8D, 10H, QH, AH]
+AI cannot attack and table is beaten. Ending turn.
+[7H, 9H, JH, KS, 10C]
+[8D, 10H, QH, AH]
+Table before ending turn: Table: 7D, KH, KC
+Player hand before ending turn: [7H, 9H, JH, KS, 10C]
+Opponent hand before ending turn: [8D, 10H, QH, AH]
+Player hand after drawing: [7H, 9H, JH, KS, 10C]
+Opponent hand after drawing: [8D, 10H, QH, AH]
+Discard pile: [6S, 7S, 7C, 8C, 6D, 9D, 9S, QS, 9C, JC, JS, AS, 6H, 8H, 8S, 10S, 10D, AD]
+Player hand after turn: [7H, 9H, JH, KS, 10C, 7D, KD, KH, KC]
+Opponent hand after turn: [8D, 10H, QH, AH]
+[7H, 7D, 9H, JH, KS, KD, KH, 10C, KC]
+[8D, 10H, QH, QD, AH, AC]
+AI attacked successfully with: [8D]
+yes
+Card clicked: KD
+Player defended against 8D with KD
+yes
+[7H, 7D, 9H, JH, KS, KH, 10C, KC]
+[10H, QH, QD, AH, AC]
+AI cannot attack and table is beaten. Ending turn.
+[7H, 7D, 9H, JH, KS, KH, 10C, KC]
+[10H, QH, QD, AH, AC]
+Table before ending turn: Table: 8D
+Player hand before ending turn: [7H, 7D, 9H, JH, KS, KH, 10C, KC]
+Opponent hand before ending turn: [10H, QH, QD, AH, AC]
+Player hand after drawing: [7H, 7D, 9H, JH, KS, KH, 10C, KC]
+Opponent hand after drawing: [10H, QH, QD, AH, AC]
+Discard pile: [6S, 7S, 7C, 8C, 6D, 9D, 9S, QS, 9C, JC, JS, AS, 6H, 8H, 8S, 10S, 10D, AD, 8D, KD]
+Player hand after turn: [7H, 7D, 9H, JH, KS, KH, 10C, KC]
+Opponent hand after turn: [10H, QH, QD, AH, AC]
+[7H, 7D, 9H, JH, KS, KH, 10C, KC]
+[10H, JD, QH, QD, AH, AC]
+Card clicked: 7H
+Selected: 7H
+Card clicked: 7D
+Selected: 7D
+Player attacked with: 7H, 7D
+[7H, 7D, 9H, JH, KS, KH, 10C, KC]
+[10H, JD, QH, QD, AH, AC]
+yes
+[9H, JH, KS, KH, 10C, KC]
+[10H, JD, QH, QD, AH, AC]
+AI defends 7H with 10H
+AI defends 7D with JD
+AI defended all attacks.
+Card clicked: JH
+Selected: JH
+Player attacked with: JH
+[9H, JH, KS, KH, 10C, KC]
+[QH, QD, AH, AC]
+yes
+[9H, KS, KH, 10C, KC]
+[QH, QD, AH, AC]
+AI defends JH with QH
+AI defended all attacks.
+[9H, KS, KH, 10C, KC]
+[QD, AH, AC]
+[9H, KS, KH, 10C, KC]
+[QD, AH, AC]
+[9H, KS, KH, 10C, KC]
+[QD, AH, AC]
+[9H, KS, KH, 10C, KC]
+[QD, AH, AC]
+[9H, KS, KH, 10C, KC]
+[QD, AH, AC]
+Card clicked: 10C
+Selected: 10C
+Player attacked with: 10C
+yes
+[9H, KS, KH, KC]
+[QD, AH, AC]
+AI defends 10C with AC
+AI defended all attacks.
+[9H, KS, KH, KC]
+[QD, AH]
+Table before ending turn: Table: 7H, 7D, JH, 10C
+Player hand before ending turn: [9H, KS, KH, KC]
+Opponent hand before ending turn: [QD, AH]
+Player hand after drawing: [9H, KS, KH, KC]
+Opponent hand after drawing: [QD, AH]
+Discard pile: [6S, 7S, 7C, 8C, 6D, 9D, 9S, QS, 9C, JC, JS, AS, 6H, 8H, 8S, 10S, 10D, AD, 8D, KD, 7H, 10H, 7D, JD, JH, QH, 10C, AC]
+Player hand after turn: [9H, KS, KH, KC]
+Opponent hand after turn: [QD, AH]
+[9H, KS, KH, 6C, QC, KC]
+[QD, AH]
+AI attacked successfully with: [QD]
+yes
+Card clicked: KC
+Player defended against QD with KC
+yes
+[9H, KS, KH, 6C, QC]
+[AH]
+AI cannot attack and table is beaten. Ending turn.
+[9H, KS, KH, 6C, QC]
+[AH]
+Table before ending turn: Table: QD
+Player hand before ending turn: [9H, KS, KH, 6C, QC]
+Opponent hand before ending turn: [AH]
+Player hand after drawing: [9H, KS, KH, 6C, QC]
+Opponent hand after drawing: [AH]
+Discard pile: [6S, 7S, 7C, 8C, 6D, 9D, 9S, QS, 9C, JC, JS, AS, 6H, 8H, 8S, 10S, 10D, AD, 8D, KD, 7H, 10H, 7D, JD, JH, QH, 10C, AC, QD, KC]
+Player hand after turn: [9H, KS, KH, 6C, QC]
+Opponent hand after turn: [AH]
+[9H, KS, KH, 6C, QC]
+[AH]
+[9H, KS, KH, 6C, QC]
+[AH]
+Card clicked: 9H
+Selected: 9H
+Player attacked with: 9H
+[9H, KS, KH, 6C, QC]
+[AH]
+yes
+[KS, KH, 6C, QC]
+[AH]
+AI defends 9H with AH
+AI defended all attacks.
 
 Full traceback:
   File "game/CardGames/Durak/scripts_durak.rpy", line 46, in script

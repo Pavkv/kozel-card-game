@@ -1,36 +1,75 @@
 init python:
-    DISCARD_X = 50
+    DISCARD_PLAYERS_X = 50
     PLAYER_DISCARD_Y = 800
     OPPONENT_DISCARD_Y = 0
-     # --------------------
-     # Durak Animations
-     # --------------------
+    # --------------------
+    # Kozel Animations
+    # --------------------
+    def kozel_player_draw():
+        draw_anim(side=0, sort_hand=True)
+
+    def kozel_opponent_draw():
+        draw_anim(side=1, sort_hand=True)
+
+    def kozel_resolve_table_logic(receiver):
+        """
+        Final game logic after table is cleared: handle take/discard, redraw hands, etc.
+        """
+        card_game.take_cards(receiver)
+        card_game.table.clear()
+
+        # Tally points before next turn
+        card_game.count_total_points_kozel_both()
+
+        print("Discard pile player:", card_game.player.discard)
+        print("Player hand after turn:", card_game.player.hand)
+        print("Player points after turn:", card_game.player_points)
+        print("Discard pile opponent:", card_game.opponent.discard)
+        print("Opponent hand after turn:", card_game.opponent.hand)
+        print("Opponent points after turn:", card_game.opponent_points)
+
+        # Switch state to next turn
+        card_game.state = (
+            "player_turn" if card_game.current_turn == card_game.player else "opponent_turn"
+        )
+
+        # Draw cards (opposite side first)
+        if card_game.current_turn == card_game.opponent:
+            draw_anim(side=0, sort_hand=True, on_finish="kozel_opponent_draw")
+        else:
+            draw_anim(side=1, sort_hand=True, on_finish="kozel_player_draw")
+
+        # Sort and re-render
+        card_game.player.sort_hand(card_game.deck.trump_suit)
+        card_game.opponent.sort_hand(card_game.deck.trump_suit)
+        compute_hand_layout()
+
     def kozel_animate_and_resolve_table(step_delay=0.05, anim_duration=0.1):
+        """
+        Animate clearing the table and then resolve the logic based on whether the cards
+        were defended (discarded) or taken.
+        """
         global hovered_card_index, confirm_drop
-        """
-        Animate cards being cleared from the table and defer logic until after animation.
-        """
 
         table_animations[:] = []
         delay = 0.0
 
-        is_beaten = card_game.table.beaten()
-
+        # Determine who receives the cards
         if confirm_drop:
-            receiver = card_game.current_turn
+            receiver = card_game.current_turn  # Attacker takes cards
         else:
-            receiver = card_game.player if card_game.current_turn == card_game.opponent else card_game.opponent  # The defender takes the cards
+            receiver = card_game.player if card_game.current_turn == card_game.opponent else card_game.opponent
             card_game.current_turn = card_game.opponent if card_game.current_turn == card_game.player else card_game.player
 
+        print("Animating table resolution. Receiver:", receiver.name)
+
+        # Animate each card from the table
         for i, (atk_card, (beaten, def_card)) in enumerate(card_game.table.table.items()):
             src_x = 350 + i * 200
             src_y = 375
             cards = list(filter(None, [atk_card, def_card]))
 
             for card in cards:
-                offset_x = 30 * i
-                offset_y = 0
-
                 anim = {
                     "card": card,
                     "src_x": src_x,
@@ -39,52 +78,27 @@ init python:
                     "duration": anim_duration,
                 }
 
-                dest_y_beaten = PLAYER_DISCARD_Y if receiver == card_game.player else OPPONENT_DISCARD_Y
-                dest_y_not_beaten = OPPONENT_DISCARD_Y if receiver == card_game.player else PLAYER_DISCARD_Y
-                if not confirm_drop:
-                    anim.update({
-                        "dest_x": DISCARD_X,
-                        "dest_y": dest_y_beaten,
-                        "target": "discard",
-                    })
-                else:
-                    anim.update({
-                        "dest_x": DISCARD_X,
-                        "dest_y": dest_y_not_beaten,
-                        "target": "discard",
-                    })
+                # Drop or take animation
+                dest_y = PLAYER_DISCARD_Y if receiver == card_game.player else OPPONENT_DISCARD_Y
+                if confirm_drop:
+                    dest_y = OPPONENT_DISCARD_Y if receiver == card_game.player else PLAYER_DISCARD_Y
+
+                anim.update({
+                    "dest_x": DISCARD_PLAYERS_X,
+                    "dest_y": dest_y,
+                    "target": "discard",
+                })
 
                 table_animations.append(anim)
                 delay += step_delay
 
-        def resolve_table_logic():
-            card_game.take_cards(receiver)
-            card_game.state = (
-                "player_turn" if card_game.current_turn == card_game.player else "opponent_turn"
-            )
+        # Show animation, pass `receiver` as tuple to args
+        show_anim(
+            on_finish="kozel_resolve_table_logic",
+            args=(receiver,)
+        )
 
-            card_game.count_total_points_kozel_both()
-            card_game.table.clear()
-
-            print("Discard pile player:", card_game.player.discard)
-            print("Player hand after turn:", card_game.player.hand)
-            print("Player points after turn:", card_game.player_points)
-            print("Discard pile opponent:", card_game.opponent.discard)
-            print("Opponent hand after turn:", card_game.opponent.hand)
-            print("Opponent points after turn:", card_game.opponent_points)
-
-            if card_game.current_turn == card_game.opponent:
-                draw_anim(side=0, sort_hand=True, on_finish=lambda: draw_anim(side=1, sort_hand=True))
-            else:
-                draw_anim(side=1, sort_hand=True, on_finish=lambda: draw_anim(side=0, sort_hand=True))
-
-            card_game.player.sort_hand(card_game.deck.trump_suit)
-            card_game.opponent.sort_hand(card_game.deck.trump_suit)
-
-            compute_hand_layout()
-
-        show_anim(function=resolve_table_logic)
-
+        # Reset selection
         hovered_card_index = -1
         confirm_drop = False
 
@@ -151,6 +165,12 @@ init python:
                 print("Player cannot defend against:", selected_attack_card)
                 print("Player has to drop same number of cards as attacks.")
 
+    def kozel_player_switch_to_defend():
+        global confirm_attack, selected_attack_card_indexes
+        selected_attack_card_indexes.clear()
+        confirm_attack = False
+        card_game.state = "opponent_defend"
+
     def kozel_confirm_selected_attack():
         """Confirms all selected attack cards and animates them from hand to table."""
         global confirm_attack, selected_attack_card_indexes
@@ -162,11 +182,6 @@ init python:
             if card_game.can_attack(card_game.player):
                 print("Player attacked with: " + ', '.join(str(c) for c in cards))
 
-                def switch_to_defend():
-                    selected_attack_card_indexes.clear()
-                    confirm_attack = False
-                    card_game.state = "opponent_defend"
-
                 # Animate each card moving to table
                 start_index = len(card_game.table)
                 play_card_anim(
@@ -174,7 +189,7 @@ init python:
                     side=0,
                     slot_index=start_index,
                     is_defense=False,
-                    on_finish=switch_to_defend
+                    on_finish="kozel_player_switch_to_defend"
                 )
 
             else:
@@ -183,55 +198,69 @@ init python:
                 confirm_attack = False
 
     def kozel_player_drop():
-        """Handles player dropping cards logic."""
-        global selected_attack_card_indexes
+        """Handles player dropping cards logic, one at a time with animation callbacks."""
+        global selected_attack_card_indexes, kozel_drop_queue, kozel_drop_index
 
         indexes = sorted(selected_attack_card_indexes)
         cards = [card_game.player.hand[i] for i in indexes]
 
-        print(cards)
+        if len(cards) != len(card_game.table.keys()):
+            print("Invalid drop: must match table count.")
+            return
 
-        if len(cards) == len(card_game.table.keys()):
-            print("Player drops cards:", cards)
+        print("Player drops cards:", cards)
+        kozel_drop_queue = []
+        kozel_drop_index = 0
 
-            cards_to_drop = []
+        # Build queue: map each attack card to a defending card
+        for i, (attack_card, (beaten, _)) in enumerate(card_game.table.table.items()):
+            def_card = cards[i]
+            kozel_drop_queue.append((i, attack_card, def_card))
 
-            for i, (attack_card, (beaten, _)) in enumerate(card_game.table.table.items()):
-                def_card = cards[i]
-                cards_to_drop.append((i, attack_card, def_card))
+        # Start first drop
+        kozel_player_do_drop()
 
-            def do_drop(index=0):
-                if card_game.table.beaten():
-                    print("AI dropped all cards.")
-                    card_game.state = "end_turn"
-                    return
+    def kozel_player_do_drop():
+        """Handles one drop animation at a time."""
+        global kozel_drop_queue, kozel_drop_index
 
-                slot_index, atk_card, def_card = cards_to_drop[index]
-
-                def apply_drop():
-                    # Now it's safe to update the game state
-                    card_game.table.beat(atk_card, def_card)
-                    card_game.player.hand.remove(def_card)
-                    compute_hand_layout()
-
-                    # Move to next defense
-                    do_drop(index + 1)
-
-                # Animate it
-                play_card_anim(
-                    cards=[def_card],
-                    side=0,
-                    slot_index=slot_index,
-                    is_defense=True,
-                    skip_check=True
-                )
-                show_anim(apply_drop)
-
-            do_drop()
-
-            # Clear selection and proceed to opponent turn
-            selected_attack_card_indexes.clear()
+        if kozel_drop_index >= len(kozel_drop_queue):
+            print("Player finished dropping cards.")
             card_game.state = "end_turn"
+            selected_attack_card_indexes.clear()
+            compute_hand_layout()
+            return
+
+        slot_index, atk_card, def_card = kozel_drop_queue[kozel_drop_index]
+        print("Animating drop: {} on {}".format(def_card, atk_card))
+
+        play_card_anim(
+            cards=[def_card],
+            side=0,
+            slot_index=slot_index,
+            is_defense=True,
+            skip_check=True
+        )
+
+        # Wait for animation, then continue logic
+        show_anim(on_finish="kozel_player_apply_drop")
+
+    def kozel_player_apply_drop():
+        """Applies the dropped card and continues to the next."""
+        global kozel_drop_queue, kozel_drop_index
+
+        slot_index, atk_card, def_card = kozel_drop_queue[kozel_drop_index]
+
+        print("Applying drop: {} -> {}".format(def_card, atk_card))
+        card_game.table.beat(atk_card, def_card)
+
+        if def_card in card_game.player.hand:
+            card_game.player.hand.remove(def_card)
+
+        compute_hand_layout()
+
+        kozel_drop_index += 1
+        kozel_player_do_drop()
 
     # --------------------
     # Opponent Functions
@@ -254,10 +283,11 @@ init python:
 
     def kozel_opponent_defend():
         """Handles the opponent's defense logic sequentially with animation."""
-        global confirm_drop
-        defense_queue = []
+        global confirm_drop, kozel_defense_queue, kozel_defense_index
 
         reserved_cards = set()
+        kozel_defense_queue = []
+        kozel_defense_index = 0
 
         for i, (attack_card, (beaten, _)) in enumerate(card_game.table.table.items()):
             if not beaten:
@@ -267,8 +297,8 @@ init python:
                     exclude=reserved_cards
                 )
                 if def_card:
-                    defense_queue.append((i, attack_card, def_card))
-                    reserved_cards.add(def_card)  # Reserve this card
+                    kozel_defense_queue.append((i, attack_card, def_card))
+                    reserved_cards.add(def_card)
                 else:
                     print("AI cannot defend against:", attack_card)
                     confirm_drop = True
@@ -276,89 +306,119 @@ init python:
                     kozel_opponent_drop()
                     return
 
-        print("AI defense queue:", defense_queue)
+        print("AI defense queue:", kozel_defense_queue)
 
-        def do_defense(index=0):
-            if index >= len(defense_queue):
-                # All done — now check if fully defended
-                if card_game.table.beaten():
-                    print("AI defended all attacks.")
-                    card_game.state = "end_turn"
-                    return
-                else:
-                    print("AI failed to defend completely.")
-                    confirm_drop = True
-                    card_game.state = "opponent_drop"
-                    kozel_opponent_drop()
-
-            slot_index, atk_card, def_card = defense_queue[index]
-
-            def apply_defense():
-                # Now it's safe to update the game state
-                card_game.table.beat(atk_card, def_card)
-                card_game.opponent.hand.remove(def_card)
-                compute_hand_layout()
-
-                # Move to next defense
-                do_defense(index + 1)
-
-            # Animate it
-            play_card_anim(
-                cards=[def_card],
-                side=1,
-                slot_index=slot_index,
-                is_defense=True,
-                delay=0.0
-            )
-            show_anim(apply_defense)
-
-        if defense_queue:
-            do_defense()
+        if kozel_defense_queue:
+            kozel_opponent_do_defense()
         else:
-            print("AI could not defend. Player wins this round.")
+            print("AI could not defend. Switching to drop.")
             confirm_drop = True
             card_game.state = "opponent_drop"
             kozel_opponent_drop()
 
+    def kozel_opponent_do_defense():
+        """Animates one card defense at a time."""
+        global kozel_defense_index, kozel_defense_queue
+
+        if kozel_defense_index >= len(kozel_defense_queue):
+            if card_game.table.beaten():
+                print("AI successfully defended all attacks.")
+                card_game.state = "end_turn"
+            else:
+                print("AI failed to defend all. Switching to drop.")
+                confirm_drop = True
+                card_game.state = "opponent_drop"
+                kozel_opponent_drop()
+            return
+
+        slot_index, atk_card, def_card = kozel_defense_queue[kozel_defense_index]
+        print("AI defends {} with {}".format(atk_card, def_card))
+
+        play_card_anim(
+            cards=[def_card],
+            side=1,
+            slot_index=slot_index,
+            is_defense=True,
+            delay=0.0
+        )
+
+        show_anim(on_finish="kozel_opponent_apply_defense")
+
+    def kozel_opponent_apply_defense():
+        """Applies the defense and proceeds to next."""
+        global kozel_defense_index, kozel_defense_queue
+
+        slot_index, atk_card, def_card = kozel_defense_queue[kozel_defense_index]
+
+        card_game.table.beat(atk_card, def_card)
+        if def_card in card_game.opponent.hand:
+            card_game.opponent.hand.remove(def_card)
+
+        compute_hand_layout()
+        kozel_defense_index += 1
+        kozel_opponent_do_defense()
+
     def kozel_opponent_drop():
-        """Handles opponent dropping cards logic."""
+        """Handles opponent dropping cards logic with animation."""
+        global kozel_drop_queue, kozel_drop_index
+
+        kozel_drop_index = 0
+        kozel_drop_queue = []
+
         opponent_drop = card_game.opponent.drop_cards(card_game.table.keys())
         print("AI drops cards:", opponent_drop)
 
-        cards_to_drop = []
-
         for i, (attack_card, (beaten, _)) in enumerate(card_game.table.table.items()):
             def_card = opponent_drop[i]
-            cards_to_drop.append((i, attack_card, def_card))
+            kozel_drop_queue.append((i, attack_card, def_card))
 
-        def do_drop(index=0):
-            if card_game.table.beaten():
-                print("AI dropped all cards.")
-                card_game.state = "end_turn"
-                return
+        if kozel_drop_queue:
+            kozel_opponent_do_drop()
+        else:
+            print("Nothing to drop.")
+            card_game.state = "end_turn"
 
-            slot_index, atk_card, def_card = cards_to_drop[index]
+    def kozel_opponent_do_drop():
+        """Performs a single card drop with animation."""
+        global kozel_drop_index, kozel_drop_queue
 
-            def apply_drop():
-                # Now it's safe to update the game state
-                card_game.table.beat(atk_card, def_card)
-                card_game.opponent.hand.remove(def_card)
-                compute_hand_layout()
+        if card_game.table.beaten():
+            print("AI dropped all cards.")
+            card_game.state = "end_turn"
+            return
 
-                # Move to next defense
-                do_drop(index + 1)
+        if kozel_drop_index >= len(kozel_drop_queue):
+            print("AI drop queue finished.")
+            card_game.state = "end_turn"
+            return
 
-            # Animate it
-            play_card_anim(
-                cards=[def_card],
-                side=1,
-                slot_index=slot_index,
-                is_defense=True,
-                skip_check=True
-            )
-            show_anim(apply_drop)
+        slot_index, atk_card, def_card = kozel_drop_queue[kozel_drop_index]
+        print("AI drops {} to beat {}".format(def_card, atk_card))
 
-        do_drop()
+        play_card_anim(
+            cards=[def_card],
+            side=1,
+            slot_index=slot_index,
+            is_defense=True,
+            skip_check=True
+        )
+
+        show_anim(on_finish="kozel_opponent_apply_drop")
+
+    def kozel_opponent_apply_drop():
+        """Applies drop logic after animation step."""
+        global kozel_drop_index, kozel_drop_queue
+
+        slot_index, atk_card, def_card = kozel_drop_queue[kozel_drop_index]
+
+        card_game.table.beat(atk_card, def_card)
+        if def_card in card_game.opponent.hand:
+            card_game.opponent.hand.remove(def_card)
+
+        compute_hand_layout()
+
+        kozel_drop_index += 1
+        kozel_opponent_do_drop()
 
     # --------------------
     # End Turn Logic
@@ -384,3 +444,22 @@ init python:
 
         print("Player hand after drawing:", card_game.player.hand)
         print("Opponent hand after drawing:", card_game.opponent.hand)
+
+    # --------------------
+    # Animation Callbacks
+    # --------------------
+    def resolve_on_finish(key):
+        if key == "kozel_player_switch_to_defend":
+            kozel_player_switch_to_defend()
+        elif key == "kozel_player_apply_drop":
+            kozel_player_apply_drop()
+        elif key == "kozel_opponent_apply_defense":
+            kozel_opponent_apply_defense()
+        elif key == "kozel_opponent_apply_drop":
+            kozel_opponent_apply_drop()
+        elif key == "kozel_resolve_table_logic":
+            kozel_resolve_table_logic()
+        elif key == "kozel_player_draw":
+            kozel_player_draw()
+        elif key == "kozel_opponent_draw":
+            kozel_opponent_draw()

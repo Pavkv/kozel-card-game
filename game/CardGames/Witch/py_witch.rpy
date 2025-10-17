@@ -122,8 +122,22 @@ init python:
             print("AI has nothing to do, ends turn.")
             show_anim(on_finish="witch_opponent_end_turn")
 
-    # Function dispatcher for animations
-    def resolve_on_finish(key, *args, **kwargs):
+    # ----------------------------
+    # Game Over
+    # ----------------------------
+    def game_over_check():
+        """Check if the game is over and handle the result."""
+        game_over = card_game.game_over()
+        if game_over[0]:
+            card_game.result = game_over[1]
+            print("Game Over: ", card_game.result)
+            card_game.state = "result"
+            renpy.jump("witch_game_loop")
+
+    # ----------------------------
+    # Animation Callbacks
+    # ----------------------------
+    def resolve_on_finish(key):
         if key == "witch_opponent_after_draw":
             witch_opponent_after_draw()
         elif key == "witch_opponent_after_discard":
@@ -137,15 +151,3 @@ init python:
         elif key == "delay_anim":
             final = kwargs.get("on_finish")
             delay_anim(on_finish=final)
-
-    # ----------------------------
-    # Game Over
-    # ----------------------------
-    def game_over_check():
-        """Check if the game is over and handle the result."""
-        game_over = card_game.game_over()
-        if game_over[0]:
-            card_game.result = game_over[1]
-            print("Game Over: ", card_game.result)
-            card_game.state = "result"
-            renpy.jump("witch_game_loop")
