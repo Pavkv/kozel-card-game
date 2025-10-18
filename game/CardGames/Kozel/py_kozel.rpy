@@ -6,10 +6,24 @@ init python:
     # Kozel Animations
     # --------------------
     def kozel_player_draw():
-        draw_anim(side=0, sort_hand=True)
+        draw_anim(side=0, sort_hand=True, on_finish="kozel_end_game_cleanup" if (
+            card_game.state not in ["player_defend", "player_drop", "opponent_defend", "opponent_drop"]
+            and card_game.deck.is_empty()
+            and (
+                (not card_game.player.hand and card_game.opponent.hand) or
+                (not card_game.opponent.hand and card_game.player.hand)
+            )
+        ) else None)
 
     def kozel_opponent_draw():
-        draw_anim(side=1, sort_hand=True)
+        draw_anim(side=1, sort_hand=True, on_finish="kozel_end_game_cleanup" if (
+            card_game.state not in ["player_defend", "player_drop", "opponent_defend", "opponent_drop"]
+            and card_game.deck.is_empty()
+            and (
+                (not card_game.player.hand and card_game.opponent.hand) or
+                (not card_game.opponent.hand and card_game.player.hand)
+            )
+        ) else None)
 
     def kozel_resolve_table_logic(receiver):
         """
@@ -34,7 +48,7 @@ init python:
         )
 
         # Draw cards (opposite side first)
-        if card_game.current_turn == card_game.opponent:
+        if card_game.current_turn == card_game.player:
             draw_anim(side=0, sort_hand=True, on_finish="kozel_opponent_draw")
         else:
             draw_anim(side=1, sort_hand=True, on_finish="kozel_player_draw")
@@ -156,7 +170,7 @@ init python:
                 selected_attack_card_indexes.add(index)
                 print("Selected:", card)
 
-            confirm_drop = len(selected_attack_card_indexes) == len(card_game.table.keys())
+            confirm_drop = len(selected_attack_card_indexes) == card_game.table.num_unbeaten()
             if not confirm_drop:
                 print("Player cannot defend against:", selected_attack_card)
                 print("Player has to drop same number of cards as attacks.")
@@ -200,7 +214,7 @@ init python:
         indexes = sorted(selected_attack_card_indexes)
         cards = [card_game.player.hand[i] for i in indexes]
 
-        if len(cards) != len(card_game.table.keys()):
+        if len(cards) != card_game.table.num_unbeaten():
             print("Invalid drop: must match table count.")
             return
 
@@ -208,10 +222,13 @@ init python:
         kozel_drop_queue = []
         kozel_drop_index = 0
 
-        # Build queue: map each attack card to a defending card
+        card_index = 0
         for i, (attack_card, (beaten, _)) in enumerate(card_game.table.table.items()):
-            def_card = cards[i]
+            if beaten:
+                continue
+            def_card = cards[card_index]
             kozel_drop_queue.append((i, attack_card, def_card))
+            card_index += 1
 
         selected_attack_card_indexes.clear()
 
@@ -421,6 +438,8 @@ init python:
     # End Turn Logic
     # --------------------
     def kozel_end_turn():
+        """Handles end turn logic: remembering cards, animating table resolution, checking endgame."""
+
         print("Table before ending turn:", card_game.table)
         print("Player hand before ending turn:", card_game.player.hand)
         print("Opponent hand before ending turn:", card_game.opponent.hand)
@@ -443,6 +462,73 @@ init python:
         print("Opponent hand after drawing:", card_game.opponent.hand)
 
     # --------------------
+    # End Game Cleanup
+    # --------------------
+    def kozel_apply_discard(player, cards, on_finish=None):
+        for card in cards:
+            player.discard.append(card)
+            if card in player.hand:
+                player.hand.remove(card)
+
+        compute_hand_layout()
+
+        if isinstance(on_finish, str):
+            resolve_on_finish(on_finish)
+
+    def kozel_end_game_cleanup():
+        """Handles cleanup when one player runs out of cards and the deck is empty."""
+
+        if (
+            card_game.state not in ["player_defend", "player_drop", "opponent_defend", "opponent_drop"]
+            and card_game.deck.is_empty()
+            and (
+                (not card_game.player.hand and card_game.opponent.hand) or
+                (not card_game.opponent.hand and card_game.player.hand)
+            )
+        ):
+            if not card_game.player.hand and card_game.opponent.hand:
+                print("Player is out of cards. Opponent discards remaining hand.")
+                player = card_game.opponent
+            elif not card_game.opponent.hand and card_game.player.hand:
+                print("Opponent is out of cards. Player discards remaining hand.")
+                player = card_game.player
+            else:
+                return
+
+            cards = [card for card in player.hand if card is not None]
+
+            print("{} discarding: " + ', '.join(str(c) for c in cards).format(player.name))
+
+            card_game.state = "game_cleanup"
+            table_animations[:] = []
+
+            side = 0 if player == card_game.player else 1
+            delay = 0.0
+            anim_duration = 0.3
+
+            for i, card in enumerate(cards):
+                src_x, src_y = hand_card_pos(side, card)
+
+                override_img = get_card_image(card) if side == 0 else base_cover_img_src
+
+                table_animations.append({
+                    "card": card,
+                    "src_x": src_x,
+                    "src_y": src_y,
+                    "dest_x": DISCARD_PLAYERS_X,
+                    "dest_y": PLAYER_DISCARD_Y if side == 0 else OPPONENT_DISCARD_Y,
+                    "delay": delay + i * 0.2,
+                    "duration": anim_duration,
+                    "override_img": override_img,
+                })
+
+            show_anim(
+                on_finish="kozel_apply_discard",
+                args=(player, cards),
+                kwargs={"on_finish": "kozel_end_turn"}
+            )
+
+    # --------------------
     # Animation Callbacks
     # --------------------
     def resolve_on_finish(key):
@@ -460,3 +546,10 @@ init python:
             kozel_player_draw()
         elif key == "kozel_opponent_draw":
             kozel_opponent_draw()
+        elif key == "kozel_end_turn":
+            kozel_end_turn()
+        elif key == "kozel_apply_discard":
+            kozel_apply_discard()
+        elif key == "kozel_end_game_cleanup":
+            kozel_end_game_cleanup()
+

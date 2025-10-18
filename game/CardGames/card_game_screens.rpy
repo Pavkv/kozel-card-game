@@ -112,8 +112,12 @@ screen game_phase_and_controls():
                 align (0.5, 0.5)
 
         if isinstance(card_game, DurakGame) or isinstance(card_game, KozelGame):
-            $ show_end_turn = card_game.table and card_game.state in ["player_turn", "player_defend"]
-            $ show_confirm_attack = card_game.state == "player_turn" and len(selected_attack_card_indexes) > 0 or card_game.state == "player_drop" and len(selected_attack_card_indexes) == len(card_game.table.keys())
+            $ show_end_turn = card_game.table and card_game.state in ["player_turn", "player_defend", "opponent_take"]
+            $ show_confirm_attack = (
+                card_game.state in "player_turn" and len(selected_attack_card_indexes) > 0 or
+                card_game.state in "opponent_take" and len(selected_attack_card_indexes) > 0 and len(card_game.opponent.hand) - card_game.table.num_unbeaten() > len(selected_attack_card_indexes) or
+                card_game.state == "player_drop" and len(selected_attack_card_indexes) == card_game.table.num_unbeaten()
+            )
             if show_end_turn and show_confirm_attack:
                 $ y1 = 30
                 $ y2 = 40
@@ -121,37 +125,37 @@ screen game_phase_and_controls():
                 $ y1 = y2 = 30
 
             if show_end_turn:
-                if card_game.state == "player_turn":
-                    $ btn_text = "Бито"
+                if card_game.state == "player_turn" or card_game.state == "opponent_take":
+                    $ btn_text_end = "Бито"
                 elif card_game.state == "player_defend" and isinstance(card_game, DurakGame):
-                    $ btn_text = "Взять"
+                    $ btn_text_end = "Взять"
                 elif card_game.state == "player_defend" and isinstance(card_game, KozelGame):
-                    $ btn_text = "Сбросить"
+                    $ btn_text_end = "Сбросить"
 
                 frame:
                     xsize 150
                     padding (0, 0)
                     ypos y1
                     has vbox
-                    textbutton "{color=#fff}[btn_text]{/color}":
+                    textbutton "{color=#fff}[btn_text_end]{/color}":
                         style "card_game_button"
                         text_size 25
                         action Function(handle_end_turn)
 
             if show_confirm_attack:
                 if card_game.state == "player_turn":
-                    $ btn_text = "Подтвердить\nатаку"
+                    $ btn_text_confirm = "Подтвердить\nатаку"
                 elif card_game.state == "player_defend" and isinstance(card_game, DurakGame):
-                    $ btn_text = "Подтвердить\nзащиту"
+                    $ btn_text_confirm = "Подтвердить\nзащиту"
                 elif card_game.state == "player_drop" and isinstance(card_game, KozelGame):
-                    $ btn_text = "Подтвердить\nсброс"
+                    $ btn_text_confirm = "Подтвердить\nсброс"
 
                 frame:
                     xsize 150
                     padding (0, 0)
                     ypos y2
                     has vbox
-                    textbutton "{color=#fff}[btn_text]{/color}":
+                    textbutton "{color=#fff}[btn_text_confirm]{/color}":
                         style "card_game_button"
                         text_size 18
                         action Function(eval("store." + handle_confirm_attack()))
@@ -224,7 +228,7 @@ screen trump_and_deck_display():
             ypos DECK_NUM_Y
             size 60
 
-    elif isinstance(card_game, DurakGame) and not card_game.deck.cards:
+    elif isinstance(card_game, DurakGame) or isinstance(card_game, KozelGame) and not card_game.deck.cards:
             text card_suits[card_game.deck.trump_suit]:
                 xpos deck_num_xpos
                 ypos DECK_NUM_Y

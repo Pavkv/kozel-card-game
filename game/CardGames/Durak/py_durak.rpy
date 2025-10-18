@@ -156,7 +156,12 @@ init python:
         global confirm_attack, selected_attack_card_indexes
         selected_attack_card_indexes.clear()
         confirm_attack = False
-        card_game.state = "opponent_defend"
+        if card_game.state == "opponent_take" and not card_game.can_attack(card_game.player):
+            card_game.state = "end_turn"
+        elif card_game.state == "opponent_take":
+            card_game.state == "player_turn"
+        else:
+            card_game.state = "opponent_defend"
 
     def durak_confirm_selected_attack():
         """Confirms all selected attack cards and animates them from hand to table."""
@@ -246,7 +251,7 @@ init python:
             durak_opponent_do_defense()
         else:
             print("AI could not defend. Will need to take.")
-            card_game.state = "opponent_take"
+            card_game.state = "opponent_take" if card_game.can_attack(card_game.player) else "end_turn"
 
     def durak_opponent_do_defense():
         """Executes one defense step at a time using animation + show_anim."""
@@ -297,7 +302,7 @@ init python:
     # End Turn Logic
     # --------------------
     def durak_end_turn():
-        global confirm_take  # Ensure this resets the global flag
+        global confirm_take
 
         print("Table before ending turn:", card_game.table)
         print("Player hand before ending turn:", card_game.player.hand)

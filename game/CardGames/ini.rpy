@@ -110,6 +110,7 @@ init python:
             "opponent_defend": "Противник защищается",
             "opponent_drop": "Противник сбрасывает",
             "end_turn": "Окончание хода",
+            "game_cleanup": "Завершение игры",
             "results": "Игра окончена"
         },
     }

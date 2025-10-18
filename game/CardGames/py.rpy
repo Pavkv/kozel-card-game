@@ -411,7 +411,6 @@ init python:
         )
 
     def apply_card_moves(player, cards, slot_index=0, is_defense=False, skip_check=False, on_finish=None):
-        print("yes")
         attack_keys = list(card_game.table.table.keys())
         for i, card in enumerate(cards):
             if skip_check and is_defense:

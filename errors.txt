@@ -2,10 +2,10 @@
 errors listed below, and try again.
 
 
-File "game/CardGames/py.rpy", line 421: invalid syntax
-            print(f"[Before correction] selected_attack_card_indexes: {selected_attack_card_indexes}")
-                                                                                                     ^
+File "game/CardGames/Kozel/py_kozel.rpy", line 454: expected an indented block
+    for card in cards:
+       ^
     
 
 Ren'Py Version: Ren'Py 7.4.11.2266
-Fri Oct 17 08:50:55 2025
+Sat Oct 18 00:16:02 2025
