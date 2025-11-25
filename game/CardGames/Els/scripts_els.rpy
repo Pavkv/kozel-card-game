@@ -1,7 +1,15 @@
-label start_els:
+label start:
+    $ player_name = "Вы"
+    $ opponent_name = "Противник"
+    $ cards_bg = "images/bg/bg_14.jpg"
+    $ in_game = False
+    $ base_card_img_src = "images/cards/cards"
+    $ day2_game_with_Alice = False
+    $ last_winner = "player"
     $ start_card_game(ElsGame, "els")
 
 label els_game_loop:
+    $ print(card_game.state)
     if is_dealing:
 #         $ renpy.block_rollback()
         $ is_dealing = False
@@ -17,11 +25,9 @@ label els_game_loop:
 #       $ renpy.block_rollback()
         $ renpy.jump("card_game_result_handler")
 
-    if card_game.state == "opponent_turn":
+    if card_game.state in ["opponent_turn", "opponent_give"]:
 #         $ renpy.block_rollback()
         $ els_opponent_turn()
 
     call screen els
     jump els_game_loop
-
-

@@ -3,5 +3,5 @@
   <component name="Black">
     <option name="sdkName" value="Python 2.7 (Kozel)" />
   </component>
-  <component name="ProjectRootManager" version="2" project-jdk-name="Python 2.7 (Kozel)" project-jdk-type="Python SDK" />
+  <component name="ProjectRootManager" version="2" project-jdk-name="Python 2.7 (kozel-card-game)" project-jdk-type="Python SDK" />
 </project>

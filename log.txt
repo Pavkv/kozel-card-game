@@ -1,4 +1,4 @@
-Sat Oct 18 00:18:46 2025
+Tue Nov 25 17:11:01 2025
 Windows-10-10.0.26100
 Ren'Py 7.4.11.2266
  
@@ -7,12 +7,12 @@ Bootstrap to the start of init.init took 0.05s
 Early init took 0.00s
 Loader init took 0.02s
 Loading error handling took 0.01s
-Loading script took 0.12s
+Loading script took 0.11s
 Loading save slot metadata. took 0.01s
 Loading persistent took 0.00s
 Importing _renpysteam: ImportError('No module named _renpysteam',)
 Running init code took 0.06s
-Loading analysis data took 0.01s
+Loading analysis data took 0.02s
 Analyze and compile ATL took 0.00s
 Index archives took 0.00s
 Backing up script files to 'C:\\Users\\Admin\\AppData\\Roaming/RenPy/backups\\kozel-card-game':
@@ -35,7 +35,7 @@ Save pyanalysis. took 0.00s
 Save bytecode. took 0.02s
 Running _start took 0.00s
 Performance test:
-Interface start took 0.09s
+Interface start took 0.07s
 
 Initializing gl2 renderer:
 primary display bounds: (0, 0, 3440, 1440)
@@ -47,214 +47,33 @@ Version: '4.6.0 NVIDIA 576.88'
 Display Info: None
 Screen sizes: virtual=(1920, 1080) physical=(1070, 602) drawable=(1070, 602)
 Maximum texture size: 4096x4096
-[6C, 7H, JH, AD, 8S, KS]
-[10C, JD, QC, KC, AH, 9S]
-[6C, 7H, JH, AD, 8S, KS]
-[10C, JD, QC, KC, AH, 9S]
-Card clicked: 7H
-Selected: 7H
-Card clicked: JH
-Selected: JH
-Player attacked with: 7H, JH
-[6C, AD, 8S, KS]
-[10C, JD, QC, KC, AH, 9S]
-AI defense queue: [(0, 7H, AH), (1, JH, 9S)]
-AI defends 7H with AH
-AI defends JH with 9S
-AI successfully defended all attacks.
-[6C, AD, 8S, KS]
-[10C, JD, QC, KC]
-Table before ending turn: Table: 7H, JH
-Player hand before ending turn: [6C, AD, 8S, KS]
-Opponent hand before ending turn: [10C, JD, QC, KC]
-Animating table resolution. Receiver: Противник
-Player hand after drawing: [6C, AD, 8S, KS]
-Opponent hand after drawing: [10C, JD, QC, KC]
-Discard pile player: []
-Player hand after turn: [6C, AD, 8S, KS]
-Player points after turn: 0
-Discard pile opponent: [7H, AH, JH, 9S]
-Opponent hand after turn: [10C, JD, QC, KC]
-Opponent points after turn: 13
-[6C, QD, AD, AC, 8S, KS]
-[9C, 10C, JD, QC, KC, 7S]
-AI attacked successfully with: [7S]
-Card clicked: 8S
-Player defended against 7S with 8S
-[6C, QD, AD, AC, KS]
-[9C, 10C, JD, QC, KC]
-Table before ending turn: Table: 7S
-Player hand before ending turn: [6C, QD, AD, AC, KS]
-Opponent hand before ending turn: [9C, 10C, JD, QC, KC]
-Animating table resolution. Receiver: d
-Player hand after drawing: [6C, QD, AD, AC, KS]
-Opponent hand after drawing: [9C, 10C, JD, QC, KC]
-Discard pile player: [7S, 8S]
-Player hand after turn: [6C, QD, AD, AC, KS]
-Player points after turn: 0
-Discard pile opponent: [7H, AH, JH, 9S]
-Opponent hand after turn: [9C, 10C, JD, QC, KC]
-Opponent points after turn: 13
-Card clicked: 8D
-Selected: 8D
-Card clicked: QD
-Selected: QD
-Card clicked: AD
-Selected: AD
-Player attacked with: 8D, QD, AD
-[6C, 8D, QD, AD, AC, KS]
-[9C, 10C, 10H, JD, QC, KC]
-[6C, AC, KS]
-[9C, 10C, 10H, JD, QC, KC]
-AI cannot defend against: QD
-AI drops cards: [9C, JD, QC]
-AI drops 9C to beat 8D
-AI drops JD to beat QD
-AI drops QC to beat AD
-AI dropped all cards.
-[6C, AC, KS]
-[KC, 10C, 10H]
-Table before ending turn: Table: 8D, QD, AD
-Player hand before ending turn: [6C, AC, KS]
-Opponent hand before ending turn: [KC, 10C, 10H]
-Animating table resolution. Receiver: d
-Player hand after drawing: [6C, AC, KS]
-Opponent hand after drawing: [KC, 10C, 10H]
-Discard pile player: [7S, 8S, 8D, 9C, QD, JD, AD, QC]
-Player hand after turn: [6C, AC, KS]
-Player points after turn: 19
-Discard pile opponent: [7H, AH, JH, 9S]
-Opponent hand after turn: [KC, 10C, 10H]
-Opponent points after turn: 13
-Card clicked: 6C
-Selected: 6C
-[6C, 10D, JC, QH, AC, KS]
-[10C, 10H, KC, 10S, JS, AS]
-Card clicked: JC
-Selected: JC
-Card clicked: AC
-Selected: AC
-Player attacked with: 6C, JC, AC
-[10D, QH, KS]
-[10C, 10H, KC, 10S, JS, AS]
-AI defense queue: [(0, 6C, 10C), (1, JC, KC), (2, AC, 10S)]
-AI defends 6C with 10C
-AI defends JC with KC
-AI defends AC with 10S
-AI successfully defended all attacks.
-[10D, QH, KS]
-[10H, JS, AS]
-Table before ending turn: Table: 6C, JC, AC
-Player hand before ending turn: [10D, QH, KS]
-Opponent hand before ending turn: [10H, JS, AS]
-Animating table resolution. Receiver: Противник
-Player hand after drawing: [10D, QH, KS]
-Opponent hand after drawing: [10H, JS, AS]
-Discard pile player: [7S, 8S, 8D, 9C, QD, JD, AD, QC]
-Player hand after turn: [10D, QH, KS]
-Player points after turn: 19
-Discard pile opponent: [7H, AH, JH, 9S, 6C, 10C, JC, KC, AC, 10S]
-Opponent hand after turn: [10H, JS, AS]
-Opponent points after turn: 50
-[6D, 7D, 8H, 10D, QH, KS]
-[9D, 10H, KD, 6S, JS, AS]
-AI attacked successfully with: [9D, KD]
-Card clicked: 10D
-Player defended against 9D with 10D
-Card clicked: KS
-Player defended against KD with KS
-[6D, 7D, 8H, QH]
-[10H, 6S, JS, AS]
-Table before ending turn: Table: 9D, KD
-Player hand before ending turn: [6D, 7D, 8H, QH]
-Opponent hand before ending turn: [10H, 6S, JS, AS]
-Animating table resolution. Receiver: d
-Player hand after drawing: [6D, 7D, 8H, QH]
-Opponent hand after drawing: [10H, 6S, JS, AS]
-Discard pile player: [7S, 8S, 8D, 9C, QD, JD, AD, QC, 9D, 10D, KD, KS]
-Player hand after turn: [6D, 7D, 8H, QH]
-Player points after turn: 37
-Discard pile opponent: [7H, AH, JH, 9S, 6C, 10C, JC, KC, AC, 10S]
-Opponent hand after turn: [10H, 6S, JS, AS]
-Opponent points after turn: 50
-Card clicked: 6H
-Selected: 6H
-[6D, 6H, 7D, 8H, QH, KH]
-[7C, 9H, 10H, 6S, JS, AS]
-Card clicked: 8H
-Selected: 8H
-Card clicked: QH
-Selected: QH
-Card clicked: KH
-Selected: KH
-Player attacked with: 6H, 8H, QH, KH
-[6D, 7D]
-[7C, 9H, 10H, 6S, JS, AS]
-AI defense queue: [(0, 6H, 9H), (1, 8H, 10H), (2, QH, 6S), (3, KH, JS)]
-AI defends 6H with 9H
-AI defends 8H with 10H
-AI defends QH with 6S
-AI defends KH with JS
-AI successfully defended all attacks.
-[6D, 7D]
-[7C, AS]
-Table before ending turn: Table: 6H, 8H, QH, KH
-Player hand before ending turn: [6D, 7D]
-Opponent hand before ending turn: [7C, AS]
-Animating table resolution. Receiver: Противник
-Player hand after drawing: [6D, 7D]
-Opponent hand after drawing: [7C, AS]
-Discard pile player: [7S, 8S, 8D, 9C, QD, JD, AD, QC, 9D, 10D, KD, KS]
-Player hand after turn: [6D, 7D]
-Player points after turn: 37
-Discard pile opponent: [7H, AH, JH, 9S, 6C, 10C, JC, KC, AC, 10S, 6H, 9H, 8H, 10H, QH, 6S, KH, JS]
-Opponent hand after turn: [7C, AS]
-Opponent points after turn: 69
-[6D, 7D]
-[7C, 8C, QS, AS]
-AI attacked successfully with: [7C, 8C]
-Card clicked: 6D
-Selected: 6D
-Player cannot defend against: None
-Player has to drop same number of cards as attacks.
-Card clicked: 7D
-Selected: 7D
-Player drops cards: [6D, 7D]
-Animating drop: 6D on 7C
-Applying drop: 6D -> 7C
-Animating drop: 7D on 8C
-Applying drop: 7D -> 8C
-Player finished dropping cards.
-[]
-[QS, AS]
-Table before ending turn: Table: 7C, 8C
-Player hand before ending turn: []
-Opponent hand before ending turn: [QS, AS]
-Animating table resolution. Receiver: Противник
-Discard pile player: [7S, 8S, 8D, 9C, QD, JD, AD, QC, 9D, 10D, KD, KS]
-Player hand after turn: []
-Player points after turn: 37
-Discard pile opponent: [7H, AH, JH, 9S, 6C, 10C, JC, KC, AC, 10S, 6H, 9H, 8H, 10H, QH, 6S, KH, JS, 7C, 6D, 8C, 7D]
-Opponent hand after turn: [QS, AS]
-Opponent points after turn: 69
-Player is out of cards. Opponent discards remaining hand.
-{} discarding: QS, AS
-[]
-[QS, AS]
+player_turn
+player_turn
+[10H, 9D, KS, 8C, QC, 9S]
+opponent_turn
+[JH, 9C, QS, 7S, 8D, 10D, 8C]
+[JH, 7S, QS, 9C, 8D, 10D, 8C]
+opponent_turn
+player_turn
+[10H, 9D, KS, QC, 9S, QS]
+opponent_turn
+[JH, 7S, 9C, 8D, 10D, 8C, KS]
+[JH, 7S, KS, 8D, 10D, 8C, 9C]
+opponent_turn
+[JH, 7S, KS, 8D, 10D, 8C, 9C]
+[JH, 7S, KS, 8D, 8C, 10D, 9C]
+opponent_turn
+player_turn
+Player combination:  Пара [3, 4]
+Opponent combination:  Две Пары [2, 4, 1, 3]
 Game Over:  Противник
-Table before ending turn: Table: 
-Player hand before ending turn: []
-Opponent hand before ending turn: []
-Animating table resolution. Receiver: d
-Discard pile player: [7S, 8S, 8D, 9C, QD, JD, AD, QC, 9D, 10D, KD, KS]
-Player hand after turn: []
-Player points after turn: 37
-Discard pile opponent: [7H, AH, JH, 9S, 6C, 10C, JC, KC, AC, 10S, 6H, 9H, 8H, 10H, QH, 6S, KH, JS, 7C, 6D, 8C, 7D, QS, AS]
-Opponent hand after turn: []
-Opponent points after turn: 83
+player_turn
+Player combination:  Пара [3, 4]
+Opponent combination:  Две Пары [2, 4, 1, 3]
+Game Over:  Противник
 
 Full traceback:
-  File "game/CardGames/ini.rpy", line 165, in script
+  File "game/CardGames/ini.rpy", line 167, in script
     "Вы проиграли."
   File "renpy/ast.py", line 721, in execute
     renpy.exports.say(who, what, *args, **kwargs)
@@ -287,7 +106,7 @@ Full traceback:
 AttributeError: 'Layout' object has no attribute 'yesno_prompt'
 
 While running game code:
-  File "game/CardGames/ini.rpy", line 165, in script
+  File "game/CardGames/ini.rpy", line 167, in script
     "Вы проиграли."
   File "renpy/common/00action_menu.rpy", line 220, in __call__
     layout.yesno_screen(layout.QUIT, Quit(False))

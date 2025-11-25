@@ -83,3 +83,34 @@ class AIEls(Player):
                 return fallback
 
         return None  # Accept the loss of selected card
+
+    def choose_card_to_give_away(self):
+        """
+        Choose a card to give away to the opponent.
+        Strategy:
+            - Prefer singletons (cards not in pairs/triples)
+            - Among those, give away the lowest-value one
+            - If all are part of pairs/triples, give away the weakest overall
+        Returns:
+            - The index of the card to give away
+        """
+        rank_counts = {}
+        for card in self.hand:
+            rank_counts[card.rank] = rank_counts.get(card.rank, 0) + 1
+
+        # Prefer to give away singletons
+        singletons = [
+            (i, card) for i, card in enumerate(self.hand)
+            if rank_counts[card.rank] == 1
+        ]
+
+        if singletons:
+            # Sort by card rank value ascending (weakest first)
+            singletons.sort(key=lambda x: Card.rank_values[x[1].rank])
+            return singletons[0][0]  # Return index of weakest singleton
+
+        # Otherwise, no singletons — give away the overall weakest card
+        all_cards = sorted(
+            enumerate(self.hand), key=lambda x: Card.rank_values[x[1].rank]
+        )
+        return all_cards[0][0]

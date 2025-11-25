@@ -78,6 +78,8 @@ init python:
             return "kozel_handle_card_click", index
         elif isinstance(card_game, ElsGame) and card_game.state == "player_defend":
             return "els_swap_cards_player", index
+        elif isinstance(card_game, ElsGame) and card_game.state == "player_give":
+            return "els_handle_card_click", index
         return None, None
 
     def handle_confirm_attack():

@@ -65,15 +65,31 @@ init python:
         print(card_game.player.hand)
         compute_hand_layout()
 
-    def els_user_take_from_opponent(index):
+    def els_handle_card_click(index):
+        """Handle user clicking a card during giving phase."""
+        global selected_exchange_card_index_player
+
+        card = card_game.player.hand[index]
+        print("Card clicked:", card)
+
+        if card_game.state == "player_give":
+            if selected_exchange_card_index_player == index:
+                selected_card_to_give_index = -1
+            else:
+                selected_exchange_card_index_player = index
+
+    def els_user_take_from_opponent():
         """Handle user taking a card from opponent during defense phase."""
-        global selected_exchange_card_index_opponent, hovered_card_index_exchange
+        global selected_exchange_card_index_opponent, selected_exchange_card_index_player, hovered_card_index_exchange
         take_card_anim(from_side=1, to_side=0, index=selected_exchange_card_index_opponent)
         card_game.turn = 1
         card_game.round += 1
-        selected_exchange_card_index_opponent = -1
         hovered_card_index_exchange = -1
-        card_game.state = "opponent_turn"
+        selected_exchange_card_index_opponent = -1
+        if card_game.ul_rules:
+            card_game.state = "player_give"
+        else:
+            card_game.state = "opponent_turn"
         renpy.jump("els_game_loop")
 
     # ----------------------------
@@ -98,40 +114,46 @@ init python:
                 card_game.turn += 1
                 card_game.state = "player_turn"
             else:
-                els_user_take_from_opponent(selected_exchange_card_index_opponent)
+                els_user_take_from_opponent()
                 selected_exchange_card_index_opponent = -1
                 hovered_card_index_exchange = -1
         else:
-            els_user_take_from_opponent(selected_exchange_card_index_opponent)
+            els_user_take_from_opponent()
             selected_exchange_card_index_opponent = -1
             hovered_card_index_exchange = -1
 
         print(card_game.opponent.hand)
         compute_hand_layout()
 
-    def els_opponent_take_from_user(index):
+    def els_opponent_take_from_user():
         """Handle user taking a card from opponent during defense phase."""
-        global selected_exchange_card_index_player, hovered_card_index
+        global selected_exchange_card_index_opponent, selected_exchange_card_index_player, hovered_card_index_exchange
         take_card_anim(from_side=0, to_side=1, index=selected_exchange_card_index_player)
         card_game.turn = 1
         card_game.round += 1
+        hovered_card_index_exchange = -1
         selected_exchange_card_index_player = -1
-        hovered_card_index = -1
-        card_game.state = "player_turn"
+        if card_game.ul_rules:
+            card_game.state = "opponent_give"
+        else:
+            card_game.state = "player_turn"
         renpy.jump("els_game_loop")
 
     def els_opponent_turn():
         """AI logic for opponent's turn."""
-        global selected_exchange_card_index_player
+        global selected_exchange_card_index_player, selected_exchange_card_index_opponent
 
         renpy.pause(1.5)
 
-        selected_exchange_card_index_player = card_game.opponent_attack()
-
-        if card_game.turn <= 2:
-            card_game.state = "player_defend"
+        if card_game.ul_rules:
+            selected_exchange_card_index_opponent = card_game.opponent_move()
+            els_user_take_from_opponent()
         else:
-            els_opponent_take_from_user(selected_exchange_card_index_player)
+            selected_exchange_card_index_player = card_game.opponent_move()
+            if card_game.turn <= 2:
+                card_game.state = "player_defend"
+            else:
+                els_opponent_take_from_user()
 
         compute_hand_layout()
 

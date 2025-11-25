@@ -193,7 +193,7 @@ screen game_phase_and_controls():
                         text_size 18
                         action Function(els_swap_cards_opponent)
 
-            if card_game.state == "player_defend" and selected_exchange_card_index_player != -1:
+            if card_game.state in ["player_defend", "player_give"] and selected_exchange_card_index_player != -1:
                 frame:
                     xsize 150
                     padding (0, 0)
@@ -202,7 +202,7 @@ screen game_phase_and_controls():
                     textbutton "{color=#fff}Отдать карту{/color}":
                         style "card_game_button"
                         text_size 18
-                        action Function(els_opponent_take_from_user, selected_exchange_card_index_player),
+                        action Function(els_opponent_take_from_user),
 
 screen trump_and_deck_display():
 

@@ -1,7 +1,7 @@
 ﻿I'm sorry, but an uncaught exception occurred.
 
 While running game code:
-  File "game/CardGames/ini.rpy", line 165, in script
+  File "game/CardGames/ini.rpy", line 167, in script
     "Вы проиграли."
   File "renpy/common/00action_menu.rpy", line 220, in __call__
     layout.yesno_screen(layout.QUIT, Quit(False))
@@ -14,7 +14,7 @@ AttributeError: 'Layout' object has no attribute 'yesno_prompt'
 -- Full Traceback ------------------------------------------------------------
 
 Full traceback:
-  File "game/CardGames/ini.rpy", line 165, in script
+  File "game/CardGames/ini.rpy", line 167, in script
     "Вы проиграли."
   File "renpy/ast.py", line 721, in execute
     renpy.exports.say(who, what, *args, **kwargs)
@@ -49,4 +49,4 @@ AttributeError: 'Layout' object has no attribute 'yesno_prompt'
 Windows-10-10.0.26100
 Ren'Py 7.4.11.2266
  
-Sat Oct 18 00:20:58 2025
+Tue Nov 25 17:11:42 2025

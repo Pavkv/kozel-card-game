@@ -71,8 +71,10 @@ init python:
         "els": {
             "player_turn": "Вы вытягиваете",
             "player_defend": "Вы защищаетесь",
+            "player_give": "Вы отдаёте",
             "opponent_turn": "Противник вытягивает",
             "opponent_defend": "Противник защищается",
+            "opponent_give": "Противник отдаёт",
             "wait_choice": "Вытягивание карты",
             "wait_choice_opponent": "Противник вытягивает карту",
             "results": "Игра окончена"

@@ -5,11 +5,12 @@ from CardGames.Classes.Card import Card
 from CardGames.Classes.AIEls import AIEls
 
 class ElsGame(CardGame):
-    def __init__(self, player_name, opponent_name, biased_draw):
+    def __init__(self, player_name, opponent_name, biased_draw, ul_rules=False):
         CardGame.__init__(self, player_name, biased_draw)
         self.opponent = AIEls(opponent_name)
         self.round = 1
         self.turn = 1
+        self.ul_rules = ul_rules
 
     # ---------- internals ----------
     def _evaluate_hand(self, cards):
@@ -154,8 +155,16 @@ class ElsGame(CardGame):
             values = [rank_order[combo_cards[0].rank]]
             return hand("Старшая Карта", 1, values, combo_cards)
 
-    def opponent_attack(self):
-        return self.opponent.choose_attack_index(self.player.hand)
+    def start_game(self, n=6):
+        CardGame.start_game(self)
+        if self.ul_rules:
+            self.state = "player_give" if self.first_player == self.player else "opponent_give"
+
+    def opponent_move(self):
+        if not self.ul_rules:
+            return self.opponent.choose_attack_index(self.player.hand)
+        else:
+            return self.opponent.choose_card_to_give_away()
 
     def game_over(self):
         p1 = self._evaluate_hand(self.player.hand)

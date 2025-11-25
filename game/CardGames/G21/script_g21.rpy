@@ -9,7 +9,6 @@ label g21_game_loop:
     else:
         $ deal_cards = False
 
-
     if card_game.state == "result":
 #       $ renpy.block_rollback()
         if card_game.result == player_name and card_game.player.total21() == 21 and ['7', 'Q', 'A'] in card_game.player.get_ranks():
