@@ -86,7 +86,7 @@ init python:
         card_game.round += 1
         hovered_card_index_exchange = -1
         selected_exchange_card_index_opponent = -1
-        if card_game.ul_rules:
+        if card_game.us_rules:
             card_game.state = "player_give"
         else:
             card_game.state = "opponent_turn"
@@ -133,7 +133,7 @@ init python:
         card_game.round += 1
         hovered_card_index_exchange = -1
         selected_exchange_card_index_player = -1
-        if card_game.ul_rules:
+        if card_game.us_rules:
             card_game.state = "opponent_give"
         else:
             card_game.state = "player_turn"
@@ -145,7 +145,7 @@ init python:
 
         renpy.pause(1.5)
 
-        if card_game.ul_rules:
+        if card_game.us_rules:
             selected_exchange_card_index_opponent = card_game.opponent_move()
             els_user_take_from_opponent()
         else:
