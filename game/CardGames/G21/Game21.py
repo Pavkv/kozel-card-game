@@ -1,6 +1,6 @@
 # coding=utf-8
 from CardGames.Classes.CardGame import CardGame
-from CardGames.Classes.AI21 import AI21
+from AI21 import AI21
 
 
 class Game21(CardGame):

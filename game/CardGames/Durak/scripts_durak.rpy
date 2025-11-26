@@ -6,7 +6,7 @@ label start:
     $ base_card_img_src = "images/cards/cards"
     $ biased_draw = ["opponent", 0.0]
     $ day2_game_with_Alice = False
-    $ last_winner = "player"
+    $ last_winner = "opponent"
     $ use_full_deck = True
     $ full_throw = True
     $ start_card_game(DurakGame, "durak", game_kwargs={"full_deck": use_full_deck, "full_throw": full_throw})

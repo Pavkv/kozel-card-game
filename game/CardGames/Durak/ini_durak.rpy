@@ -6,6 +6,7 @@ init python:
     selected_attack_card = None
     attack_target = None
     full_throw = None
+    can_transfer = False
 
     # Opponent defense turn
     opponent_defense_queue = []

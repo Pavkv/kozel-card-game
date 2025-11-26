@@ -1,9 +1,9 @@
 # coding=utf-8
 
 from CardGames.Classes.CardGame import CardGame
-from CardGames.Classes.AIKozel import AIKozel
 from CardGames.Classes.Table import Table
 from CardGames.Classes.Card import Card
+from AIKozel import AIKozel
 
 class KozelGame(CardGame):
     def __init__(self, player_name, opponent_name, biased_draw, full_deck):

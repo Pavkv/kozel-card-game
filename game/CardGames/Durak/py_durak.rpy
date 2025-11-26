@@ -107,13 +107,13 @@ init python:
     # --------------------
     def durak_handle_card_click(index):
         """Handles card click events for player actions."""
-        global confirm_attack, selected_attack_card_indexes, selected_attack_card
+        global confirm_attack, can_transfer, selected_attack_card_indexes, selected_attack_card
 
         card = card_game.player.hand[index]
         print("Card clicked:", card)
 
         # Player attack phase
-        if card_game.state in ["player_turn", "opponent_take"]:
+        if card_game.state in ["player_turn", "opponent_take"] or card_game.table.can_transfer():
             if index in selected_attack_card_indexes:
                 selected_attack_card_indexes.remove(index)
                 print("Unselected:", card)
@@ -125,9 +125,14 @@ init python:
                     print("Selected:", card)
 
             confirm_attack = len(selected_attack_card_indexes) > 0
+            can_transfer = (
+                len(selected_attack_card_indexes) > 0
+                and len(selected_attack_card_indexes) + len(card_game.table) <= len(card_game.opponent.hand)
+            )
 
         # Player defend phase
         elif card_game.state == "player_defend" and selected_attack_card:
+
             if card_game.defend_card(card, selected_attack_card):
                 print("Player defended against {} with {}".format(selected_attack_card, card))
 
@@ -153,21 +158,24 @@ init python:
                 selected_attack_card = None
 
     def durak_player_switch_to_defend():
-        global confirm_attack, selected_attack_card_indexes
+        global confirm_attack, can_transfer, selected_attack_card_indexes
         selected_attack_card_indexes.clear()
         confirm_attack = False
+        can_transfer = False
         if card_game.state == "opponent_take" and not card_game.can_attack(card_game.player):
             card_game.state = "end_turn"
         elif card_game.state == "opponent_take":
             card_game.state == "player_turn"
         else:
+            if card_game.state == "player_defend":
+                card_game.current_turn = card_game.player
             card_game.state = "opponent_defend"
 
     def durak_confirm_selected_attack():
         """Confirms all selected attack cards and animates them from hand to table."""
-        global confirm_attack, selected_attack_card_indexes
+        global confirm_attack, can_transfer, selected_attack_card_indexes
 
-        if confirm_attack and selected_attack_card_indexes:
+        if (confirm_attack or can_transfer) and selected_attack_card_indexes:
             indexes = sorted(selected_attack_card_indexes)
             cards = [card_game.player.hand[i] for i in indexes]
 
@@ -183,7 +191,18 @@ init python:
                     is_defense=False,
                     on_finish="durak_player_switch_to_defend"
                 )
+            elif card_game.table.can_transfer():
+                print("Player transferred attack with: " + ', '.join(str(c) for c in cards))
 
+                # Animate each card moving to table
+                start_index = len(card_game.table)
+                play_card_anim(
+                    cards=cards,
+                    side=0,
+                    slot_index=start_index,
+                    is_defense=False,
+                    on_finish="durak_player_switch_to_defend"
+                )
             else:
                 print("Invalid attack. Resetting selection.")
                 selected_attack_card_indexes.clear()
@@ -228,28 +247,29 @@ init python:
         """Handles the opponent's defense logic sequentially with animation."""
         global durak_defense_queue, durak_defense_index
 
-        should_transfer, transfer_card = card_game.opponent.should_transfer(
-            card_game.table,
-            len(card_game.player.hand),
-            card_game.deck.trump_suit
-        )
-
-        if should_transfer:
-            print("AI chooses to transfer using:", transfer_card)
-
-            card_game.opponent.hand.remove(transfer_card)
-            card_game.table.append(transfer_card)
-
-            play_card_anim(
-                cards=[transfer_card],
-                side=1,
-                slot_index=len(card_game.table) - 1,
-                is_defense=False,
-                delay=0.0
+        if card_game.table.can_transfer() and len(card_game.player.hand) >= len(card_game.table) + 1:
+            should_transfer, transfer_card = card_game.opponent.should_transfer(
+                card_game.table,
+                card_game.deck.trump_suit
             )
 
-            card_game.state = "player_defend"
-            return
+            if should_transfer:
+                print("AI chooses to transfer using:", transfer_card)
+
+                card_game.opponent.hand.remove(transfer_card)
+                card_game.table.append(transfer_card)
+
+                play_card_anim(
+                    cards=[transfer_card],
+                    side=1,
+                    slot_index=len(card_game.table) - 1,
+                    is_defense=False,
+                    delay=0.0
+                )
+
+                card_game.state = "player_defend"
+                card_game.current_turn = card_game.opponent
+                return
 
         durak_defense_queue = []
         reserved_cards = set()

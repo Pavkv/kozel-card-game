@@ -1,85 +1,139 @@
-Wed Nov 26 12:56:30 2025
-Darwin-24.6.0-x86_64-i386-64bit
+Wed Nov 26 18:34:49 2025
+Windows-10-10.0.26100
 Ren'Py 7.4.11.2266
  
 
-Bootstrap to the start of init.init took 0.04s
+Bootstrap to the start of init.init took 0.05s
 Early init took 0.00s
-Loader init took 0.01s
+Loader init took 0.03s
 Loading error handling took 0.01s
-Loading script took 0.06s
+Loading script took 0.17s
 Loading save slot metadata. took 0.01s
 Loading persistent took 0.00s
 Importing _renpysteam: ImportError('No module named _renpysteam',)
-Running init code took 0.02s
+Running init code took 0.07s
 Loading analysis data took 0.01s
 Analyze and compile ATL took 0.00s
 Index archives took 0.00s
-Backing up script files to '/Users/pavkv/Library/RenPy/backups/Card Games':
-Dump and make backups. took 0.03s
+Backing up script files to 'C:\\Users\\Admin\\AppData\\Roaming/RenPy/backups\\kozel-card-game':
+Dump and make backups. took 0.04s
 Cleaning cache took 0.00s
 Making clean stores took 0.00s
 Initial gc. took 0.01s
 DPI scale factor: 1.000000
-Creating interface object took 0.00s
+nvdrs: Loaded, about to disable thread optimizations.
+nvdrs: Disabled thread optimizations.
+Creating interface object took 0.22s
 Cleaning stores took 0.00s
-Init translation took 0.01s
+Init translation took 0.02s
 Build styles took 0.00s
 Load screen analysis took 0.00s
 Analyze screens took 0.01s
-Save screen analysis took 0.01s
-Prepare screens took 0.02s
-Save pyanalysis. took 0.00s
-Save bytecode. took 0.01s
+Save screen analysis took 0.02s
+Prepare screens took 0.05s
+Save pyanalysis. took 0.02s
+Save bytecode. took 0.02s
 Running _start took 0.00s
 Performance test:
-Interface start took 0.19s
+Interface start took 0.08s
 
 Initializing gl2 renderer:
-primary display bounds: (0, 0, 1470, 956)
+primary display bounds: (0, 0, 3440, 1440)
 swap interval: 1 frames
 Windowed mode.
-Vendor: 'Apple'
-Renderer: 'Apple M4'
-Version: '2.1 Metal - 89.4'
+Vendor: 'NVIDIA Corporation'
+Renderer: 'NVIDIA GeForce RTX 3080/PCIe/SSE2'
+Version: '4.6.0 NVIDIA 576.88'
 Display Info: None
-Screen sizes: virtual=(1920, 1080) physical=(1070, 602) drawable=(2140, 1204)
+Screen sizes: virtual=(1920, 1080) physical=(1070, 602) drawable=(1070, 602)
 Maximum texture size: 4096x4096
-[4H, 5D, 7D, 8H, 10S, 10C]
-[7S, 9D, 2C, 3C, 4C, QC]
+[3H, 6S, 7C, QC, AH, 10D]
+[3S, 7H, 10C, AC, 2D, KD]
 40
-[4H, 5D, 7D, 8H, 10S, 10C]
-[7S, 9D, 2C, 3C, 4C, QC]
+[3H, 6S, 7C, QC, AH, 10D]
+[3S, 7H, 10C, AC, 2D, KD]
 40
+AI attacked successfully with: [3S]
+Card clicked: 3H
+Selected: 3H
+Player attacked with: 3H
+[6S, 7C, QC, AH, 10D]
+[7H, 10C, AC, 2D, KD]
+40
+AI defends 3S with 2D
+AI defends 3H with 7H
+AI defended all attacks.
+Card clicked: 7C
+Selected: 7C
+[6S, 7C, QC, AH, 10D]
+[10C, AC, KD]
+40
+Player attacked with: 7C
+[6S, QC, AH, 10D]
+[10C, AC, KD]
+40
+AI defends 7C with 10C
+AI defended all attacks.
+[6S, QC, AH, 10D]
+[AC, KD]
+40
+[6S, QC, AH, 10D]
+[AC, KD]
+40
+Card clicked: 10D
+Selected: 10D
+[6S, QC, AH, 10D]
+[AC, KD]
+40
+[6S, QC, AH, 10D]
+[AC, KD]
+40
+Player attacked with: 10D
+[6S, QC, AH]
+[AC, KD]
+40
+AI defends 10D with KD
+AI defended all attacks.
+[6S, QC, AH]
+[AC]
+40
+Table before ending turn: Table: 3S, 3H, 7C, 10D
+Player hand before ending turn: [6S, QC, AH]
+Opponent hand before ending turn: [AC]
+Player hand after drawing: [6S, QC, AH]
+Opponent hand after drawing: [AC]
+Discard pile: [3S, 2D, 3H, 7H, 7C, 10C, 10D, KD]
+Player hand after turn: [6S, QC, AH]
+Opponent hand after turn: [AC]
 
 Full traceback:
   File "game/CardGames/Durak/scripts_durak.rpy", line 49, in script
     call screen durak
-  File "/Users/pavkv/Downloads/renpy-7.4.11-sdk/renpy/ast.py", line 2015, in execute
+  File "renpy/ast.py", line 2015, in execute
     self.call("execute")
-  File "/Users/pavkv/Downloads/renpy-7.4.11-sdk/renpy/ast.py", line 2003, in call
+  File "renpy/ast.py", line 2003, in call
     return renpy.statements.call(method, parsed, *args, **kwargs)
-  File "/Users/pavkv/Downloads/renpy-7.4.11-sdk/renpy/statements.py", line 278, in call
+  File "renpy/statements.py", line 278, in call
     return method(parsed, *args, **kwargs)
   File "renpy/common/000statements.rpy", line 569, in execute_call_screen
     store._return = renpy.call_screen(name, *args, **kwargs)
-  File "/Users/pavkv/Downloads/renpy-7.4.11-sdk/renpy/exports.py", line 3136, in call_screen
+  File "renpy/exports.py", line 3136, in call_screen
     rv = renpy.ui.interact(mouse="screen", type="screen", roll_forward=roll_forward)
-  File "/Users/pavkv/Downloads/renpy-7.4.11-sdk/renpy/ui.py", line 298, in interact
+  File "renpy/ui.py", line 298, in interact
     rv = renpy.game.interface.interact(roll_forward=roll_forward, **kwargs)
-  File "/Users/pavkv/Downloads/renpy-7.4.11-sdk/renpy/display/core.py", line 3325, in interact
+  File "renpy/display/core.py", line 3325, in interact
     repeat, rv = self.interact_core(preloads=preloads, trans_pause=trans_pause, pause=pause, pause_start=pause_start, **kwargs)
-  File "/Users/pavkv/Downloads/renpy-7.4.11-sdk/renpy/display/core.py", line 4035, in interact_core
+  File "renpy/display/core.py", line 4035, in interact_core
     self.quit_event()
-  File "/Users/pavkv/Downloads/renpy-7.4.11-sdk/renpy/display/core.py", line 2977, in quit_event
+  File "renpy/display/core.py", line 2977, in quit_event
     renpy.display.behavior.run(renpy.config.quit_action)
-  File "/Users/pavkv/Downloads/renpy-7.4.11-sdk/renpy/display/behavior.py", line 330, in run
+  File "renpy/display/behavior.py", line 330, in run
     return action(*args, **kwargs)
   File "renpy/common/00action_menu.rpy", line 220, in __call__
     layout.yesno_screen(layout.QUIT, Quit(False))
   File "renpy/common/00layout.rpy", line 527, in yesno_screen
     if renpy.invoke_in_new_context(layout.invoke_yesno_prompt, None, message):
-  File "/Users/pavkv/Downloads/renpy-7.4.11-sdk/renpy/game.py", line 284, in invoke_in_new_context
+  File "renpy/game.py", line 284, in invoke_in_new_context
     return callable(*args, **kwargs)
   File "renpy/common/00layout.rpy", line 472, in invoke_yesno_prompt
     rv = layout.yesno_prompt(*args)

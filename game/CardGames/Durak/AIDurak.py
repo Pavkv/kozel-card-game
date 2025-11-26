@@ -113,17 +113,15 @@ class AIDurak(Player):
 
         return candidates[0]
 
-    def should_transfer(self, table, next_player_hand_size, trump_suit):
+    def should_transfer(self, table, trump_suit):
         """
         Determine if the AI should transfer the attack instead of defending.
 
         Returns: (bool, Card) — whether to transfer and which card to use
         """
-        if next_player_hand_size <= 0:
-            return False, None
 
         # Get the rank of the first attacking card
-        first_rank = table.can_transfer()
+        first_rank = table.keys()[0].rank
 
         if not first_rank:
             return False, None
@@ -139,7 +137,7 @@ class AIDurak(Player):
 
         # Heuristic: if almost all cards of this rank are visible (seen or in hand), it's safe
         known_same_rank = len([c for c in self.seen_cards if c.rank == first_rank]) + len(candidates)
-        safe_to_transfer = known_same_rank - unseen_same_rank >= 3  # 3 or 4 known → safe
+        safe_to_transfer = known_same_rank - unseen_same_rank >= 3
 
         if not safe_to_transfer:
             return False, None

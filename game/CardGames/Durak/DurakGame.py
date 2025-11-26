@@ -3,7 +3,7 @@
 from CardGames.Classes.CardGame import CardGame
 from CardGames.Classes.Table import Table
 from CardGames.Classes.Card import Card
-from CardGames.Classes.AIDurak import AIDurak
+from AIDurak import AIDurak
 
 class DurakGame(CardGame):
     def __init__(self, player_name, opponent_name, biased_draw, full_deck, full_throw):

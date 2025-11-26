@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 
 from CardGames.Classes.CardGame import CardGame
-from CardGames.Classes.AIWitch import AIWitch
+from AIWitch import AIWitch
 
 
 class WitchGame(CardGame):

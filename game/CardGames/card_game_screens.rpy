@@ -118,11 +118,13 @@ screen game_phase_and_controls():
                 card_game.state in "opponent_take" and len(selected_attack_card_indexes) > 0 and len(card_game.opponent.hand) - card_game.table.num_unbeaten() > len(selected_attack_card_indexes) or
                 card_game.state == "player_drop" and len(selected_attack_card_indexes) == card_game.table.num_unbeaten()
             )
-            if show_end_turn and show_confirm_attack:
+            $ show_confirm_transfer = card_game.state in "player_defend" and len(selected_attack_card_indexes) > 0 and card_game.table.can_transfer() and len(selected_attack_card_indexes) + len(card_game.table) <= len(card_game.opponent.hand)
+            if show_end_turn and show_confirm_attack and show_confirm_transfer:
                 $ y1 = 30
                 $ y2 = 40
+                $ y3 = 50
             else:
-                $ y1 = y2 = 30
+                $ y1 = y2 = y3 = 30
 
             if show_end_turn:
                 if card_game.state == "player_turn" or card_game.state == "opponent_take":
@@ -156,6 +158,18 @@ screen game_phase_and_controls():
                     ypos y2
                     has vbox
                     textbutton "{color=#fff}[btn_text_confirm]{/color}":
+                        style "card_game_button"
+                        text_size 18
+                        action Function(eval("store." + handle_confirm_attack()))
+
+            if show_confirm_transfer:
+
+                frame:
+                    xsize 150
+                    padding (0, 0)
+                    ypos y2
+                    has vbox
+                    textbutton "{color=#fff}Перевести{/color}":
                         style "card_game_button"
                         text_size 18
                         action Function(eval("store." + handle_confirm_attack()))

@@ -2,7 +2,7 @@
 
 from CardGames.Classes.CardGame import CardGame
 from CardGames.Classes.Card import Card
-from CardGames.Classes.AIEls import AIEls
+from AIEls import AIEls
 
 class ElsGame(CardGame):
     def __init__(self, player_name, opponent_name, biased_draw, us_rules=False):
