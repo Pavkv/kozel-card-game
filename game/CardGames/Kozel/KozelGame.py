@@ -6,8 +6,8 @@ from CardGames.Classes.Table import Table
 from CardGames.Classes.Card import Card
 
 class KozelGame(CardGame):
-    def __init__(self, player_name, opponent_name, biased_draw):
-        CardGame.__init__(self, player_name, biased_draw)
+    def __init__(self, player_name, opponent_name, biased_draw, full_deck):
+        CardGame.__init__(self, player_name, biased_draw, full_deck=full_deck)
         self.opponent = AIKozel(opponent_name)
         self.table = Table(qualifier="suit")
         self.player_points = 0

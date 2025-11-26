@@ -1,11 +1,13 @@
 # coding=utf-8
 import random
 
+from Card import Card
 from Player import Player
 from Deck import Deck
 
 class CardGame:
-    def __init__(self, player_name="Вы", biased_draw=None, aces_low=False):
+    def __init__(self, player_name="Вы", biased_draw=None, aces_low=False, full_deck=False):
+        Card.set_deck_type(use_full_deck=full_deck)
         self.deck = Deck()
         self.player = Player(player_name, aces_low)
         self.opponent = None

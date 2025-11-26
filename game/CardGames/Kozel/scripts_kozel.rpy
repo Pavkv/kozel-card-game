@@ -1,13 +1,14 @@
 label start_kozel:
-#     $ player_name = renpy.input("Введите ваше имя", length=20)
+#     $ player_name = "Pasha"
 #     $ opponent_name = "Противник"
 #     $ cards_bg = "images/bg/bg_14.jpg"
 #     $ in_game = False
 #     $ base_card_img_src = "images/cards/cards"
-#     $ biased_draw = ["opponent", 1]
+#     $ biased_draw = ["opponent", 0.0]
 #     $ day2_game_with_Alice = False
 #     $ last_winner = "player"
-    $ start_card_game(KozelGame, "kozel")
+#     $ use_full_deck = True
+    $ start_card_game(KozelGame, "kozel", game_kwargs={"full_deck": use_full_deck})
 
 label kozel_game_loop:
     $ print(card_game.player.hand)

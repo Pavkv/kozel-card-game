@@ -6,10 +6,11 @@ from CardGames.Classes.Card import Card
 from CardGames.Classes.AIDurak import AIDurak
 
 class DurakGame(CardGame):
-    def __init__(self, player_name, opponent_name, biased_draw):
-        CardGame.__init__(self, player_name, biased_draw)
+    def __init__(self, player_name, opponent_name, biased_draw, full_deck, full_throw):
+        CardGame.__init__(self, player_name, biased_draw, full_deck=full_deck)
         self.opponent = AIDurak(opponent_name)
         self.table = Table()
+        self.full_throw = full_throw
 
     def start_game(self, n=6, sort_hand=True):
         CardGame.start_game(self, n=n, sort_hand=sort_hand)
@@ -22,6 +23,8 @@ class DurakGame(CardGame):
         defender = self.player if attacker is self.opponent else self.opponent
 
         if self.table.num_unbeaten() + num_of_attack_cards > len(defender.hand):
+            return False
+        if not self.full_throw and len(self.table) + num_of_attack_cards > 6:
             return False
 
         if len(self.table) == 0:
@@ -55,7 +58,12 @@ class DurakGame(CardGame):
             self.deck.trump_suit
         )
 
-        return throw_ins
+        if self.full_throw:
+            # Limit throw-ins so total cards on table do not exceed 6
+            max_throw_ins = max(0, 6 - len(self.table))
+            return throw_ins[:max_throw_ins]
+        else:
+            return throw_ins
 
     def check_endgame(self):
         """Check if the game is over and set the result."""

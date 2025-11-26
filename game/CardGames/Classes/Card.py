@@ -1,19 +1,29 @@
 # coding=utf-8
 class Card:
-    suits = ['C', 'D', 'H', 'S'] # C for Clubs(Крести/Трефы), D for Diamonds(Бубны), H for Hearts(Черви), S for Spades(Пики)
-    # '2', '3', '4', '5',
-    ranks = ['6', '7', '8', '9', '10', 'J', 'Q', 'K', 'A'] # J for Jack(Валет), Q for Queen(Дама), K for King(Король), A for Ace(Туз)
+    suits = ['C', 'D', 'H', 'S']
+
+    short_ranks = ['6', '7', '8', '9', '10', 'J', 'Q', 'K', 'A']
+    full_ranks = ['2', '3', '4', '5'] + short_ranks  # total 13 ranks
+
+    # This will be used in card logic
+    ranks = short_ranks
+
+    # Will be overridden when deck is created
     rank_values = {rank: i for i, rank in enumerate(ranks)}
+
+    # Points mappings can stay the same — only valid in games that use those values
     points21_map = {
         '6': 6, '7': 7, '8': 8, '9': 9, '10': 10,
         'J': 2, 'Q': 3, 'K': 4, 'A': 11
     }
-    WITCH_RANK = 'K'
-    WITCH_SUIT = 'S'
+
     points_kozel_map = {
         '6': 0, '7': 0, '8': 0, '9': 0, '10': 10,
         'J': 2, 'Q': 3, 'K': 4, 'A': 11
     }
+
+    WITCH_RANK = 'K'
+    WITCH_SUIT = 'S'
 
     def __init__(self, rank, suit):
         self.rank = rank
@@ -64,3 +74,9 @@ class Card:
             elif defender.rank == '10':
                 return attacker.rank != 'A'
         return cls.beats(defender, attacker, trump)
+
+    @classmethod
+    def set_deck_type(cls, use_full_deck=False):
+        """Set deck to full (52) or short (36) mode and update rank values."""
+        cls.ranks = cls.full_ranks if use_full_deck else cls.short_ranks
+        cls.rank_values = {rank: i for i, rank in enumerate(cls.ranks)}

@@ -1,5 +1,5 @@
-label start_durak:
-    $ player_name = renpy.input("Введите ваше имя", length=20)
+label start:
+    $ player_name = "Pasha"
     $ opponent_name = "Противник"
     $ cards_bg = "images/bg/bg_14.jpg"
     $ in_game = False
@@ -7,11 +7,14 @@ label start_durak:
     $ biased_draw = ["opponent", 0.0]
     $ day2_game_with_Alice = False
     $ last_winner = "player"
-    $ start_card_game(DurakGame, "durak")
+    $ use_full_deck = True
+    $ full_throw = True
+    $ start_card_game(DurakGame, "durak", game_kwargs={"full_deck": use_full_deck, "full_throw": full_throw})
 
 label durak_game_loop:
     $ print(card_game.player.hand)
     $ print(card_game.opponent.hand)
+    $ print(len(card_game.deck.cards))  # should be 52
 
     if is_dealing:
 #         $ renpy.block_rollback()

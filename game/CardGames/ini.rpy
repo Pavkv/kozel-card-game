@@ -13,10 +13,15 @@ init python:
     biased_draw = None
     made_turn = False
     last_winner = None
+    use_full_deck = False
 
     CARD_WIDTH, CARD_HEIGHT, CARD_SPACING = 157, 237, 118
     suits = {'C': 'uvao', 'D': '2ch', 'H': 'ussr', 'S': 'utan'}
-    ranks = {'6': '6', '7': '7', '8': '8', '9': '9', '10': '10', 'J': '11', 'Q': '12', 'K': '13', 'A': '1'} # '2': '2', '3': '3', '4': '4', '5': '5',
+    ranks = {
+        '2': '2', '3': '3', '4': '4', '5': '5',
+        '6': '6', '7': '7', '8': '8', '9': '9',
+        '10': '10', 'J': '11', 'Q': '12', 'K': '13', 'A': '1'
+    }
 
     # Layout constants
     DECK_X = -50

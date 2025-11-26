@@ -2,10 +2,11 @@
 errors listed below, and try again.
 
 
-File "game/CardGames/Kozel/py_kozel.rpy", line 454: expected an indented block
-    for card in cards:
-       ^
-    
+The label start is defined twice, at File "game/CardGames/Els/scripts_els.rpy", line 1:
+label start:
+and File "game/CardGames/Kozel/scripts_kozel.rpy", line 1:
+label start:
+
 
 Ren'Py Version: Ren'Py 7.4.11.2266
-Sat Oct 18 00:16:02 2025
+Tue Nov 25 09:53:12 2025
