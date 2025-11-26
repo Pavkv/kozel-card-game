@@ -1,7 +1,6 @@
 # coding=utf-8
-import random
-from Card import Card
-from Player import Player
+from CardGames.Classes.Card import Card
+from CardGames.Classes.Player import Player
 
 class AIKozel(Player):
     def __init__(self, name):

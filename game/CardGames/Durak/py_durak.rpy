@@ -228,6 +228,29 @@ init python:
         """Handles the opponent's defense logic sequentially with animation."""
         global durak_defense_queue, durak_defense_index
 
+        should_transfer, transfer_card = card_game.opponent.should_transfer(
+            card_game.table,
+            len(card_game.player.hand),
+            card_game.deck.trump_suit
+        )
+
+        if should_transfer:
+            print("AI chooses to transfer using:", transfer_card)
+
+            card_game.opponent.hand.remove(transfer_card)
+            card_game.table.append(transfer_card)
+
+            play_card_anim(
+                cards=[transfer_card],
+                side=1,
+                slot_index=len(card_game.table) - 1,
+                is_defense=False,
+                delay=0.0
+            )
+
+            card_game.state = "player_defend"
+            return
+
         durak_defense_queue = []
         reserved_cards = set()
 

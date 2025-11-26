@@ -1,8 +1,7 @@
 # -*- coding: utf-8 -*-
-from __future__ import print_function
 import random
-from Card import Card
-from Player import Player
+from CardGames.Classes.Card import Card
+from CardGames.Classes.Player import Player
 
 class AIWitch(Player):
     """
@@ -19,7 +18,7 @@ class AIWitch(Player):
     """
 
     def __init__(self, name='ИИ', aces_low=False,
-                 rng=None, epsilon=0.20, reward=1.0, witch_penalty=1.5,
+                 epsilon=0.20, reward=1.0, witch_penalty=1.5,
                  decay=0.995, min_trials_boost=0.25, verbose=False):
         super(AIWitch, self).__init__(name, aces_low)
         self.epsilon = float(epsilon)

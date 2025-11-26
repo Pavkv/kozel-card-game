@@ -1,11 +1,11 @@
-from Card import Card
-from Player import Player
+# coding=utf-8
+from CardGames.Classes.Card import Card
+from CardGames.Classes.Player import Player
 
 class AIDurak(Player):
     def __init__(self, name):
         super(AIDurak, self).__init__(name)
         self.seen_cards = set()
-        self.player_hand_estimate = set()
 
         self._full_deck = {Card(rank, suit) for suit in Card.suits for rank in Card.ranks}
         self._unseen_cache = None
@@ -112,3 +112,39 @@ class AIDurak(Player):
                     return c
 
         return candidates[0]
+
+    def should_transfer(self, table, next_player_hand_size, trump_suit):
+        """
+        Determine if the AI should transfer the attack instead of defending.
+
+        Returns: (bool, Card) — whether to transfer and which card to use
+        """
+        if next_player_hand_size <= 0:
+            return False, None
+
+        # Get the rank of the first attacking card
+        first_rank = table.can_transfer()
+
+        if not first_rank:
+            return False, None
+
+        # Find all cards in hand with same rank
+        candidates = [c for c in self.hand if c.rank == first_rank]
+
+        if not candidates:
+            return False, None
+
+        unseen = self._unseen_cards()
+        unseen_same_rank = len([c for c in unseen if c.rank == first_rank])
+
+        # Heuristic: if almost all cards of this rank are visible (seen or in hand), it's safe
+        known_same_rank = len([c for c in self.seen_cards if c.rank == first_rank]) + len(candidates)
+        safe_to_transfer = known_same_rank - unseen_same_rank >= 3  # 3 or 4 known → safe
+
+        if not safe_to_transfer:
+            return False, None
+
+        # Prefer weakest card to transfer with
+        candidates.sort(key=lambda c: (c.suit == trump_suit, Card.rank_values[c.rank]))
+
+        return True, candidates[0]

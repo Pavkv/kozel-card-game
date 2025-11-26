@@ -1,7 +1,7 @@
 # coding=utf-8
 import random
-from Player import Player
-from Card import Card
+from CardGames.Classes.Player import Player
+from CardGames.Classes.Card import Card
 
 class AIEls(Player):
     def __init__(self, name):

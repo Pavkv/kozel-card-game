@@ -91,6 +91,12 @@ class Table:
                     return False
         return True
 
+    def can_transfer(self):
+        """Check if a card can be used to transfer the attack."""
+        if not self.table or len(self.qualifier_set) != 1:
+            return False
+        return self.table.keys()[0].rank
+
     # ---------------------- Utility methods ---------------------- #
 
     def num_beaten(self):
