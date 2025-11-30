@@ -14,6 +14,7 @@ init python:
     made_turn = False
     last_winner = None
     use_full_deck = False
+    num_players = 2
 
     CARD_WIDTH, CARD_HEIGHT, CARD_SPACING = 157, 237, 118
     suits = {'C': 'uvao', 'D': '2ch', 'H': 'ussr', 'S': 'utan'}

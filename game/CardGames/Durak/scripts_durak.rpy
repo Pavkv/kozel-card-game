@@ -9,12 +9,11 @@ label start:
     $ last_winner = "opponent"
     $ use_full_deck = True
     $ full_throw = True
-    $ start_card_game(DurakGame, "durak", game_kwargs={"full_deck": use_full_deck, "full_throw": full_throw})
+    $ start_card_game(DurakGame, "durak", game_kwargs={"full_deck": use_full_deck, "full_throw": durak_full_throw, "can_pass": durak_passing})
 
 label durak_game_loop:
     $ print(card_game.player.hand)
     $ print(card_game.opponent.hand)
-    $ print(len(card_game.deck.cards))  # should be 52
 
     if is_dealing:
 #         $ renpy.block_rollback()

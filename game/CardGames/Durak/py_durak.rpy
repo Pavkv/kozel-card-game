@@ -107,13 +107,13 @@ init python:
     # --------------------
     def durak_handle_card_click(index):
         """Handles card click events for player actions."""
-        global confirm_attack, can_transfer, selected_attack_card_indexes, selected_attack_card
+        global confirm_attack, can_pass, passed, selected_attack_card_indexes, selected_attack_card
 
         card = card_game.player.hand[index]
         print("Card clicked:", card)
 
         # Player attack phase
-        if card_game.state in ["player_turn", "opponent_take"] or card_game.table.can_transfer():
+        if card_game.state in ["player_turn", "opponent_take"] or (card_game.table.can_pass() and card.rank == card_game.table.keys()[0].rank and not passed):
             if index in selected_attack_card_indexes:
                 selected_attack_card_indexes.remove(index)
                 print("Unselected:", card)
@@ -125,7 +125,7 @@ init python:
                     print("Selected:", card)
 
             confirm_attack = len(selected_attack_card_indexes) > 0
-            can_transfer = (
+            can_pass = (
                 len(selected_attack_card_indexes) > 0
                 and len(selected_attack_card_indexes) + len(card_game.table) <= len(card_game.opponent.hand)
             )
@@ -158,10 +158,10 @@ init python:
                 selected_attack_card = None
 
     def durak_player_switch_to_defend():
-        global confirm_attack, can_transfer, selected_attack_card_indexes
+        global confirm_attack, can_pass, passed, selected_attack_card_indexes
         selected_attack_card_indexes.clear()
         confirm_attack = False
-        can_transfer = False
+        can_pass = False
         if card_game.state == "opponent_take" and not card_game.can_attack(card_game.player):
             card_game.state = "end_turn"
         elif card_game.state == "opponent_take":
@@ -169,13 +169,14 @@ init python:
         else:
             if card_game.state == "player_defend":
                 card_game.current_turn = card_game.player
+                passed = True
             card_game.state = "opponent_defend"
 
     def durak_confirm_selected_attack():
         """Confirms all selected attack cards and animates them from hand to table."""
-        global confirm_attack, can_transfer, selected_attack_card_indexes
+        global confirm_attack, can_pass, selected_attack_card_indexes
 
-        if (confirm_attack or can_transfer) and selected_attack_card_indexes:
+        if (confirm_attack or can_pass) and selected_attack_card_indexes:
             indexes = sorted(selected_attack_card_indexes)
             cards = [card_game.player.hand[i] for i in indexes]
 
@@ -191,7 +192,7 @@ init python:
                     is_defense=False,
                     on_finish="durak_player_switch_to_defend"
                 )
-            elif card_game.table.can_transfer():
+            elif card_game.table.can_pass():
                 print("Player transferred attack with: " + ', '.join(str(c) for c in cards))
 
                 # Animate each card moving to table
@@ -245,9 +246,9 @@ init python:
 
     def durak_opponent_defend():
         """Handles the opponent's defense logic sequentially with animation."""
-        global durak_defense_queue, durak_defense_index
+        global durak_defense_queue, durak_defense_index, passed
 
-        if card_game.table.can_transfer() and len(card_game.player.hand) >= len(card_game.table) + 1:
+        if card_game.table.can_pass() and len(card_game.player.hand) >= len(card_game.table) + 1 and not passed:
             should_transfer, transfer_card = card_game.opponent.should_transfer(
                 card_game.table,
                 card_game.deck.trump_suit
@@ -269,6 +270,7 @@ init python:
 
                 card_game.state = "player_defend"
                 card_game.current_turn = card_game.opponent
+                passed = True
                 return
 
         durak_defense_queue = []
@@ -345,7 +347,7 @@ init python:
     # End Turn Logic
     # --------------------
     def durak_end_turn():
-        global confirm_take
+        global confirm_take, passed
 
         print("Table before ending turn:", card_game.table)
         print("Player hand before ending turn:", card_game.player.hand)
@@ -375,6 +377,7 @@ init python:
         print("Opponent hand after drawing:", card_game.opponent.hand)
 
         confirm_take = False
+        passed = False
 
     # --------------------
     # Animation Callbacks

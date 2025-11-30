@@ -91,10 +91,20 @@ class Table:
                     return False
         return True
 
-    def can_transfer(self):
-        """Check if a card can be used to transfer the attack."""
-        if not self.table or len(self.qualifier_set) != 1:
+    def can_pass(self):
+        """Check if the defender can pass the attack (transfer)."""
+        # Must have a table with cards
+        if len(self.table) == 0:
             return False
+
+        # All cards on table must share a single rank
+        if len(self.qualifier_set) != 1:
+            return False
+
+        # All cards must be unbeaten (i.e., it's the initial attack phase)
+        if self.num_unbeaten() != len(self.table):
+            return False
+
         return True
 
     # ---------------------- Utility methods ---------------------- #

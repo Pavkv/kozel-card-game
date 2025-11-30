@@ -5,8 +5,10 @@ init python:
     selected_card = None
     selected_attack_card = None
     attack_target = None
-    full_throw = None
-    can_transfer = False
+    can_pass = False
+    passed = False
+    durak_full_throw = None
+    durak_passing = False
 
     # Opponent defense turn
     opponent_defense_queue = []

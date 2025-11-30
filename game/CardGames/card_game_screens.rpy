@@ -118,11 +118,20 @@ screen game_phase_and_controls():
                 card_game.state in "opponent_take" and len(selected_attack_card_indexes) > 0 and len(card_game.opponent.hand) - card_game.table.num_unbeaten() > len(selected_attack_card_indexes) or
                 card_game.state == "player_drop" and len(selected_attack_card_indexes) == card_game.table.num_unbeaten()
             )
-            $ show_confirm_transfer = card_game.state in "player_defend" and len(selected_attack_card_indexes) > 0 and card_game.table.can_transfer() and len(selected_attack_card_indexes) + len(card_game.table) <= len(card_game.opponent.hand)
-            if show_end_turn and show_confirm_attack and show_confirm_transfer:
+            $ show_confirm_pass = can_pass and not passed
+            if show_end_turn and show_confirm_attack and show_confirm_pass:
                 $ y1 = 30
                 $ y2 = 40
                 $ y3 = 50
+            elif show_end_turn and show_confirm_attack:
+                $ y1 = 30
+                $ y2 = 40
+            elif show_end_turn and show_confirm_pass:
+                $ y1 = 30
+                $ y3 = 40
+            elif show_confirm_attack and show_confirm_pass:
+                $ y2 = 30
+                $ y3 = 40
             else:
                 $ y1 = y2 = y3 = 30
 
@@ -162,12 +171,12 @@ screen game_phase_and_controls():
                         text_size 18
                         action Function(eval("store." + handle_confirm_attack()))
 
-            if show_confirm_transfer:
+            if show_confirm_pass:
 
                 frame:
                     xsize 150
                     padding (0, 0)
-                    ypos y2
+                    ypos y3
                     has vbox
                     textbutton "{color=#fff}Перевести{/color}":
                         style "card_game_button"

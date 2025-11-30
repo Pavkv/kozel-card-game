@@ -6,11 +6,12 @@ from CardGames.Classes.Card import Card
 from AIDurak import AIDurak
 
 class DurakGame(CardGame):
-    def __init__(self, player_name, opponent_name, biased_draw, full_deck, full_throw):
+    def __init__(self, player_name, opponent_name, biased_draw, full_deck, full_throw, can_pass):
         CardGame.__init__(self, player_name, biased_draw, full_deck=full_deck)
         self.opponent = AIDurak(opponent_name)
         self.table = Table()
         self.full_throw = full_throw
+        self.can_pass = can_pass
 
     def start_game(self, n=6, sort_hand=True):
         CardGame.start_game(self, n=n, sort_hand=sort_hand)
