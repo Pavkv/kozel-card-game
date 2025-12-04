@@ -6,9 +6,18 @@ init python:
     selected_attack_card = None
     attack_target = None
     can_pass = False
+
     passed = False
     durak_full_throw = None
     durak_passing = False
+
+    draw_animations_dict = {
+        0: "durak_player_draw",
+        1: "durak_opponent_draw",
+        2: "durak_opponent_2_draw",
+        3: "durak_opponent_3_draw",
+    }
+    on_finish_draw_animations = []
 
     # Opponent defense turn
     opponent_defense_queue = []

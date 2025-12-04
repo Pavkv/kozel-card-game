@@ -14,7 +14,7 @@ init python:
     made_turn = False
     last_winner = None
     use_full_deck = False
-    num_players = 2
+    number_of_opponents = 1
 
     CARD_WIDTH, CARD_HEIGHT, CARD_SPACING = 157, 237, 118
     suits = {'C': 'uvao', 'D': '2ch', 'H': 'ussr', 'S': 'utan'}
@@ -38,6 +38,10 @@ init python:
     OPPONENT_HAND_X = 700
     OPPONENT_HAND_Y = 20
     OPPONENT_HAND_NUM_Y = 377
+    OPPONENT_2_HAND_X = 1820
+    OPPONENT_2_HAND_Y = 375
+    OPPONENT_3_HAND_X = 20
+    OPPONENT_3_HAND_Y = 375
     HAND_SPACING = 118
     HAND_NUM_X = 885
 
@@ -63,6 +67,8 @@ init python:
     # Card layouts
     player_card_layout = []
     opponent_card_layout = []
+    opponent_2_card_layout = []
+    opponent_3_card_layout = []
 
     # Suit translations
     card_suits = {
@@ -89,9 +95,9 @@ init python:
             "player_turn": "Вы атакуете",
             "player_defend": "Вы защищаетесь",
             "player_take": "Вы забираете",
-            "opponent_turn": "Противник атакует",
-            "opponent_defend": "Противник защищается",
-            "opponent_take": "Противник забирает",
+            "opponent_turn": " атакует",
+            "opponent_defend": "защищается",
+            "opponent_take": " забирает",
             "end_turn": "Окончание хода",
             "results": "Игра окончена"
         },

@@ -1,7 +1,7 @@
 ﻿I'm sorry, but an uncaught exception occurred.
 
 While running game code:
-  File "game/CardGames/Durak/scripts_durak.rpy", line 48, in script
+  File "game/CardGames/Durak/scripts_durak.rpy", line 73, in script
     call screen durak
   File "renpy/common/000statements.rpy", line 569, in execute_call_screen
     store._return = renpy.call_screen(name, *args, **kwargs)
@@ -16,7 +16,7 @@ AttributeError: 'Layout' object has no attribute 'yesno_prompt'
 -- Full Traceback ------------------------------------------------------------
 
 Full traceback:
-  File "game/CardGames/Durak/scripts_durak.rpy", line 48, in script
+  File "game/CardGames/Durak/scripts_durak.rpy", line 73, in script
     call screen durak
   File "/Users/pavkv/Downloads/renpy-7.4.11-sdk/renpy/ast.py", line 2015, in execute
     self.call("execute")
@@ -51,4 +51,4 @@ AttributeError: 'Layout' object has no attribute 'yesno_prompt'
 Darwin-24.6.0-x86_64-i386-64bit
 Ren'Py 7.4.11.2266
  
-Sat Nov 29 20:48:00 2025
+Wed Dec  3 22:33:42 2025

@@ -1,4 +1,30 @@
 label start:
+    "Выберите количество противников"
+    menu:
+        "Один противник":
+            $ number_of_opponents = 1
+        "Два противника":
+            $ number_of_opponents = 2
+        "Три противника":
+            $ number_of_opponents = 3
+    "Использовать полную колоду?"
+    menu:
+        "Да":
+            $ use_full_deck = True
+        "Нет":
+            $ use_full_deck = False
+    "Переводы разрешены?"
+    menu:
+        "Да":
+            $ durak_passing = True
+        "Нет":
+            $ durak_passing = False
+    "До завала?"
+    menu:
+        "Да":
+            $ durak_full_throw = True
+        "Нет":
+            $ durak_full_throw = False
     $ player_name = "Pasha"
     $ opponent_name = "Противник"
     $ cards_bg = "images/bg/bg_14.jpg"
@@ -6,15 +32,14 @@ label start:
     $ base_card_img_src = "images/cards/cards"
     $ biased_draw = ["opponent", 0.0]
     $ day2_game_with_Alice = False
-    $ last_winner = "opponent"
-    $ use_full_deck = True
-    $ full_throw = True
-    $ start_card_game(DurakGame, "durak", game_kwargs={"full_deck": use_full_deck, "full_throw": durak_full_throw, "can_pass": durak_passing})
+#     $ last_winner = "player"
+#     $ use_full_deck = False
+#     $ durak_passing = True
+#     $ durak_full_throw = False
+#     $ number_of_opponents = 2
+    $ start_card_game(DurakGame, "durak", game_kwargs={"full_deck": use_full_deck, "full_throw": durak_full_throw, "can_pass": durak_passing, "number_of_opponents": number_of_opponents})
 
 label durak_game_loop:
-    $ print(card_game.player.hand)
-    $ print(card_game.opponent.hand)
-
     if is_dealing:
 #         $ renpy.block_rollback()
         $ is_dealing = False

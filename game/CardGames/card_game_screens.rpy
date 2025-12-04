@@ -20,7 +20,8 @@ screen card_game_base_ui():
                 ]
 
     # Opponent Avatar & Info
-    use opponent_info_block()
+    if in_game:
+        use opponent_info_block()
 
     # Game Phase & Action Buttons
     use game_phase_and_controls()
@@ -33,7 +34,10 @@ screen card_game_base_ui():
 
     if not deal_cards:
         # Opponent Hand
-        use opponent_card_hand_display()
+        if number_of_opponents == 1:
+            use opponent_card_hand_display()
+        else:
+            use opponents_card_hand_display()
 
         # Player Hand
         use player_card_hand_display()
@@ -103,7 +107,7 @@ screen game_phase_and_controls():
             padding (5, 5)
             $ phase_text = "—"
             if card_game is not None and hasattr(card_game, "state"):
-                $ phase_text = card_game_state_tl.get(card_game_name, {}).get(card_game.state, "—")
+                $ phase_text = get_current_turn_text()
 
             text phase_text:
                 color "#ffffff"
@@ -114,9 +118,12 @@ screen game_phase_and_controls():
         if isinstance(card_game, DurakGame) or isinstance(card_game, KozelGame):
             $ show_end_turn = card_game.table and card_game.state in ["player_turn", "player_defend", "opponent_take"]
             $ show_confirm_attack = (
-                card_game.state in "player_turn" and len(selected_attack_card_indexes) > 0 or
-                card_game.state in "opponent_take" and len(selected_attack_card_indexes) > 0 and len(card_game.opponent.hand) - card_game.table.num_unbeaten() > len(selected_attack_card_indexes) or
-                card_game.state == "player_drop" and len(selected_attack_card_indexes) == card_game.table.num_unbeaten()
+                (card_game.state == "player_turn" and len(selected_attack_card_indexes) > 0)
+                or (card_game.state == "opponent_take"
+                    and len(selected_attack_card_indexes) > 0
+                    and len(card_game.current_defender.hand) - card_game.table.num_unbeaten() > len(selected_attack_card_indexes))
+                or (card_game.state == "player_drop"
+                    and len(selected_attack_card_indexes) == card_game.table.num_unbeaten())
             )
             $ show_confirm_pass = can_pass and not passed
             if show_end_turn and show_confirm_attack and show_confirm_pass:
@@ -274,7 +281,7 @@ screen opponent_card_hand_display():
         $ ypos = OPPONENT_HAND_NUM_Y
 
         if isinstance(card_game, Game21):
-            $ opponent_total = card_game.opponent.total21()
+            $ opponent_total = card_game.players[1].total21()
             $ opponent_hand_text = "Цена: " + (
                 str(opponent_total) if card_game.state in ("reveal", "result")
                 else "#" if opponent_total < 10
@@ -296,7 +303,7 @@ screen opponent_card_hand_display():
             padding (5, 5)
             text "[opponent_hand_text]" color "#ffffff" text_align 0.5 align (0.5, 0.5)
 
-    for i, card in enumerate(card_game.opponent.hand):
+    for i, card in enumerate(card_game.players[1].hand):
 
         if not card in in_flight_cards:
             $ card_x = opponent_card_layout[i]["x"]
@@ -339,6 +346,32 @@ screen opponent_card_hand_display():
                     unhovered If(hovered_card_index_exchange == i, SetVariable("hovered_card_index_exchange", -1))
 
             else:
+                add Transform(base_cover_img_src, xysize=(CARD_WIDTH, CARD_HEIGHT)):
+                    xpos card_x
+                    ypos card_y
+
+screen opponents_card_hand_display():
+
+    for opponent_index in range(1, len(card_game.players)):
+        $ opponent = card_game.players[opponent_index]
+        $ layout = compute_opponent_card_layout(opponent_index, len(opponent.hand))
+        $ base_x = layout[0]["x"]
+        $ base_y = layout[0]["y"]
+
+        # Display label
+        frame:
+            background RoundRect("#222222aa", 8)
+            xpos base_x
+            ypos base_y - 40
+            xsize 160
+            padding (5, 5)
+            text "[opponent.name]" color "#ffffff" xalign 0.5
+
+        # Fan cards
+        for i, card in enumerate(opponent.hand):
+            if card not in in_flight_cards:
+                $ card_x = layout[i]["x"]
+                $ card_y = layout[i]["y"]
                 add Transform(base_cover_img_src, xysize=(CARD_WIDTH, CARD_HEIGHT)):
                     xpos card_x
                     ypos card_y
@@ -438,19 +471,27 @@ screen table():
                     ypos atk_y + 115
 
 screen deal_cards():
-
     for card_data in dealt_cards:
-
         $ i = card_data["index"]
         $ delay = card_data["delay"]
+        $ owner_index = card_data["owner"]
+        $ owner = card_game.players[owner_index]
 
-        if card_data["owner"] == "player":
+        if owner_index == 0:
+            # Player's card
             $ dest_x = player_card_layout[i]["x"]
             $ dest_y = player_card_layout[i]["y"]
-            $ card_img_src = get_card_image(card_game.player.hand[i])
-        else:
+            $ card_img_src = get_card_image(owner.hand[i])
+        elif number_of_opponents == 1:
+            # Single opponent's card
             $ dest_x = opponent_card_layout[i]["x"]
             $ dest_y = opponent_card_layout[i]["y"]
+            $ card_img_src = base_cover_img_src
+        else:
+            # Opponent's card
+            $ layout = compute_opponent_card_layout(owner_index, len(owner.hand))
+            $ dest_x = layout[i]["x"]
+            $ dest_y = layout[i]["y"]
             $ card_img_src = base_cover_img_src
 
         add Transform(card_img_src, xysize=(CARD_WIDTH, CARD_HEIGHT)) at deal_card(dest_x, dest_y, delay)

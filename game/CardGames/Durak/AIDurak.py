@@ -4,64 +4,89 @@ from CardGames.Classes.Player import Player
 
 class AIDurak(Player):
     def __init__(self, name):
-        super(AIDurak, self).__init__(name)
+        Player.__init__(self, name)
         self.seen_cards = set()
 
-        self._full_deck = {Card(rank, suit) for suit in Card.suits for rank in Card.ranks}
+        self._full_deck = set()
+        for suit in Card.suits:
+            for rank in Card.ranks:
+                self._full_deck.add(Card(rank, suit))
+
         self._unseen_cache = None
         self._cache_dirty = True
 
+    # -------------------------
+    # Cache helpers
+    # -------------------------
+
     def _update_unseen_cache(self):
-        """ Update the cache of unseen cards if it is marked dirty."""
+        """Update unseen cards cache if dirty."""
         if self._cache_dirty:
             known = self.seen_cards | set(self.hand)
             self._unseen_cache = list(self._full_deck - known)
             self._cache_dirty = False
 
     def _mark_dirty(self):
-        """ Mark the unseen cache as dirty to be updated later."""
+        """Mark caches as dirty."""
         self._cache_dirty = True
 
     def _remember_card(self, card):
-        """ Remember a card that has been played or seen."""
+        """Remember a seen card."""
         if card not in self.seen_cards:
             self.seen_cards.add(card)
             self._mark_dirty()
-    
+
     def _unseen_cards(self):
-        """ Return a list of cards that have not been seen (played or in hand)."""
+        """Get the list of unseen cards."""
         self._update_unseen_cache()
         return self._unseen_cache
 
     def _estimate_player_has_trumps(self, trump_suit):
-        """ Estimate if the opponent might still have trump cards based on unseen cards."""
-        return any(c.suit == trump_suit for c in self._unseen_cards())
+        """Estimate if a player has trumps based on unseen cards."""
+        unseen = self._unseen_cards()
+        return len([c for c in unseen if c.suit == trump_suit]) > 0
+
+    # -------------------------
+    # Memory
+    # -------------------------
 
     def remember_table(self, table):
-        """ Remember cards that have been played on the table."""
+        """AI remembers cards on the table."""
         for attack_card, (beaten, defend_card) in table.table.items():
             self._remember_card(attack_card)
             if defend_card:
                 self._remember_card(defend_card)
 
     def remember_discard(self, discard_iterable):
-        """ Remember cards that have been discarded."""
+        """AI remembers discarded cards."""
         for c in discard_iterable:
             self._remember_card(c)
 
-    def choose_throw_ins(self, table, defender_hand_size, trump_suit):
-        """ Choose cards to throw in after initial attack, given the current table state and defender's hand size."""
-        if defender_hand_size <= 0:
+    # -------------------------
+    # AI Decisions
+    # -------------------------
+
+    def choose_throw_ins(self, table, defender, trump_suit):
+        """AI chooses throw-ins."""
+
+        # AI must NOT throw-in to itself
+        if self == defender:
             return []
 
-        table_ranks = table.qualifier_set
-        candidates = [c for c in self.hand if c.rank in table_ranks]
+        # Cannot throw if defender will pick up everything
+        if len(defender.hand) == 0:
+            return []
+
+        ranks = table.qualifier_set
+        candidates = [c for c in self.hand if c.rank in ranks]
+
+        # Sort by weakest first
         candidates.sort(key=lambda c: (c.suit == trump_suit, Card.rank_values[c.rank]))
 
-        return candidates[:defender_hand_size]
+        return candidates
 
-    def choose_attack_cards(self, table, trump_suit, defender_hand_size):
-        """ Choose cards to attack with, given the current table state and defender's hand size."""
+    def choose_attack_cards(self, table, trump_suit, defender_hand_size, full_throw):
+        """AI chooses attack cards."""
         if defender_hand_size <= 0:
             return []
 
@@ -69,38 +94,48 @@ class AIDurak(Player):
         table_ranks = table.qualifier_set
         hand_sorted = sorted(self.hand, key=lambda c: (c.suit == trump_suit, Card.rank_values[c.rank]))
 
-        attack_cards = []
-
+        # First attack of round
         if not table:
-            first = next((c for c in hand_sorted if c.suit != trump_suit), hand_sorted[0])
-            attack_cards.append(first)
+            first = None
+            for c in hand_sorted:
+                if c.suit != trump_suit:
+                    first = c
+                    break
+            if first is None:
+                first = hand_sorted[0]
+
+            attack_cards = [first]
+
+            # add matching ranks
             for c in hand_sorted:
                 if len(attack_cards) >= defender_hand_size:
                     break
                 if c is not first and c.rank == first.rank:
                     attack_cards.append(c)
-        else:
-            for c in hand_sorted:
-                if len(attack_cards) >= (defender_hand_size + table.num_unbeaten()):
-                    break
-                if c.rank in table_ranks:
-                    if has_trump_left and c.suit != trump_suit:
-                        attack_cards.append(c)
-                    elif not has_trump_left or c.suit == trump_suit:
-                        attack_cards.append(c)
+
+            return attack_cards
+
+        # Additional attacks
+        attack_cards = []
+        limit = defender_hand_size - table.num_unbeaten()
+
+        for c in hand_sorted:
+            if len(attack_cards) >= limit or (not full_throw and len(table) + len(attack_cards) >= 6):
+                break
+            if c.rank in table_ranks:
+                if has_trump_left and c.suit != trump_suit:
+                    attack_cards.append(c)
+                elif not has_trump_left or c.suit == trump_suit:
+                    attack_cards.append(c)
 
         return attack_cards
 
     def defense(self, attack_card, trump_suit, exclude=None):
-        """ Choose a card to beat the given attack_card, or None if cannot defend."""
+        """AI chooses a defense card."""
         exclude = exclude or set()
         has_trump_left = self._estimate_player_has_trumps(trump_suit)
 
-        candidates = [
-            c for c in self.hand
-            if c not in exclude and Card.beats(c, attack_card, trump_suit)
-        ]
-
+        candidates = [c for c in self.hand if c not in exclude and Card.beats(c, attack_card, trump_suit)]
         if not candidates:
             return None
 
@@ -139,8 +174,8 @@ class AIDurak(Player):
         known_same_rank = len([c for c in self.seen_cards if c.rank == first_rank]) + len(candidates)
         safe_to_transfer = known_same_rank - unseen_same_rank >= 3
 
-        if not safe_to_transfer:
-            return False, None
+        # if not safe_to_transfer:
+        #     return False, None
 
         # Prefer weakest card to transfer with
         candidates.sort(key=lambda c: (c.suit == trump_suit, Card.rank_values[c.rank]))

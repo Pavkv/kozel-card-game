@@ -209,7 +209,7 @@ init python:
 
     def kozel_player_drop():
         """Handles player dropping cards logic, one at a time with animation callbacks."""
-        global selected_attack_card_indexes, kozel_drop_queue, kozel_drop_index
+        global selected_attack_card_indexes, drop_queue, drop_index
 
         indexes = sorted(selected_attack_card_indexes)
         cards = [card_game.player.hand[i] for i in indexes]
@@ -219,15 +219,15 @@ init python:
             return
 
         print("Player drops cards:", cards)
-        kozel_drop_queue = []
-        kozel_drop_index = 0
+        drop_queue = []
+        drop_index = 0
 
         card_index = 0
         for i, (attack_card, (beaten, _)) in enumerate(card_game.table.table.items()):
             if beaten:
                 continue
             def_card = cards[card_index]
-            kozel_drop_queue.append((i, attack_card, def_card))
+            drop_queue.append((i, attack_card, def_card))
             card_index += 1
 
         selected_attack_card_indexes.clear()
@@ -237,15 +237,15 @@ init python:
 
     def kozel_player_do_drop():
         """Handles one drop animation at a time."""
-        global kozel_drop_queue, kozel_drop_index
+        global drop_queue, drop_index
 
-        if kozel_drop_index >= len(kozel_drop_queue):
+        if drop_index >= len(drop_queue):
             print("Player finished dropping cards.")
             card_game.state = "end_turn"
             compute_hand_layout()
             return
 
-        slot_index, atk_card, def_card = kozel_drop_queue[kozel_drop_index]
+        slot_index, atk_card, def_card = drop_queue[drop_index]
         print("Animating drop: {} on {}".format(def_card, atk_card))
 
         play_card_anim(
@@ -261,9 +261,9 @@ init python:
 
     def kozel_player_apply_drop():
         """Applies the dropped card and continues to the next."""
-        global selected_attack_card_indexes, kozel_drop_queue, kozel_drop_index
+        global selected_attack_card_indexes, drop_queue, drop_index
 
-        slot_index, atk_card, def_card = kozel_drop_queue[kozel_drop_index]
+        slot_index, atk_card, def_card = drop_queue[drop_index]
 
         print("Applying drop: {} -> {}".format(def_card, atk_card))
         card_game.table.beat(atk_card, def_card)
@@ -273,7 +273,7 @@ init python:
 
         compute_hand_layout()
 
-        kozel_drop_index += 1
+        drop_index += 1
         kozel_player_do_drop()
 
     # --------------------
@@ -374,19 +374,19 @@ init python:
 
     def kozel_opponent_drop():
         """Handles opponent dropping cards logic with animation."""
-        global kozel_drop_queue, kozel_drop_index
+        global drop_queue, drop_index
 
-        kozel_drop_index = 0
-        kozel_drop_queue = []
+        drop_index = 0
+        drop_queue = []
 
         opponent_drop = card_game.opponent.drop_cards(card_game.table.keys())
         print("AI drops cards:", opponent_drop)
 
         for i, (attack_card, (beaten, _)) in enumerate(card_game.table.table.items()):
             def_card = opponent_drop[i]
-            kozel_drop_queue.append((i, attack_card, def_card))
+            drop_queue.append((i, attack_card, def_card))
 
-        if kozel_drop_queue:
+        if drop_queue:
             kozel_opponent_do_drop()
         else:
             print("Nothing to drop.")
@@ -394,19 +394,19 @@ init python:
 
     def kozel_opponent_do_drop():
         """Performs a single card drop with animation."""
-        global kozel_drop_index, kozel_drop_queue
+        global drop_index, drop_queue
 
         if card_game.table.beaten():
             print("AI dropped all cards.")
             card_game.state = "end_turn"
             return
 
-        if kozel_drop_index >= len(kozel_drop_queue):
+        if drop_index >= len(drop_queue):
             print("AI drop queue finished.")
             card_game.state = "end_turn"
             return
 
-        slot_index, atk_card, def_card = kozel_drop_queue[kozel_drop_index]
+        slot_index, atk_card, def_card = drop_queue[drop_index]
         print("AI drops {} to beat {}".format(def_card, atk_card))
 
         play_card_anim(
@@ -421,9 +421,9 @@ init python:
 
     def kozel_opponent_apply_drop():
         """Applies drop logic after animation step."""
-        global kozel_drop_index, kozel_drop_queue
+        global drop_index, drop_queue
 
-        slot_index, atk_card, def_card = kozel_drop_queue[kozel_drop_index]
+        slot_index, atk_card, def_card = drop_queue[drop_index]
 
         card_game.table.beat(atk_card, def_card)
         if def_card in card_game.opponent.hand:
@@ -431,7 +431,7 @@ init python:
 
         compute_hand_layout()
 
-        kozel_drop_index += 1
+        drop_index += 1
         kozel_opponent_do_drop()
 
     # --------------------

@@ -2,11 +2,41 @@
 errors listed below, and try again.
 
 
-The label start is defined twice, at File "game/CardGames/Els/scripts_els.rpy", line 1:
-label start:
-and File "game/CardGames/Kozel/scripts_kozel.rpy", line 1:
-label start:
+File "game/CardGames/Durak/scripts_durak.rpy", line 4: expected statement.
+    "Один противник":
+                    ^
 
+File "game/CardGames/Durak/scripts_durak.rpy", line 6: expected statement.
+    "Два противника":
+                    ^
+
+File "game/CardGames/Durak/scripts_durak.rpy", line 8: expected statement.
+    "Три противника":
+                    ^
+
+File "game/CardGames/Durak/scripts_durak.rpy", line 12: expected statement.
+    "Да":
+        ^
+
+File "game/CardGames/Durak/scripts_durak.rpy", line 14: expected statement.
+    "Нет":
+         ^
+
+File "game/CardGames/Durak/scripts_durak.rpy", line 18: expected statement.
+    "Да":
+        ^
+
+File "game/CardGames/Durak/scripts_durak.rpy", line 20: expected statement.
+    "Нет":
+         ^
+
+File "game/CardGames/Durak/scripts_durak.rpy", line 24: expected statement.
+    "Да":
+        ^
+
+File "game/CardGames/Durak/scripts_durak.rpy", line 26: expected statement.
+    "Нет":
+         ^
 
 Ren'Py Version: Ren'Py 7.4.11.2266
-Tue Nov 25 09:53:12 2025
+Wed Dec  3 21:24:46 2025
