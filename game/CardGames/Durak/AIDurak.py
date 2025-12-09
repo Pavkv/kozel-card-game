@@ -66,25 +66,6 @@ class AIDurak(Player):
     # AI Decisions
     # -------------------------
 
-    def choose_throw_ins(self, table, defender, trump_suit):
-        """AI chooses throw-ins."""
-
-        # AI must NOT throw-in to itself
-        if self == defender:
-            return []
-
-        # Cannot throw if defender will pick up everything
-        if len(defender.hand) == 0:
-            return []
-
-        ranks = table.qualifier_set
-        candidates = [c for c in self.hand if c.rank in ranks]
-
-        # Sort by weakest first
-        candidates.sort(key=lambda c: (c.suit == trump_suit, Card.rank_values[c.rank]))
-
-        return candidates
-
     def choose_attack_cards(self, table, trump_suit, defender_hand_size, full_throw):
         """AI chooses attack cards."""
         if defender_hand_size <= 0:

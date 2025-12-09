@@ -35,11 +35,14 @@ label start:
 #     $ last_winner = "player"
 #     $ use_full_deck = False
 #     $ durak_passing = True
-#     $ durak_full_throw = False
-#     $ number_of_opponents = 2
+#     $ durak_full_throw = True
+#     $ number_of_opponents = 3
     $ start_card_game(DurakGame, "durak", game_kwargs={"full_deck": use_full_deck, "full_throw": durak_full_throw, "can_pass": durak_passing, "number_of_opponents": number_of_opponents})
 
 label durak_game_loop:
+    if len(card_game.current_defender) == 0:
+        $ card_game.state = "end_turn"
+
     if is_dealing:
 #         $ renpy.block_rollback()
         $ is_dealing = False

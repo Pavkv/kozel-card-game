@@ -95,59 +95,6 @@ class DurakGame(CardGame):
             return False, []
         return True, cards
 
-    def throw_ins(self):
-        """Collect throw-in cards from all players (including human) except defender."""
-
-        defender = self.next_player(self.current_index)
-
-        throw_in_cards = []
-
-        # table limit
-        if self.full_throw:
-            remaining = max(0, 6 - len(self.table))
-        else:
-            remaining = len(defender.hand)
-
-        # Loop through ALL players clockwise starting after defender
-        # but skip the defender himself
-        for p in self.players:
-
-            if p == defender:
-                continue
-
-            # ---- Human player throw-ins ----
-            if p == self.players[0]:
-                # Human chooses throw-ins manually from UI
-                if hasattr(self, "human_choose_throw_ins"):
-                    cards = self.human_choose_throw_ins(
-                        self.table,
-                        len(defender.hand),
-                        self.deck.trump_suit
-                    )
-                else:
-                    # fallback: no throw-ins if UI not implemented yet
-                    cards = []
-            else:
-                # ---- AI throw-ins ----
-                cards = p.choose_throw_ins(
-                    self.table,
-                    len(defender.hand),
-                    self.deck.trump_suit
-                )
-
-            # Add cards respecting the limit
-            for c in cards:
-                if len(throw_in_cards) < remaining:
-                    throw_in_cards.append(c)
-                else:
-                    break
-
-            # Stop if table is full
-            if len(throw_in_cards) >= remaining:
-                break
-
-        return throw_in_cards
-
     def check_endgame(self):
         """Check if the game has ended and set the result."""
         if self.deck.cards:

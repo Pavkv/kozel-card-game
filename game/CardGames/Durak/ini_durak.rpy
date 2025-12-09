@@ -6,10 +6,10 @@ init python:
     selected_attack_card = None
     attack_target = None
     can_pass = False
-
     passed = False
     durak_full_throw = None
     durak_passing = False
+    confirm_turn = [False, False]
 
     draw_animations_dict = {
         0: "durak_player_draw",

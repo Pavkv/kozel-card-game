@@ -50,6 +50,7 @@ class CardGame:
             self.first_player = random.choice(self.players)
 
     def start_game(self, n=6, sort_hand=False):
+        self.opponent = self.players[1]
         self.deal_cards(n, sort_hand)
         self.current_turn = self.first_player
         self.state = "player_turn" if self.first_player == self.players[0] else "opponent_turn"

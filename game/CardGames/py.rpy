@@ -90,14 +90,17 @@ init python:
             return "kozel_player_drop"
 
     def handle_end_turn():
-        global selected_attack_card_indexes, hovered_card_index, confirm_take
+        global selected_attack_card_indexes, hovered_card_index, confirm_take, confirm_turn
         if (isinstance(card_game, DurakGame) or isinstance(card_game, KozelGame)) and (card_game.state == "player_turn" or card_game.state == "opponent_take"):
+            confirm_index = 0 if confirm_turn[0] is False and confirm_turn[1] else 1
+            confirm_turn[confirm_index] = True
             durak_get_next_attacker()
             selected_attack_card_indexes = set()
             hovered_card_index = -1
         elif isinstance(card_game, DurakGame) and card_game.state == "player_defend":
             card_game.state = "player_take"
             confirm_take = True
+            durak_get_next_attacker()
         elif isinstance(card_game, KozelGame) and card_game.state == "player_defend":
             card_game.state = "player_drop"
 
@@ -179,7 +182,7 @@ init python:
 
         # One opponent — same layout as player, just at the top
         if num_opponents == 1:
-            opponent_card_layout = layout_horizontal(len(card_game.players[1].hand), 20, 1680)
+            opponent_card_layout = layout_horizontal(len(card_game.opponent.hand), 20, 1680)
 
         # Multiple opponents — use fan layout
         else:

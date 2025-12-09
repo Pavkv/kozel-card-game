@@ -125,7 +125,7 @@ screen game_phase_and_controls():
                 or (card_game.state == "player_drop"
                     and len(selected_attack_card_indexes) == card_game.table.num_unbeaten())
             )
-            $ show_confirm_pass = can_pass and not passed
+            $ show_confirm_pass = can_pass
             if show_end_turn and show_confirm_attack and show_confirm_pass:
                 $ y1 = 30
                 $ y2 = 40
@@ -281,7 +281,7 @@ screen opponent_card_hand_display():
         $ ypos = OPPONENT_HAND_NUM_Y
 
         if isinstance(card_game, Game21):
-            $ opponent_total = card_game.players[1].total21()
+            $ opponent_total = card_game.opponent.total21()
             $ opponent_hand_text = "Цена: " + (
                 str(opponent_total) if card_game.state in ("reveal", "result")
                 else "#" if opponent_total < 10
@@ -303,7 +303,7 @@ screen opponent_card_hand_display():
             padding (5, 5)
             text "[opponent_hand_text]" color "#ffffff" text_align 0.5 align (0.5, 0.5)
 
-    for i, card in enumerate(card_game.players[1].hand):
+    for i, card in enumerate(card_game.opponent.hand):
 
         if not card in in_flight_cards:
             $ card_x = opponent_card_layout[i]["x"]
@@ -354,11 +354,10 @@ screen opponents_card_hand_display():
 
     for opponent_index in range(1, len(card_game.players)):
         $ opponent = card_game.players[opponent_index]
-        $ layout = compute_opponent_card_layout(opponent_index, len(opponent.hand))
+        $ layout = compute_opponent_card_layout(opponent_index, max(1, len(opponent.hand)))
         $ base_x = layout[0]["x"]
         $ base_y = layout[0]["y"]
 
-        # Display label
         frame:
             background RoundRect("#222222aa", 8)
             xpos base_x
@@ -367,14 +366,14 @@ screen opponents_card_hand_display():
             padding (5, 5)
             text "[opponent.name]" color "#ffffff" xalign 0.5
 
-        # Fan cards
-        for i, card in enumerate(opponent.hand):
-            if card not in in_flight_cards:
-                $ card_x = layout[i]["x"]
-                $ card_y = layout[i]["y"]
-                add Transform(base_cover_img_src, xysize=(CARD_WIDTH, CARD_HEIGHT)):
-                    xpos card_x
-                    ypos card_y
+        if len(opponent.hand) > 0:
+            for i, card in enumerate(opponent.hand):
+                if card not in in_flight_cards:
+                    $ card_x = layout[i]["x"]
+                    $ card_y = layout[i]["y"]
+                    add Transform(base_cover_img_src, xysize=(CARD_WIDTH, CARD_HEIGHT)):
+                        xpos card_x
+                        ypos card_y
 
 screen player_card_hand_display():
 

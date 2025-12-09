@@ -173,12 +173,15 @@ label card_game_result_handler:
         $ reset_card_game()
         jump expression card_game_results[result]
     else:
-        if card_game.result == card_game.player.name:
-            "Вы выиграли!"
-        elif card_game.result == card_game.opponent.name:
-            "Вы проиграли."
+        if card_game_name == "durak" and card_game.result != "draw":
+            "[card_game.result] дурак!"
         else:
-            "Ничья."
+            if card_game.result == card_game.player.name:
+                "Вы выиграли!"
+            elif card_game.result == "draw":
+                "Ничья."
+            else:
+                "[card_game.result] выиграл."
         jump ga_play_again
 
 # Show Achievements
