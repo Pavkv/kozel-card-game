@@ -27,26 +27,9 @@ class DurakGame(CardGame):
         self.initial_attacker_index = None
         self.last_attacker = None
 
-    def get_player_index(self, player):
-        """Get the index of a player in the circle."""
-        return self.players.index(player)
-
-    def next_player(self, index=None):
-        """Get the next player in the circle."""
-        if index is None:
-            index = self.get_player_index(self.current_turn)
-        return self.players[(index + 1) % len(self.players)]
-
-    def previous_player(self, index=None):
-        """Get the previous player in the circle."""
-        if index is None:
-            index = self.get_player_index(self.current_turn)
-        return self.players[(index - 1) % len(self.players)]
-
     def start_game(self, n=6, sort_hand=True):
         """Start the Durak game by dealing cards and setting the first player."""
         CardGame.start_game(self, n=n, sort_hand=sort_hand)
-        self.current_turn = self.first_player
         self.initial_attacker_index = self.get_player_index(self.first_player)
         self.last_attacker = self.first_player
         self.current_defender = self.next_player(self.get_player_index(self.current_turn))
@@ -100,7 +83,7 @@ class DurakGame(CardGame):
         if self.deck.cards:
             return
 
-        active = [p for p in self.players if len(p.hand) > 0]
+        active = self.get_players_with_cards()
 
         if len(active) == 0:
             self.result = "draw"

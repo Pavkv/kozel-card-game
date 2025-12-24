@@ -11,19 +11,31 @@ class AIKozel(Player):
     # Memory Management
     # -------------------------------
 
-    def remember_card(self, card):
+    def _remember_card(self, card):
         """Remember a single revealed card."""
         if isinstance(card, Card):
             self.seen_cards.add(card)
 
-    def remember_cards(self, cards):
+    def _remember_cards(self, cards):
         """Remember a list of revealed cards."""
         for c in cards:
-            self.remember_card(c)
+            self._remember_card(c)
 
     def unseen_cards(self, full_deck):
         """Return a list of cards not yet seen (still possibly in play)."""
         return [c for c in full_deck.cards if c not in self.seen_cards]
+    
+    def remember_table(self, table):
+        """AI remembers cards on the table."""
+        for attack_card, (beaten, defend_card) in table.table.items():
+            self._remember_card(attack_card)
+            if defend_card:
+                self._remember_card(defend_card)
+
+    def remember_discard(self, discard_iterable):
+        """AI remembers discarded cards."""
+        for c in discard_iterable:
+            self._remember_card(c)
 
     # -------------------------------
     # AI Core Logic
@@ -34,7 +46,7 @@ class AIKozel(Player):
         Selects a set of same-suit cards to attack with.
         Never attacks with more cards than opponent can defend (hand size limit).
         """
-        self.remember_cards(list(table.keys()) + list(table.values()))
+        self._remember_cards(list(table.keys()) + list(table.values()))
 
         # Organize hand by suit
         hand_by_suit = {}
@@ -58,7 +70,7 @@ class AIKozel(Player):
         if opponent_hand_size is not None and len(attack_set) > opponent_hand_size:
             attack_set = attack_set[:opponent_hand_size]
 
-        self.remember_cards(attack_set)
+        self._remember_cards(attack_set)
         return attack_set
 
     def defense(self, attack_card, trump_suit, exclude=None):
@@ -66,7 +78,7 @@ class AIKozel(Player):
         Return one card to defend against `attack_card`, or None to give up.
         `exclude` is a set of already-used cards that cannot be used again this turn.
         """
-        self.remember_card(attack_card)
+        self._remember_card(attack_card)
 
         if exclude is None:
             exclude = set()
@@ -84,12 +96,12 @@ class AIKozel(Player):
         candidates.sort(key=lambda c: (c.suit == trump_suit, Card.rank_values[c.rank]))
 
         chosen = candidates[0]
-        self.remember_card(chosen)
+        self._remember_card(chosen)
         return chosen
 
     def drop_cards(self, attack_cards):
         """If unable to defend, discard the same number of lowest-value cards."""
         self.hand.sort(key=lambda c: Card.points_kozel_map[c.rank])
         discard_cards = self.hand[:len(attack_cards)]
-        self.remember_cards(attack_cards + discard_cards)
+        self._remember_cards(attack_cards + discard_cards)
         return discard_cards

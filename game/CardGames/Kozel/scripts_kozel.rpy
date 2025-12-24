@@ -1,4 +1,18 @@
 label start_kozel:
+#     "Выберите количество противников"
+#     menu:
+#         "Один противник":
+#             $ number_of_opponents = 1
+#         "Два противника":
+#             $ number_of_opponents = 2
+#         "Три противника":
+#             $ number_of_opponents = 3
+#     "Использовать полную колоду?"
+#     menu:
+#         "Да":
+#             $ use_full_deck = True
+#         "Нет":
+#             $ use_full_deck = False
 #     $ player_name = "Pasha"
 #     $ opponent_name = "Противник"
 #     $ cards_bg = "images/bg/bg_14.jpg"
@@ -7,12 +21,11 @@ label start_kozel:
 #     $ biased_draw = ["opponent", 0.0]
 #     $ day2_game_with_Alice = False
 #     $ last_winner = "player"
-#     $ use_full_deck = True
-    $ start_card_game(KozelGame, "kozel", game_kwargs={"full_deck": use_full_deck})
+# #     $ use_full_deck = True
+#     $ number_of_opponents = 3
+    $ start_card_game(KozelGame, "kozel", game_kwargs={"full_deck": use_full_deck, "number_of_opponents": number_of_opponents})
 
 label kozel_game_loop:
-    $ print(card_game.player.hand)
-    $ print(card_game.opponent.hand)
 
     if card_game.same_suit():
         $ same_suit_achievement = True

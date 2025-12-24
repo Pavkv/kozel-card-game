@@ -32,15 +32,11 @@ screen card_game_base_ui():
     # Discard Pile
     use discard_pile_display()
 
-    if not deal_cards:
-        # Opponent Hand
-        if number_of_opponents == 1:
-            use opponent_card_hand_display()
-        else:
-            use opponents_card_hand_display()
+    # Opponent Hand
+    use opponent_hands_display()
 
-        # Player Hand
-        use player_card_hand_display()
+    # Player Hand
+    use player_card_hand_display()
 
     # Auto-jump after results
     if card_game.state == "result" or card_game.result:
@@ -273,107 +269,119 @@ screen discard_pile_display():
             ypos DISCARD_Y
         $ rotate += 15 if rotate < 360 else -360
 
-screen opponent_card_hand_display():
+screen opponent_hands_display():
 
-    if isinstance(card_game, Game21) or isinstance(card_game, KozelGame) or (isinstance(card_game, ElsGame) and card_game.state == "result"):
+    if not deal_cards:
 
-        $ xpos = HAND_NUM_X
-        $ ypos = OPPONENT_HAND_NUM_Y
+        # If only one opponent (index 1), show single-hand layout
+        if len(card_game.players) == 2:
 
-        if isinstance(card_game, Game21):
-            $ opponent_total = card_game.opponent.total21()
-            $ opponent_hand_text = "Цена: " + (
-                str(opponent_total) if card_game.state in ("reveal", "result")
-                else "#" if opponent_total < 10
-                else "##"
-            )
-        elif isinstance(card_game, KozelGame):
-            $ opponent_hand_text = "Очки: " + str(card_game.opponent_points)
-            $ xpos = 20
+            $ opponent = card_game.opponent
+            $ layout = opponent_card_layout
+            $ opponent_index = 1
+            $ card_x_base = HAND_NUM_X
+            $ card_y_base = OPPONENT_HAND_NUM_Y
 
-        else:
-            $ opponent_hand_text = result_combination_opponent
-
-        frame:
-            background RoundRect("#b2b3b4", 10)
-            xpos xpos
-            ypos ypos
-            xsize 150
-            yoffset 10
-            padding (5, 5)
-            text "[opponent_hand_text]" color "#ffffff" text_align 0.5 align (0.5, 0.5)
-
-    for i, card in enumerate(card_game.opponent.hand):
-
-        if not card in in_flight_cards:
-            $ card_x = opponent_card_layout[i]["x"]
-            $ card_y = opponent_card_layout[i]["y"]
-            $ is_hovered = (i == hovered_card_index_exchange)
-            $ is_adjacent = abs(i - hovered_card_index_exchange) == 1
-
-            $ x_shift = 20 if i == hovered_card_index_exchange + 1 else (-20 if i == hovered_card_index_exchange - 1 else 0)
-
-            if isinstance(card_game, ElsGame) and card_game.state == "result":
-                $ is_selected = (i in result_combination_indexes_opponent)
-                $ y_shift = 80 if is_hovered or is_selected else 0
-                imagebutton:
-                    idle Transform(get_card_image(card), xysize=(CARD_WIDTH, CARD_HEIGHT))
-                    hover Transform(get_card_image(card), xysize=(CARD_WIDTH, CARD_HEIGHT))
-                    xpos card_x
-                    ypos card_y
-                    at hover_offset(y=y_shift, x=x_shift)
-
-            elif (isinstance(card_game, Game21) or isinstance(card_game, WitchGame)) and card_game.state == "result" or card_game.result:
-                add Transform(get_card_image(card), xysize=(CARD_WIDTH, CARD_HEIGHT)):
-                    xpos card_x
-                    ypos card_y
-
-            elif (isinstance(card_game, WitchGame) and card_game.state == "wait_choice") or (isinstance(card_game, ElsGame) and card_game.state == "player_turn"):
-                $ is_selected = (i == selected_exchange_card_index_opponent)
-                $ y_shift = 80 if is_hovered or is_selected else 0
-                imagebutton:
-                    idle Transform(base_cover_img_src, xysize=(CARD_WIDTH, CARD_HEIGHT))
-                    hover Transform(base_cover_img_src, xysize=(CARD_WIDTH, CARD_HEIGHT))
-                    xpos card_x
-                    ypos card_y
-                    at hover_offset(y=y_shift, x=x_shift)
-                    action If(
-                        (isinstance(card_game, WitchGame) or isinstance(card_game, ElsGame)),
-                        SetVariable("selected_exchange_card_index_opponent", i),
-                        None
-                    )
-                    hovered If(hovered_card_index_exchange != i, SetVariable("hovered_card_index_exchange", i))
-                    unhovered If(hovered_card_index_exchange == i, SetVariable("hovered_card_index_exchange", -1))
-
+            if isinstance(card_game, Game21):
+                $ text_display = "Цена: " + (
+                    str(opponent.total21()) if card_game.state in ("reveal", "result")
+                    else "#" if opponent.total21() < 10 else "##"
+                )
+            elif isinstance(card_game, KozelGame):
+                $ text_display = "Очки: " + str(card_game.players_points[opponent_index])
+                $ card_x_base = 20
+            elif isinstance(card_game, ElsGame) and card_game.state == "result":
+                $ text_display = result_combination_opponent
             else:
-                add Transform(base_cover_img_src, xysize=(CARD_WIDTH, CARD_HEIGHT)):
-                    xpos card_x
-                    ypos card_y
+                $ text_display = ""
 
-screen opponents_card_hand_display():
+            if text_display:
+                frame:
+                    background RoundRect("#b2b3b4", 10)
+                    xpos card_x_base
+                    ypos card_y_base
+                    xsize 150
+                    yoffset 10
+                    padding (5, 5)
+                    text "[text_display]" color "#ffffff" text_align 0.5 align (0.5, 0.5)
 
-    for opponent_index in range(1, len(card_game.players)):
-        $ opponent = card_game.players[opponent_index]
-        $ layout = compute_opponent_card_layout(opponent_index, max(1, len(opponent.hand)))
-        $ base_x = layout[0]["x"]
-        $ base_y = layout[0]["y"]
-
-        frame:
-            background RoundRect("#222222aa", 8)
-            xpos base_x
-            ypos base_y - 40
-            xsize 160
-            padding (5, 5)
-            text "[opponent.name]" color "#ffffff" xalign 0.5
-
-        if len(opponent.hand) > 0:
             for i, card in enumerate(opponent.hand):
                 if card not in in_flight_cards:
                     $ card_x = layout[i]["x"]
                     $ card_y = layout[i]["y"]
-                    add Transform(base_cover_img_src, xysize=(CARD_WIDTH, CARD_HEIGHT)):
-                        xpos card_x
-                        ypos card_y
+                    $ is_hovered = (i == hovered_card_index_exchange)
+                    $ is_adjacent = abs(i - hovered_card_index_exchange) == 1
+                    $ x_shift = 20 if i == hovered_card_index_exchange + 1 else (-20 if i == hovered_card_index_exchange - 1 else 0)
+
+                    if isinstance(card_game, ElsGame) and card_game.state == "result":
+                        $ is_selected = (i in result_combination_indexes_opponent)
+                        $ y_shift = 80 if is_hovered or is_selected else 0
+                        imagebutton:
+                            idle Transform(get_card_image(card), xysize=(CARD_WIDTH, CARD_HEIGHT))
+                            hover Transform(get_card_image(card), xysize=(CARD_WIDTH, CARD_HEIGHT))
+                            xpos card_x
+                            ypos card_y
+                            at hover_offset(y=y_shift, x=x_shift)
+
+                    elif (isinstance(card_game, Game21) or isinstance(card_game, WitchGame)) and card_game.state == "result" or card_game.result:
+                        add Transform(get_card_image(card), xysize=(CARD_WIDTH, CARD_HEIGHT)):
+                            xpos card_x
+                            ypos card_y
+
+                    elif (isinstance(card_game, WitchGame) and card_game.state == "wait_choice") or \
+                         (isinstance(card_game, ElsGame) and card_game.state == "player_turn"):
+                        $ is_selected = (i == selected_exchange_card_index_opponent)
+                        $ y_shift = 80 if is_hovered or is_selected else 0
+                        imagebutton:
+                            idle Transform(base_cover_img_src, xysize=(CARD_WIDTH, CARD_HEIGHT))
+                            hover Transform(base_cover_img_src, xysize=(CARD_WIDTH, CARD_HEIGHT))
+                            xpos card_x
+                            ypos card_y
+                            at hover_offset(y=y_shift, x=x_shift)
+                            action SetVariable("selected_exchange_card_index_opponent", i)
+                            hovered SetVariable("hovered_card_index_exchange", i)
+                            unhovered SetVariable("hovered_card_index_exchange", -1)
+                    else:
+                        add Transform(base_cover_img_src, xysize=(CARD_WIDTH, CARD_HEIGHT)):
+                            xpos card_x
+                            ypos card_y
+
+        else:
+            # Multi-opponent (Kozel-style)
+            for opponent_index in range(1, len(card_game.players)):
+                $ opponent = card_game.players[opponent_index]
+                $ layout = compute_opponent_card_layout(opponent_index, max(1, len(opponent.hand)))
+                $ base_x = layout[0]["x"]
+                $ base_y = layout[0]["y"]
+                if isinstance(card_game, KozelGame):
+                    $ points = "Очки: " + str(card_game.players_points[opponent_index])
+
+                # Name + Points
+                frame:
+                    background RoundRect("#222222aa", 8)
+                    xpos base_x
+                    ypos base_y - 40
+                    xsize 160
+                    padding (5, 5)
+                    text "[opponent.name]" color "#ffffff" xalign 0.5
+
+                if isinstance(card_game, KozelGame):
+                    frame:
+                        background RoundRect("#b2b3b4", 8)
+                        xpos base_x + 180
+                        ypos base_y - 40
+                        xsize 110
+                        padding (1, 5)
+                        text "[points]" color "#ffffff" xalign 0.5
+
+                # Opponent hand cards
+                for i, card in enumerate(opponent.hand):
+                    if card not in in_flight_cards:
+                        $ card_x = layout[i]["x"]
+                        $ card_y = layout[i]["y"]
+                        add Transform(base_cover_img_src, xysize=(CARD_WIDTH, CARD_HEIGHT)):
+                            xpos card_x
+                            ypos card_y
 
 screen player_card_hand_display():
 
@@ -386,7 +394,7 @@ screen player_card_hand_display():
             $ player_hand_text = "Цена: " + str(card_game.player.total21())
 
         elif isinstance(card_game, KozelGame):
-            $ player_hand_text = "Очки: " + str(card_game.player_points)
+            $ player_hand_text = "Очки: " + str(card_game.players_points[0])
             $ xpos = 20
 
         else:
@@ -400,53 +408,63 @@ screen player_card_hand_display():
             padding (5, 5)
             text "[player_hand_text]" color "#ffffff" text_align 0.5 align (0.5, 0.5) size 25
 
-    for i, card in enumerate(card_game.player.hand):
+    if not deal_cards:
+        for i, card in enumerate(card_game.player.hand):
 
-        if not card in in_flight_cards:
-            $ card_x = player_card_layout[i]["x"]
-            $ card_y = player_card_layout[i]["y"]
-            $ is_hovered = (i == hovered_card_index)
-            $ is_adjacent = abs(i - hovered_card_index) == 1
-            $ x_shift = 20 if i == hovered_card_index + 1 else (-20 if i == hovered_card_index - 1 else 0)
+            if not card in in_flight_cards:
+                $ card_x = player_card_layout[i]["x"]
+                $ card_y = player_card_layout[i]["y"]
+                $ is_hovered = (i == hovered_card_index)
+                $ is_adjacent = abs(i - hovered_card_index) == 1
+                $ x_shift = 20 if i == hovered_card_index + 1 else (-20 if i == hovered_card_index - 1 else 0)
 
-            if isinstance(card_game, ElsGame) and card_game.state == "result":
-                $ is_selected = (i in result_combination_indexes_player)
-                $ y_shift = -80 if is_hovered or is_selected else 0
-                imagebutton:
-                    idle Transform(get_card_image(card), xysize=(CARD_WIDTH, CARD_HEIGHT))
-                    hover Transform(get_card_image(card), xysize=(CARD_WIDTH, CARD_HEIGHT))
-                    xpos card_x
-                    ypos card_y
-                    at hover_offset(y=y_shift, x=x_shift)
+                if isinstance(card_game, ElsGame) and card_game.state == "result":
+                    $ is_selected = (i in result_combination_indexes_player)
+                    $ y_shift = -80 if is_hovered or is_selected else 0
+                    imagebutton:
+                        idle Transform(get_card_image(card), xysize=(CARD_WIDTH, CARD_HEIGHT))
+                        hover Transform(get_card_image(card), xysize=(CARD_WIDTH, CARD_HEIGHT))
+                        xpos card_x
+                        ypos card_y
+                        at hover_offset(y=y_shift, x=x_shift)
 
-            else:
-                $ is_selected = (i in selected_attack_card_indexes or i == selected_exchange_card_index_player)
-                $ y_shift = -80 if is_hovered or is_selected else 0
-                $ func_name, idx = handle_card_action(card_game, i)
-                imagebutton:
-                    idle Transform(get_card_image(card), xysize=(CARD_WIDTH, CARD_HEIGHT))
-                    hover Transform(get_card_image(card), xysize=(CARD_WIDTH, CARD_HEIGHT))
-                    xpos card_x
-                    ypos card_y
-                    at hover_offset(y=y_shift, x=x_shift)
-                    if func_name:
-                        action Function(eval("store." + func_name), idx)
-                    hovered If(hovered_card_index != i, SetVariable("hovered_card_index", i))
-                    unhovered If(hovered_card_index == i, SetVariable("hovered_card_index", -1))
+                else:
+                    $ is_selected = (i in selected_attack_card_indexes or i == selected_exchange_card_index_player)
+                    $ y_shift = -80 if is_hovered or is_selected else 0
+                    $ func_name, idx = handle_card_action(card_game, i)
+                    imagebutton:
+                        idle Transform(get_card_image(card), xysize=(CARD_WIDTH, CARD_HEIGHT))
+                        hover Transform(get_card_image(card), xysize=(CARD_WIDTH, CARD_HEIGHT))
+                        xpos card_x
+                        ypos card_y
+                        at hover_offset(y=y_shift, x=x_shift)
+                        if func_name:
+                            action Function(eval("store." + func_name), idx)
+                        hovered If(hovered_card_index != i, SetVariable("hovered_card_index", i))
+                        unhovered If(hovered_card_index == i, SetVariable("hovered_card_index", -1))
 
 screen table():
     timer .5 action SetVariable("next_turn", False)
     if card_game.state not in ["player_attack", "player_defend", "opponent_take"]:
-         timer 5 action Jump(card_game_name + "_game_loop")
+        timer 5 action Jump(card_game_name + "_game_loop")
 
     $ num_table_cards = len(card_game.table.table)
     $ max_table_width = 1280
-    $ base_x = 320
-    $ pair_spacing = min(200, max_table_width // max(1, num_table_cards))
+    $ card_width = CARD_WIDTH
+    $ pair_spacing = 40  # minimum spacing between cards
+
+    # Calculate ideal spacing so all cards fit within 1280px
+    if num_table_cards > 1:
+        $ pair_spacing = min(200, (max_table_width - num_table_cards * card_width) // (num_table_cards - 1))
+    else:
+        $ pair_spacing = 0  # only one card, no spacing needed
+
+    $ total_width = num_table_cards * card_width + (num_table_cards - 1) * pair_spacing if num_table_cards > 1 else card_width
+    $ start_x = (max_table_width - total_width) // 2 + (1920 - max_table_width) // 2  # centered in full screen
 
     for i, (atk, (beaten, def_card)) in enumerate(card_game.table.table.items()):
-        if atk not in in_flight_cards:
-            $ atk_x = base_x + i * pair_spacing
+        if atk and atk not in in_flight_cards:
+            $ atk_x = start_x + i * (card_width + pair_spacing)
             $ atk_y = TABLE_Y
 
             if card_game.state == "player_defend" and not beaten:
@@ -464,10 +482,10 @@ screen table():
                     xpos atk_x
                     ypos atk_y
 
-            if def_card:
-                add Transform(get_card_image(def_card), xysize=(CARD_WIDTH, CARD_HEIGHT)):
-                    xpos atk_x
-                    ypos atk_y + 115
+        if def_card:
+            add Transform(get_card_image(def_card), xysize=(CARD_WIDTH, CARD_HEIGHT)):
+                xpos atk_x
+                ypos atk_y + 115
 
 screen deal_cards():
     for card_data in dealt_cards:

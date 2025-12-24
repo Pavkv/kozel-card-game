@@ -6,7 +6,7 @@ from Player import Player
 from Deck import Deck
 
 class CardGame:
-    def __init__(self, player_name="Вы", biased_draw=None, aces_low=False, full_deck=False, num_ai_opponents=1):
+    def __init__(self, player_name="Вы", biased_draw=None, aces_low=False, full_deck=False):
         Card.set_deck_type(use_full_deck=full_deck)
         self.deck = Deck()
 
@@ -24,6 +24,26 @@ class CardGame:
         if biased_draw:
             who, amount = biased_draw
             self.bias[who] = float(amount)
+
+    def get_player_index(self, player):
+        """Get the index of a player in the circle."""
+        return self.players.index(player)
+
+    def next_player(self, index=None):
+        """Get the next player in the circle."""
+        if index is None:
+            index = self.get_player_index(self.current_turn)
+        return self.players[(index + 1) % len(self.players)]
+
+    def previous_player(self, index=None):
+        """Get the previous player in the circle."""
+        if index is None:
+            index = self.get_player_index(self.current_turn)
+        return self.players[(index - 1) % len(self.players)]
+
+    def get_players_with_cards(self):
+        """Get a list of players who still have cards in their hands."""
+        return [player for player in self.players if len(player.hand) > 0]
 
     def deal_cards(self, n=6, sort_hand=False):
         for i, player in enumerate(self.players):

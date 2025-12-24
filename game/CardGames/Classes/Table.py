@@ -12,6 +12,7 @@ class Table:
         self.table = OrderedDict()  # {attack_card: [is_beaten: bool, defending_card: Card or None]}
         self.qualifier = qualifier
         self.qualifier_set = set()
+        self.player_actions = {}
 
     def __str__(self):
         return "Table: {}".format(", ".join(str(card) for card in self.table))
@@ -107,6 +108,19 @@ class Table:
 
         return True
 
+    def discard_beaten(self, discard_pile, is_drop):
+        """Discard beaten cards into the """
+        new_table = {}
+        for attack_card, (_, defend_card) in self.table.items():
+            if not is_drop:
+                new_table[defend_card] = [False, None]
+                discard_pile.append(attack_card)
+            else:
+                self.table[attack_card] = [False, None]
+                discard_pile.append(defend_card)
+        if not is_drop:
+            self.table = new_table
+
     # ---------------------- Utility methods ---------------------- #
 
     def num_beaten(self):
@@ -127,3 +141,4 @@ class Table:
     def clear(self):
         self.table.clear()
         self.qualifier_set.clear()
+        self.player_actions.clear()

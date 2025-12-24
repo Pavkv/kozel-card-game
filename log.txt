@@ -1,4 +1,4 @@
-Mon Dec  8 21:14:19 2025
+Wed Dec 24 18:08:51 2025
 Darwin-24.6.0-x86_64-i386-64bit
 Ren'Py 7.4.11.2266
  
@@ -6,13 +6,13 @@ Ren'Py 7.4.11.2266
 Bootstrap to the start of init.init took 0.04s
 Early init took 0.00s
 Loader init took 0.00s
-Loading error handling took 0.04s
-Loading script took 0.78s
+Loading error handling took 0.01s
+Loading script took 0.05s
 Loading save slot metadata. took 0.00s
 Loading persistent took 0.00s
 Importing _renpysteam: ImportError('No module named _renpysteam',)
-Running init code took 0.06s
-Loading analysis data took 0.00s
+Running init code took 0.02s
+Loading analysis data took 0.01s
 Analyze and compile ATL took 0.00s
 Index archives took 0.00s
 Backing up script files to '/Users/pavkv/Library/RenPy/backups/Card Games':
@@ -26,8 +26,88 @@ Cleaning stores took 0.00s
 Init translation took 0.01s
 Build styles took 0.00s
 Load screen analysis took 0.00s
-Analyze screens took 0.02s
+Analyze screens took 0.01s
 Save screen analysis took 0.01s
-Prepare screens took 0.05s
-Save pyanalysis. took 0.02s
+Prepare screens took 0.02s
+Save pyanalysis. took 0.00s
 Save bytecode. took 0.01s
+Running _start took 0.00s
+Performance test:
+Interface start took 0.18s
+
+Initializing gl2 renderer:
+primary display bounds: (0, 0, 1470, 956)
+swap interval: 1 frames
+Windowed mode.
+Vendor: 'Apple'
+Renderer: 'Apple M4'
+Version: '2.1 Metal - 89.4'
+Display Info: None
+Screen sizes: virtual=(1920, 1080) physical=(1368, 770) drawable=(2736, 1540)
+Maximum texture size: 4096x4096
+[KH, 7C, KD, JD, AH, 8H]
+[KH, KD, 7C, JD, AH, 8H]
+[KH, KD, 7C, JD, AH, 8H]
+[9C, 8S, 6H, QS, 7S, 9S, 8H]
+[9C, 8S, 6H, 7S, QS, 9S, 8H]
+[9C, 8S, 6H, 7S, QS, 9S, 8H]
+[7S, 8S, 6H, 9C, QS, 9S, 8H]
+[KH, KD, 7C, JD, AH, 7S]
+[KH, KD, JD, 7C, AH, 7S]
+[KH, KD, JD, 7C, AH, 7S]
+[KH, KD, 7C, JD, AH, 7S]
+[KH, KD, 7C, JD, AH, 7S]
+[8S, 6H, 9C, QS, 9S, 8H, 7C]
+[8S, 6H, 9C, 7C, 9S, 8H, QS]
+[8S, 6H, 9C, 7C, 9S, 8H, QS]
+[8S, 6H, 9C, QS, 9S, 8H, 7C]
+Player combination:  Две Пары [2, 4, 0, 5]
+Opponent combination:  Пара [0, 1]
+Game Over:  Вы
+Player combination:  Две Пары [2, 4, 0, 5]
+Opponent combination:  Пара [0, 1]
+Game Over:  Вы
+
+Full traceback:
+  File "game/CardGames/ini.rpy", line 179, in script
+    "Вы выиграли!"
+  File "/Users/pavkv/Downloads/renpy-7.4.11-sdk/renpy/ast.py", line 721, in execute
+    renpy.exports.say(who, what, *args, **kwargs)
+  File "/Users/pavkv/Downloads/renpy-7.4.11-sdk/renpy/exports.py", line 1419, in say
+    who(what, *args, **kwargs)
+  File "/Users/pavkv/Downloads/renpy-7.4.11-sdk/renpy/character.py", line 1249, in __call__
+    self.do_display(who, what, cb_args=self.cb_args, dtt=dtt, **display_args)
+  File "/Users/pavkv/Downloads/renpy-7.4.11-sdk/renpy/character.py", line 901, in do_display
+    **display_args)
+  File "/Users/pavkv/Downloads/renpy-7.4.11-sdk/renpy/character.py", line 647, in display_say
+    rv = renpy.ui.interact(mouse='say', type=type, roll_forward=roll_forward)
+  File "/Users/pavkv/Downloads/renpy-7.4.11-sdk/renpy/ui.py", line 298, in interact
+    rv = renpy.game.interface.interact(roll_forward=roll_forward, **kwargs)
+  File "/Users/pavkv/Downloads/renpy-7.4.11-sdk/renpy/display/core.py", line 3325, in interact
+    repeat, rv = self.interact_core(preloads=preloads, trans_pause=trans_pause, pause=pause, pause_start=pause_start, **kwargs)
+  File "/Users/pavkv/Downloads/renpy-7.4.11-sdk/renpy/display/core.py", line 4035, in interact_core
+    self.quit_event()
+  File "/Users/pavkv/Downloads/renpy-7.4.11-sdk/renpy/display/core.py", line 2977, in quit_event
+    renpy.display.behavior.run(renpy.config.quit_action)
+  File "/Users/pavkv/Downloads/renpy-7.4.11-sdk/renpy/display/behavior.py", line 330, in run
+    return action(*args, **kwargs)
+  File "renpy/common/00action_menu.rpy", line 220, in __call__
+    layout.yesno_screen(layout.QUIT, Quit(False))
+  File "renpy/common/00layout.rpy", line 527, in yesno_screen
+    if renpy.invoke_in_new_context(layout.invoke_yesno_prompt, None, message):
+  File "/Users/pavkv/Downloads/renpy-7.4.11-sdk/renpy/game.py", line 284, in invoke_in_new_context
+    return callable(*args, **kwargs)
+  File "renpy/common/00layout.rpy", line 472, in invoke_yesno_prompt
+    rv = layout.yesno_prompt(*args)
+AttributeError: 'Layout' object has no attribute 'yesno_prompt'
+
+While running game code:
+  File "game/CardGames/ini.rpy", line 179, in script
+    "Вы выиграли!"
+  File "renpy/common/00action_menu.rpy", line 220, in __call__
+    layout.yesno_screen(layout.QUIT, Quit(False))
+  File "renpy/common/00layout.rpy", line 527, in yesno_screen
+    if renpy.invoke_in_new_context(layout.invoke_yesno_prompt, None, message):
+  File "renpy/common/00layout.rpy", line 472, in invoke_yesno_prompt
+    rv = layout.yesno_prompt(*args)
+AttributeError: 'Layout' object has no attribute 'yesno_prompt'

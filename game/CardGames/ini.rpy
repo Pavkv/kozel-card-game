@@ -39,9 +39,7 @@ init python:
     OPPONENT_HAND_Y = 20
     OPPONENT_HAND_NUM_Y = 377
     OPPONENT_2_HAND_X = 1820
-    OPPONENT_2_HAND_Y = 375
     OPPONENT_3_HAND_X = 20
-    OPPONENT_3_HAND_Y = 375
     HAND_SPACING = 118
     HAND_NUM_X = 885
 
@@ -63,6 +61,7 @@ init python:
     table_animations = []
     is_table_animating = False
     in_flight_cards = set()
+    on_finish_draw_animations = []
 
     # Card layouts
     player_card_layout = []
@@ -120,9 +119,9 @@ init python:
             "player_turn": "Вы атакуете",
             "player_defend": "Вы защищаетесь",
             "player_drop": "Вы сбрасываете",
-            "opponent_turn": "Противник атакует",
-            "opponent_defend": "Противник защищается",
-            "opponent_drop": "Противник сбрасывает",
+            "opponent_turn": " атакует",
+            "opponent_defend": " защищается",
+            "opponent_drop": " сбрасывает",
             "end_turn": "Окончание хода",
             "game_cleanup": "Завершение игры",
             "results": "Игра окончена"

@@ -2,6 +2,7 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
+      <module fileurl="file://$USER_HOME$/Library/Application Support/Steam/steamapps/workshop/content/331470/Golden Age/.idea/GoldenAge.iml" filepath="$USER_HOME$/Library/Application Support/Steam/steamapps/workshop/content/331470/Golden Age/.idea/GoldenAge.iml" />
       <module fileurl="file://$PROJECT_DIR$/.idea/Kozel.iml" filepath="$PROJECT_DIR$/.idea/Kozel.iml" />
     </modules>
   </component>

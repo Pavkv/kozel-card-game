@@ -6,7 +6,7 @@ from AI21 import AI21
 class Game21(CardGame):
     def __init__(self, player_name, opponent_name, biased_draw, initial_deal, aces_low):
         CardGame.__init__(self, player_name, biased_draw, aces_low)
-        self.opponent = AI21(opponent_name)
+        self.players.append(AI21(opponent_name))
         self.initial_deal = initial_deal
         self.that_s_him = False  # special flag for "That’s him!" achievement
         self.all_in_place = False  # special flag for "All in place" achievement

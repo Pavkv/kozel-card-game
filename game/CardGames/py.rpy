@@ -57,10 +57,15 @@ init python:
         state = card_game.state
         current_turn_text = card_game_state_tl.get(card_game_name, {}).get(state, "—")
 
-        if state == "opponent_turn":
-            current_turn_text = card_game.current_turn.name + "\n" + current_turn_text
-        elif state in ["opponent_defend", "opponent_take"]:
-            current_turn_text = card_game.current_defender.name + "\n" + current_turn_text
+        if isinstance(card_game, DurakGame):
+            if state == "opponent_turn":
+                current_turn_text = card_game.current_turn.name + "\n" + current_turn_text
+            elif state in ["opponent_defend", "opponent_take"]:
+                current_turn_text = card_game.current_defender.name + "\n" + current_turn_text
+
+        if isinstance(card_game, KozelGame):
+            if state in ["opponent_turn", "opponent_defend", "opponent_drop"]:
+                current_turn_text = card_game.current_turn.name + "\n" + current_turn_text
 
         return current_turn_text
 
@@ -91,16 +96,20 @@ init python:
 
     def handle_end_turn():
         global selected_attack_card_indexes, hovered_card_index, confirm_take, confirm_turn
-        if (isinstance(card_game, DurakGame) or isinstance(card_game, KozelGame)) and (card_game.state == "player_turn" or card_game.state == "opponent_take"):
+        if isinstance(card_game, DurakGame) and (card_game.state == "player_turn" or card_game.state == "opponent_take"):
             confirm_index = 0 if confirm_turn[0] is False and confirm_turn[1] else 1
             confirm_turn[confirm_index] = True
-            durak_get_next_attacker()
             selected_attack_card_indexes = set()
             hovered_card_index = -1
+            durak_get_next_attacker()
         elif isinstance(card_game, DurakGame) and card_game.state == "player_defend":
             card_game.state = "player_take"
             confirm_take = True
             durak_get_next_attacker()
+        elif isinstance(card_game, KozelGame) and card_game.state == "player_turn":
+            selected_attack_card_indexes = set()
+            hovered_card_index = -1
+            kozel_get_next_defender()
         elif isinstance(card_game, KozelGame) and card_game.state == "player_defend":
             card_game.state = "player_drop"
 
@@ -120,27 +129,37 @@ init python:
     def hand_card_pos(side_index, card, override_index=None):
         """
         Return the (x, y) position of a specific card in a player's hand layout.
-        Dynamically computes layout for opponents to avoid layout overflow.
+        Uses the SAME layout as the screen, so animations always start correctly.
         """
+
+        # --- Player ---
         if side_index == 0:
-            layout = player_card_layout
             hand = card_game.player.hand
+            layout = player_card_layout
+
+        # --- Opponents ---
         else:
             hand = card_game.players[side_index].hand
-            layout = compute_opponent_card_layout(side_index, len(hand))
 
+            if len(card_game.players) == 2:
+                layout = opponent_card_layout
+            else:
+                layout = compute_opponent_card_layout(side_index, len(hand))
+
+        # Determine index
         if override_index is not None:
             idx = override_index
         else:
             try:
                 idx = hand.index(card)
             except ValueError:
-                idx = 0  # fallback if card not found
+                idx = 0  # safe fallback
 
+        # Return position safely
         if idx < len(layout):
             return layout[idx]["x"], layout[idx]["y"]
         else:
-            return layout[0]["x"], layout[0]["y"]  # fallback position
+            return layout[0]["x"], layout[0]["y"]
 
     def next_slot_pos(side_index):
         """
@@ -202,7 +221,7 @@ init python:
         base_y = 50
 
         # Layout constants
-        max_hand_width = 500
+        max_hand_width = 300
         spacing_x = 35
         spacing_between_opponents = 700
         screen_center_x = config.screen_width // 2
@@ -235,6 +254,21 @@ init python:
 
         return layout
 
+    def table_card_pos(card):
+        """
+        Return (x, y) screen position of a card on the table.
+        Finds the card's position in the table layout based on index.
+        """
+        for i, (atk, (beaten, def_card)) in enumerate(card_game.table.table.items()):
+            x = 320 + i * min(200, 1280 // max(1, len(card_game.table.table)))
+            y = TABLE_Y
+
+            if card == atk:
+                return x, y
+            elif card == def_card:
+                return x, y + 115
+
+        return None  # fallback if card not found
 
     # ----------------------------
     # Animation Management
@@ -299,6 +333,9 @@ init python:
             delay=delay
         )
 
+    def get_next_draw_side():
+        return on_finish_draw_animations.pop(0) if on_finish_draw_animations else None
+
 
     # ----------------------------
     # In-Game Control Management
@@ -358,6 +395,9 @@ init python:
         card_game.select_first_player(first_player_selection=first_player_selection)
         card_game.start_game(n=num_of_cards)
 
+        if isinstance(card_game, KozelGame):
+            card_game.sort_players_by_hand_suit()
+
         compute_hand_layout()
 
         # Prepare deal animation for all players
@@ -384,7 +424,9 @@ init python:
     def apply_draw(drawn_cards, player, sort_hand=False, on_finish=None):
         for card in drawn_cards:
             player.hand.append(card)
-        if sort_hand:
+        if sort_hand and isinstance(card_game, KozelGame):
+            card_game.sort_players_by_hand_suit()
+        elif sort_hand:
             player.sort_hand(card_game.deck.trump_suit)
         compute_hand_layout()
         if isinstance(on_finish, str):
@@ -508,6 +550,7 @@ init python:
 
     def apply_card_moves(player, cards, slot_index=0, is_defense=False, skip_check=False, on_finish=None):
         attack_keys = list(card_game.table.table.keys())
+
         for i, card in enumerate(cards):
             if skip_check and is_defense:
                 if i == 0 and slot_index < len(attack_keys):
@@ -534,38 +577,41 @@ init python:
             resolve_on_finish(on_finish)
 
     def play_card_anim(cards, side, slot_index=0, is_defense=False, skip_check=False, on_finish=None, delay=0.5, anim_duration=0.5):
-        """
-        Animate playing one or multiple cards from any player's hand onto the table,
-        then update the table structure and remove cards from the hand.
-
-        Arguments:
-        - cards: list of Card objects to animate
-        - side: index of the player (0 = human, 1–3 = AI)
-        - slot_index: index on table (0 for first attack, 1 for next, etc.)
-        - is_defense: if True, only one card should be used to defend at given slot
-        - delay: delay before first animation starts
-        - anim_duration: animation duration per card
-        - skip_check: if True, skip validation checks (for forced moves)
-        """
         global hovered_card_index
         table_animations[:] = []
 
         player = card_game.players[side]
-        base_x = 350 + slot_index * 200
+
+        # Compute total number of table pairs including incoming ones
+        existing_pairs = len(card_game.table.table)
+        num_incoming = len(cards) if not is_defense else 1  # only 1 defense per slot
+        total_table_cards = existing_pairs + (num_incoming if not is_defense else 0)
+
+        # Centered layout math
+        max_table_width = 1280
+        card_width = CARD_WIDTH
+        pair_spacing = min(200, (max_table_width - total_table_cards * card_width) // max(1, total_table_cards - 1)) if total_table_cards > 1 else 0
+        total_width = total_table_cards * card_width + (total_table_cards - 1) * pair_spacing if total_table_cards > 1 else card_width
+        start_x = (config.screen_width - max_table_width) // 2 + (max_table_width - total_width) // 2
+
         base_y = 375
 
         for i, card in enumerate(cards):
-            if card is None:
-                continue
-
-            # Skip invalid cards for attack
             if not is_defense and not skip_check and not card_game.table.can_append(card):
                 print("Cannot append card to table:", card)
                 continue
 
             src_x, src_y = hand_card_pos(side, card)
-            dest_x = base_x + i * 40  # Spacing between multiple cards
-            dest_y = base_y + 120 if is_defense else base_y
+
+            # 👉 For attack: each card goes to its own new slot
+            if not is_defense:
+                slot_offset = slot_index + i  # i-th new attack card
+                dest_x = start_x + slot_offset * (card_width + pair_spacing)
+                dest_y = base_y
+            else:
+                # 👉 For defense: all go to same slot_index
+                dest_x = start_x + slot_index * (card_width + pair_spacing)
+                dest_y = base_y + 120
 
             override_img = get_card_image(card) if side == 0 else base_cover_img_src
 

@@ -7,7 +7,7 @@ from AIEls import AIEls
 class ElsGame(CardGame):
     def __init__(self, player_name, opponent_name, biased_draw, us_rules=False):
         CardGame.__init__(self, player_name, biased_draw)
-        self.opponent = AIEls(opponent_name)
+        self.players.append(AIEls(opponent_name))
         self.round = 1
         self.turn = 1
         self.us_rules = us_rules

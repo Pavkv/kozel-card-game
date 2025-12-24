@@ -5,9 +5,9 @@ from AIWitch import AIWitch
 
 
 class WitchGame(CardGame):
-    def __init__(self, player_name, opponent_name, biased_draw):
-        CardGame.__init__(self, player_name, biased_draw)
-        self.opponent = AIWitch(opponent_name)
+    def __init__(self, player_name, opponent_name, biased_draw, full_deck):
+        CardGame.__init__(self, player_name, biased_draw, full_deck=full_deck)
+        self.players.append(AIWitch(opponent_name))
         self.user_turn = None
 
     def start_game(self, n=6, sort_hand=False, first_player_selection=False):

@@ -36,6 +36,17 @@ class Player(object):
 
         self.hand.sort(key=card_sort_key)
 
+    def sort_hand_by_suit(self, trump_suit):
+        """ Sort the hand by suit, with trump suit last, and within each suit by rank. """
+        suit_order = {'C': 0, 'D': 1, 'H': 2, 'S': 3}
+
+        def sort_key(card):
+            suit_value = 4 if card.suit == trump_suit else suit_order[card.suit]
+            rank_value = Card.rank_values[card.rank]
+            return suit_value, rank_value
+
+        self.hand.sort(key=sort_key)
+
     def lowest_trump_card(self, trump):
         trump_cards = [card for card in self.hand if card.suit == trump]
         if not trump_cards:
