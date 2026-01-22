@@ -262,7 +262,7 @@ init python:
 
             confirm_attack = (
                 len(selected_attack_card_indexes) > 0
-                and len(selected_attack_card_indexes) + len(card_game.table) <= len(defender.hand)
+                and len(selected_attack_card_indexes) + card_game.table.num_unbeaten() <= len(defender.hand)
             )
 
             can_pass = (

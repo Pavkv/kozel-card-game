@@ -60,9 +60,9 @@ class KozelGame(CardGame):
             for i in range(len(self.deck.discard)):
                 receiver.discard.append(self.deck.discard.pop(0))
 
-    def start_game(self, n=6, sort_hand=True):
+    def start_game(self, n=6, sort_hand=True, last_winner=None, first_player_selection="lowest_trump"):
         """Start the game by dealing cards and setting the initial attacker."""
-        CardGame.start_game(self, n=n, sort_hand=sort_hand)
+        CardGame.start_game(self, n=n, sort_hand=sort_hand, last_winner=last_winner, first_player_selection=first_player_selection)
         self.initial_attacker_index = self.get_player_index(self.first_player)
         self.last_attacker = self.first_player
 
@@ -117,7 +117,7 @@ class KozelGame(CardGame):
     # Achievement checks
     def same_suit(self):
         """Check if all cards in player's hand are of the same suit."""
-        if len(self.player.hand) < 6:
+        if len(self.player.hand) < 6 or self.all_trumps():
             return False
         first_suit = self.player.hand[0].suit
         for card in self.player.hand:

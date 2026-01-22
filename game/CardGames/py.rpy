@@ -336,30 +336,6 @@ init python:
     def get_next_draw_side():
         return on_finish_draw_animations.pop(0) if on_finish_draw_animations else None
 
-
-    # ----------------------------
-    # In-Game Control Management
-    # ----------------------------
-    def disable_ingame_controls():
-        """
-        Disables in-game menu, skipping, auto-mode, and rollback.
-        Immediately stops skipping if active.
-        """
-        renpy.game.context().fast_skip = False
-        renpy.config.allow_skipping = False
-        renpy.preferences.afm_enable = False
-        renpy.preferences.skip = False
-        renpy.config.rollback_enabled = False
-        renpy.block_rollback()
-
-    def enable_ingame_controls():
-        """
-        Ress normal skipping, rollback, and menu behavior after the game ends.
-        """
-        renpy.game.context().fast_skip = True
-        renpy.config.allow_skipping = True
-        renpy.config.rollback_enabled = True
-
     # ----------------------------
     # Game Start Function
     # ----------------------------
@@ -377,23 +353,34 @@ init python:
         global base_cover_img_src, base_card_img_src
         global dealt_cards, is_dealing, deal_cards
 
-        disable_ingame_controls()
+#         disable_ingame_controls()
 
         # Initialize game
         card_game = game_class(player_name, opponent_name, biased_draw, *game_args, **game_kwargs)
         card_game_name = game_name
         base_cover_img_src = base_card_img_src + "/cover.png"
 
-        # Determine first player
-        if last_winner:
-            first_player_selection = last_winner
-        elif isinstance(card_game, DurakGame):
-            first_player_selection = "lowest_trump"
-        else:
-            first_player_selection = None
+        card_game.start_game(n=num_of_cards, last_winner=last_winner)
 
-        card_game.select_first_player(first_player_selection=first_player_selection)
-        card_game.start_game(n=num_of_cards)
+        for p in card_game.players:
+            print(p.hand)
+
+        lowest_trump_player = None
+        lowest_trump_card = None
+
+        for player in card_game.players:
+            card = player.lowest_trump_card(card_game.deck.trump_suit)
+            if card is None:
+                continue
+
+            if (
+                lowest_trump_card is None or
+                Card.rank_values[card.rank] < Card.rank_values[lowest_trump_card.rank]
+            ):
+                lowest_trump_card = card
+                lowest_trump_player = player
+
+        print(lowest_trump_player, lowest_trump_card)
 
         if isinstance(card_game, KozelGame):
             card_game.sort_players_by_hand_suit()

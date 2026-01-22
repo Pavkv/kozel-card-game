@@ -155,8 +155,8 @@ class ElsGame(CardGame):
             values = [rank_order[combo_cards[0].rank]]
             return hand("Старшая Карта", 1, values, combo_cards)
 
-    def start_game(self, n=6):
-        CardGame.start_game(self)
+    def start_game(self, n=6, sort_hand=False, last_winner=None, first_player_selection=None):
+        CardGame.start_game(self, n=n, sort_hand=sort_hand, last_winner=last_winner, first_player_selection=first_player_selection)
         if self.us_rules:
             self.state = "player_give" if self.first_player == self.player else "opponent_give"
 

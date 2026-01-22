@@ -61,7 +61,13 @@ class CardGame:
 
             for player in self.players:
                 card = player.lowest_trump_card(self.deck.trump_suit)
-                if card and (lowest_trump_card is None or card < lowest_trump_card):
+                if card is None:
+                    continue
+
+                if (
+                        lowest_trump_card is None or
+                        Card.rank_values[card.rank] < Card.rank_values[lowest_trump_card.rank]
+                ):
                     lowest_trump_card = card
                     lowest_trump_player = player
 
@@ -69,8 +75,12 @@ class CardGame:
         else:
             self.first_player = random.choice(self.players)
 
-    def start_game(self, n=6, sort_hand=False):
+    def start_game(self, n=6, sort_hand=False, last_winner=None, first_player_selection=None):
         self.opponent = self.players[1]
         self.deal_cards(n, sort_hand)
+        if last_winner:
+            self.select_first_player(last_winner)
+        else:
+            self.select_first_player(first_player_selection)
         self.current_turn = self.first_player
         self.state = "player_turn" if self.first_player == self.players[0] else "opponent_turn"

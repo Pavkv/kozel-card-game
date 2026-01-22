@@ -27,9 +27,9 @@ class DurakGame(CardGame):
         self.initial_attacker_index = None
         self.last_attacker = None
 
-    def start_game(self, n=6, sort_hand=True):
+    def start_game(self, n=6, sort_hand=True, last_winner=None, first_player_selection="lowest_trump"):
         """Start the Durak game by dealing cards and setting the first player."""
-        CardGame.start_game(self, n=n, sort_hand=sort_hand)
+        CardGame.start_game(self, n=n, sort_hand=sort_hand, last_winner=last_winner, first_player_selection=first_player_selection)
         self.initial_attacker_index = self.get_player_index(self.first_player)
         self.last_attacker = self.first_player
         self.current_defender = self.next_player(self.get_player_index(self.current_turn))

@@ -10,8 +10,8 @@ class WitchGame(CardGame):
         self.players.append(AIWitch(opponent_name))
         self.user_turn = None
 
-    def start_game(self, n=6, sort_hand=False, first_player_selection=False):
-        CardGame.start_game(self)
+    def start_game(self, n=6, sort_hand=False, last_winner=None, first_player_selection=False):
+        CardGame.start_game(self, n=n, sort_hand=sort_hand, last_winner=last_winner, first_player_selection=first_player_selection)
         if self.current_turn == self.player:
             self.player_turn_start()
 

@@ -32,7 +32,7 @@ label start_durak:
 #     $ base_card_img_src = "images/cards/cards"
 #     $ biased_draw = ["opponent", 0.0]
 #     $ day2_game_with_Alice = False
-#     $ last_winner = "player"
+# #     $ last_winner = "player"
 #     $ use_full_deck = False
 #     $ durak_passing = True
 #     $ durak_full_throw = True

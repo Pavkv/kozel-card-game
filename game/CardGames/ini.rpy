@@ -172,6 +172,7 @@ label card_game_result_handler:
         $ reset_card_game()
         jump expression card_game_results[result]
     else:
+        scene expression cards_bg
         if card_game_name == "durak" and card_game.result != "draw":
             "[card_game.result] дурак!"
         else:
